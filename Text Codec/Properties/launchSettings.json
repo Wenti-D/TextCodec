@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Text Codec (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "Text Codec (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}
