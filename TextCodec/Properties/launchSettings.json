@@ -1,9 +1,9 @@
 {
   "profiles": {
-    "Text Codec (Package)": {
+    "TextCodec (Package)": {
       "commandName": "MsixPackage"
     },
-    "Text Codec (Unpackaged)": {
+    "TextCodec (Unpackaged)": {
       "commandName": "Project"
     }
   }

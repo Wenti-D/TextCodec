@@ -20,11 +20,12 @@ using Windows.Storage;
 using Windows.System;
 using WinRT.Interop;
 using Vanara.PInvoke;
+using Microsoft.UI.Xaml.Media.Animation;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
 
-namespace Text_Codec
+namespace TextCodec
 {
     /// <summary>
     /// An empty window that can be used on its own or navigated to within a Frame.
@@ -36,17 +37,16 @@ namespace Text_Codec
 
         public MainWindow()
         {
-            this.InitializeComponent();
-            SystemBackdrop = new MicaBackdrop() { Kind = MicaKind.BaseAlt };
-            ExtendsContentIntoTitleBar = true;
-            SetTitleBar(AppTitleBar);
+            InitializeComponent();
 
             hwnd = WindowNative.GetWindowHandle(this);
             WindowId id = Win32Interop.GetWindowIdFromWindow(hwnd);
             appWindow = AppWindow.GetFromWindowId(id);
 
+            NavigationViewController.SelectedItem = NavigationViewController.MenuItems[0];
+            ContentFrame.Navigate(typeof(Views.Pages.CodecPage), null, new EntranceNavigationTransitionInfo());
 
-            this.Closed += MainWindow_Closed;
+            Closed += MainWindow_Closed;
             if (ApplicationData.Current.LocalSettings.Values["IsMainWindowMaximum"] is true)
             {
                 User32.ShowWindow(hwnd, ShowWindowCommand.SW_SHOWMAXIMIZED);
@@ -59,7 +59,6 @@ namespace Text_Codec
                 if (rect.Left >= 0 && rect.Top >= 0 && rect.Right <= scr_area.WorkArea.Width && rect.Bottom <= scr_area.WorkArea.Height)
                 {
                     appWindow.MoveAndResize(rect.ToRectInt32());
-
                 }
             }
         }
@@ -78,9 +77,40 @@ namespace Text_Codec
             }
         }
 
-        private void myButton_Click(object sender, RoutedEventArgs e)
+        private void NavigationViewController_ItemInvoked(NavigationView sender,
+            NavigationViewItemInvokedEventArgs args)
         {
-            myButton.Content = "Clicked";
+            if (args.IsSettingsInvoked)
+            {
+                ContentFrame.Navigate(typeof(Views.Pages.SettingsPage), null, args.RecommendedNavigationTransitionInfo);
+            }
+            else if (args.InvokedItemContainer != null && args.InvokedItemContainer.Tag != null)
+            {
+                Type newPageType = Type.GetType(args.InvokedItemContainer.Tag.ToString());
+                ContentFrame.Navigate(newPageType, null, args.RecommendedNavigationTransitionInfo);
+            }
+        }
+
+        private void NavigationViewController_BackRequested(NavigationView sender,
+            NavigationViewBackRequestedEventArgs args)
+        {
+            if (ContentFrame.CanGoBack) { ContentFrame.GoBack(); }
+        }
+
+        private void ContentFrame_Navigated(object sender, NavigationEventArgs args)
+        {
+            NavigationViewController.IsBackEnabled = ContentFrame.CanGoBack;
+
+            if (ContentFrame.SourcePageType == typeof(Views.Pages.SettingsPage))
+            {
+                NavigationViewController.SelectedItem = (NavigationViewItem)NavigationViewController.SettingsItem;
+            }
+            else if (ContentFrame.SourcePageType != null)
+            {
+                NavigationViewController.SelectedItem = NavigationViewController.MenuItems
+                    .OfType<NavigationViewItem>()
+                    .First(n => n.Tag.Equals(ContentFrame.SourcePageType.FullName.ToString()));
+            }
         }
 
         [StructLayout(LayoutKind.Explicit)]
