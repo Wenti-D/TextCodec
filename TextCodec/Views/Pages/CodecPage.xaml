@@ -11,23 +11,89 @@
 
     <Grid Width="Auto" Height="Auto">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
             <RowDefinition Height="1*"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
-        <TextBlock Text="Content" 
-                           Style="{ThemeResource TitleTextBlockStyle}"
-                           Margin="32,0,0,0"
-                           Grid.Row="0"/>
-        <TextBox x:Name="RawText"
-                         AcceptsReturn="True"
-                         Margin="20"
-                         Grid.Row="1"/>
-        <Button x:Name="myButton" Click="myButton_Click" Grid.Row="2">Click Me</Button>
-        <TextBox x:Name="EncodedText"
-                         AcceptsReturn="True"
-                         Margin="20"
-                         Grid.Row="3"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Orientation="Vertical">
+            <Button x:Name="clearRawText"
+                    Click="clearText_Click">
+                <FontIcon Glyph="&#xE711;" />
+            </Button>
+            <Button x:Name="copyRawText">
+                <FontIcon Glyph="&#xE8C8;" />
+            </Button>
+            <Button x:Name="pasteRawText">
+                <FontIcon Glyph="&#xE77F;" />
+            </Button>
+        </StackPanel>
+        <TextBox x:Name="rawTextBox"
+                 AcceptsReturn="True"
+                 Margin="20,0,0,0"
+                 Grid.Row="0"
+                 Grid.Column="1"
+                 TextChanged="rawTextBox_TextChanged"/>
+
+        <StackPanel Orientation="Horizontal"
+                    Padding="20"
+                    Grid.Row="1" 
+                    Grid.Column="1">
+            <TextBlock Text="操作：" VerticalAlignment="Center"/>
+            <DropDownButton x:Name="encodeMode"
+                    Content="测试">
+                <!--<Button.Content>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="test"/>
+                        <FontIcon Glyph="&#xE8C8;" />
+                    </StackPanel>
+                </Button.Content>-->
+                <DropDownButton.Flyout>
+                    <MenuFlyout>
+                        <MenuFlyoutSubItem Text="Unicode">
+                            <MenuFlyoutItem x:Name="unicodeBin"
+                                            Text="Bin"
+                                            Click="unicodeBin_Click"/>
+                            <MenuFlyoutItem x:Name="unicodeOct"
+                                            Text="Oct"
+                                            Click="unicodeOct_Click"/>
+                            <MenuFlyoutItem x:Name="unicodeDec"
+                                            Text="Dec"
+                                            Click="unicodeDec_Click"/>
+                            <MenuFlyoutItem x:Name="unicodeHex"
+                                            Text="Hex"
+                                            Click="unicodeHex_Click"/>
+                        </MenuFlyoutSubItem>
+                    </MenuFlyout>
+                </DropDownButton.Flyout>
+            </DropDownButton>
+            <Button x:Name="myButton" 
+                    Click="myButton_Click">
+                Click Me
+            </Button>
+        </StackPanel>
+        
+
+        <StackPanel Orientation="Vertical" Grid.Row="2">
+            <Button x:Name="clearEncodedText"
+                    Click="clearText_Click">
+                <FontIcon Glyph="&#xE711;" />
+            </Button>
+            <Button x:Name="copyEncodedText">
+                <FontIcon Glyph="&#xE8C8;" />
+            </Button>
+            <Button x:Name="pasteEncodedText">
+                <FontIcon Glyph="&#xE77F;" />
+            </Button>
+        </StackPanel>
+        <TextBox x:Name="encodedTextBox"
+                 AcceptsReturn="True"
+                 Margin="20,0,0,0"
+                 Grid.Row="2"
+                 Grid.Column="1"
+                 TextChanged="encodedTextBox_TextChanged"/>
     </Grid>
 </Page>

@@ -111,6 +111,9 @@ namespace TextCodec
                     .OfType<NavigationViewItem>()
                     .First(n => n.Tag.Equals(ContentFrame.SourcePageType.FullName.ToString()));
             }
+
+            // 什么玩意，导航切来切去还能让内存水涨船高
+            GC.Collect();
         }
 
         [StructLayout(LayoutKind.Explicit)]
