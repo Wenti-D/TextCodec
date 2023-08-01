@@ -25,7 +25,7 @@
             </Style.Setters>
         </Style>
     </Page.Resources>
-    
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -33,7 +33,7 @@
         </Grid.RowDefinitions>
 
         <TextBlock x:Name="Heading"
-                   Style="{StaticResource TitleTextBlockStyle}"
+                   Style="{StaticResource HeaderTextBlockStyle}"
                    Text="设置"/>
         <ScrollViewer Grid.Row="1" 
                       VerticalScrollBarVisibility="Auto"

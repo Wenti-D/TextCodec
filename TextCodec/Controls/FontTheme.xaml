@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!--xmlns:local="using:TextCodec.Controls"-->
+    <ResourceDictionary.MergedDictionaries>
+        <!--硬要往这里加一句才认识 BodyTextBlockFontSize 是吧-->
+        <XamlControlsResources xmlns="using:Microsoft.UI.Xaml.Controls" />
+    </ResourceDictionary.MergedDictionaries>
+
+    <FontFamily x:Key="SarasaUI">ms-appx:///Resources/Fonts/Sarasa-UI-SC-Regular.ttf#Sarasa UI SC</FontFamily>
+    <FontFamily x:Key="SarasaMono">ms-appx:///Resources/Fonts/Sarasa-Mono-SC-Regular.ttf#Sarasa Mono SC</FontFamily>
+
+    <StaticResource x:Key="ContentControlThemeFontFamily" ResourceKey="SarasaUI"/>
+
+    <!--直接应用在控件类型的字体样式-->
+    <Style TargetType="TextBlock"
+           BasedOn="{StaticResource BodyTextBlockStyle}"/>
+    <Style TargetType="MenuFlyoutSubItem"
+           BasedOn="{StaticResource DefaultMenuFlyoutSubItemStyle}">
+        <Setter Property="FontFamily" Value="{StaticResource SarasaUI}"/>
+    </Style>
+    <Style TargetType="MenuFlyoutItem"
+           BasedOn="{StaticResource DefaultMenuFlyoutItemStyle}">
+        <Setter Property="FontFamily" Value="{StaticResource SarasaUI}"/>
+    </Style>
+    
+    <!--带标签的字体样式-->
+    <Style x:Name="BaseTextBlockStyle" 
+           TargetType="TextBlock" >
+        <Setter Property="FontFamily" Value="{StaticResource SarasaUI}"/>
+        <Setter Property="FontSize" Value="{StaticResource BodyTextBlockFontSize}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+        <Setter Property="TextWrapping" Value="Wrap" />
+        <Setter Property="LineStackingStrategy" Value="MaxHeight" />
+        <Setter Property="TextLineBounds" Value="Full" />
+    </Style>
+    <Style x:Name="BodyTextBlockStyle"
+           TargetType="TextBlock"
+           BasedOn="{StaticResource BaseTextBlockStyle}">
+        <Setter Property="FontWeight" Value="Normal" />
+    </Style>
+    <Style x:Name="BodyStrongTextBlockStyle"
+           BasedOn="{StaticResource BaseTextBlockStyle}"
+           TargetType="TextBlock">
+        <Setter Property="FontSize" Value="{StaticResource BodyStrongTextBlockFontSize}"/>
+    </Style>
+    <Style x:Name="HeaderTextBlockStyle"
+           TargetType="TextBlock" 
+           BasedOn="{StaticResource BaseTextBlockStyle}">
+        <Setter Property="FontSize" Value="46" />
+        <Setter Property="FontWeight" Value="Light" />
+        <Setter Property="OpticalMarginAlignment" Value="TrimSideBearings" />
+    </Style>
+    <Style x:Name="CaptionTextBlockStyle"
+           BasedOn="{StaticResource BaseTextBlockStyle}"
+           TargetType="TextBlock">
+        <Setter Property="FontSize" Value="{StaticResource CaptionTextBlockFontSize}"/>
+        <Setter Property="FontWeight" Value="Normal" />
+    </Style>
+    
+    <Style x:Name="MonoTextBoxStyle"
+           TargetType="TextBox"
+           BasedOn="{StaticResource DefaultTextBoxStyle}" >
+        <Setter Property="FontFamily" Value="{StaticResource SarasaMono}"/>
+    </Style>
+    
+</ResourceDictionary>

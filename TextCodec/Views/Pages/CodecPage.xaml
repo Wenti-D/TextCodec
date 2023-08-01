@@ -34,6 +34,7 @@
         <TextBox x:Name="rawTextBox"
                  AcceptsReturn="True"
                  Margin="20,0,0,0"
+                 IsSpellCheckEnabled="False"
                  Grid.Row="0"
                  Grid.Column="1"
                  TextChanged="rawTextBox_TextChanged"/>
@@ -44,13 +45,7 @@
                     Grid.Column="1">
             <TextBlock Text="操作：" VerticalAlignment="Center"/>
             <DropDownButton x:Name="encodeMode"
-                    Content="测试">
-                <!--<Button.Content>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="test"/>
-                        <FontIcon Glyph="&#xE8C8;" />
-                    </StackPanel>
-                </Button.Content>-->
+                            Content="测试">
                 <DropDownButton.Flyout>
                     <MenuFlyout>
                         <MenuFlyoutSubItem Text="Unicode">
@@ -92,6 +87,8 @@
         <TextBox x:Name="encodedTextBox"
                  AcceptsReturn="True"
                  Margin="20,0,0,0"
+                 Style="{ThemeResource MonoTextBoxStyle}"
+                 IsSpellCheckEnabled="False"
                  Grid.Row="2"
                  Grid.Column="1"
                  TextChanged="encodedTextBox_TextChanged"/>
