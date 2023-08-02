@@ -9,8 +9,8 @@
 
   <Identity
     Name="e62dba12-2d46-417f-8975-0eee1901b4da"
-    Publisher="CN=Windy_D"
-    Version="1.0.0.0" />
+    Publisher="CN=Windy Deng"
+    Version="0.1.0.0" />
 
   <mp:PhoneIdentity PhoneProductId="e62dba12-2d46-417f-8975-0eee1901b4da" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
