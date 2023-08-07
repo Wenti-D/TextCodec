@@ -21,6 +21,8 @@ using Windows.System;
 using WinRT.Interop;
 using Vanara.PInvoke;
 using Microsoft.UI.Xaml.Media.Animation;
+using TextCodec.Core;
+using Microsoft.Extensions.DependencyInjection;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -34,10 +36,15 @@ namespace TextCodec
     {
         private IntPtr hwnd;
         private AppWindow appWindow;
+        private static AppSettings appSettings;
 
         public MainWindow()
         {
             InitializeComponent();
+
+            appSettings = new AppSettings();
+            ChangeSystemBackdrop(appSettings.BackdropType);
+            appSettings.PropertyChanged += Settings_PropertyChanged;
 
             hwnd = WindowNative.GetWindowHandle(this);
             WindowId id = Win32Interop.GetWindowIdFromWindow(hwnd);
@@ -63,9 +70,33 @@ namespace TextCodec
             }
         }
 
+        public static AppSettings AppSettings
+        {
+            get { return appSettings; }
+            set { }
+        }
+
+        private void Settings_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(appSettings.BackdropType))
+            {
+                ChangeSystemBackdrop(((AppSettings)sender!).BackdropType);
+            }
+        }
+
+        private void ChangeSystemBackdrop(BackdropTypes backdrop)
+        {
+            SystemBackdrop = backdrop switch
+            {
+                BackdropTypes.Mica => new MicaBackdrop() { Kind = MicaKind.Base },
+                BackdropTypes.MicaAlt => new MicaBackdrop() { Kind = MicaKind.BaseAlt },
+                BackdropTypes.Acrylic => new DesktopAcrylicBackdrop(),
+                _ => null
+            };
+        }
+
         private void MainWindow_Closed(object sender, WindowEventArgs args)
         {
-            //throw new NotImplementedException();
             var window_placement = new User32.WINDOWPLACEMENT();
             if (User32.GetWindowPlacement(hwnd, ref window_placement))
             {
@@ -130,10 +161,10 @@ namespace TextCodec
             [FieldOffset(6)]
             public short height;
 
-            public int Left => x;
-            public int Top => y;
-            public int Right => x + width;
-            public int Bottom => y + height;
+            public readonly int Left => x;
+            public readonly int Top => y;
+            public readonly int Right => x + width;
+            public readonly int Bottom => y + height;
 
             public WindowRect(int X, int Y, int Width, int Height)
             {

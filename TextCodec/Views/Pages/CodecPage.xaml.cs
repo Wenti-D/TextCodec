@@ -72,45 +72,25 @@ namespace TextCodec.Views.Pages
         {
             if (last_focused_is_raw_text == false)
             {
-                switch (converter_mode)
+                encodedTextBox.Text = converter_mode switch
                 {
-                    case ConverterModes.ConverterMode.UnicodeBin:
-                        encodedTextBox.Text = UnicodeCodec.BinEncoder(rawTextBox.Text);
-                        break;
-                    case ConverterModes.ConverterMode.UnicodeOct:
-                        encodedTextBox.Text = UnicodeCodec.OctEncoder(rawTextBox.Text);
-                        break;
-                    case ConverterModes.ConverterMode.UnicodeDec:
-                        encodedTextBox.Text = UnicodeCodec.DecEncoder(rawTextBox.Text);
-                        break;
-                    case ConverterModes.ConverterMode.UnicodeHex:
-                        encodedTextBox.Text = UnicodeCodec.HexEncoder(rawTextBox.Text);
-                        break;
-                    default:
-                        encodedTextBox.Text = rawTextBox.Text;
-                        break;
-                }
+                    ConverterModes.ConverterMode.UnicodeBin => UnicodeCodec.BinEncoder(rawTextBox.Text),
+                    ConverterModes.ConverterMode.UnicodeOct => UnicodeCodec.OctEncoder(rawTextBox.Text),
+                    ConverterModes.ConverterMode.UnicodeDec => UnicodeCodec.DecEncoder(rawTextBox.Text),
+                    ConverterModes.ConverterMode.UnicodeHex => UnicodeCodec.HexEncoder(rawTextBox.Text),
+                    _ => rawTextBox.Text,
+                };
             }
             else
             {
-                switch (converter_mode)
+                rawTextBox.Text = converter_mode switch
                 {
-                    case ConverterModes.ConverterMode.UnicodeBin:
-                        rawTextBox.Text = UnicodeCodec.BinDecoder(encodedTextBox.Text);
-                        break;
-                    case ConverterModes.ConverterMode.UnicodeOct:
-                        rawTextBox.Text = UnicodeCodec.OctDecoder(encodedTextBox.Text);
-                        break;
-                    case ConverterModes.ConverterMode.UnicodeDec:
-                        rawTextBox.Text = UnicodeCodec.DecDecoder(encodedTextBox.Text);
-                        break;
-                    case ConverterModes.ConverterMode.UnicodeHex:
-                        rawTextBox.Text = UnicodeCodec.HexDecoder(encodedTextBox.Text);
-                        break;
-                    default:
-                        rawTextBox.Text = encodedTextBox.Text;
-                        break;
-                }
+                    ConverterModes.ConverterMode.UnicodeBin => UnicodeCodec.BinDecoder(encodedTextBox.Text),
+                    ConverterModes.ConverterMode.UnicodeOct => UnicodeCodec.OctDecoder(encodedTextBox.Text),
+                    ConverterModes.ConverterMode.UnicodeDec => UnicodeCodec.DecDecoder(encodedTextBox.Text),
+                    ConverterModes.ConverterMode.UnicodeHex => UnicodeCodec.HexDecoder(encodedTextBox.Text),
+                    _ => encodedTextBox.Text,
+                };
             }
 
         }

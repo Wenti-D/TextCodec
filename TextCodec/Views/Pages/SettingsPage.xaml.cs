@@ -25,7 +25,7 @@ namespace TextCodec.Views.Pages
     {
         public SettingsPage()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
     }
 }
