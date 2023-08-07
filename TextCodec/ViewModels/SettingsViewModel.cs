@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using TextCodec.Core;
 using CommunityToolkit.Mvvm.ComponentModel;
+using Windows.ApplicationModel;
+using TextCodec.Extensions;
 
 namespace TextCodec.ViewModels
 {
@@ -13,6 +15,7 @@ namespace TextCodec.ViewModels
         #region fields
         private List<string> sysBackdrops;
         private string? selectedBackdrop;
+        private Version version = Package.Current.Id.Version.ToVersion();
         #endregion
 
         #region properties
@@ -30,6 +33,8 @@ namespace TextCodec.ViewModels
                 }
             }
         }
+
+        public Version Version { get { return version; } }
         #endregion
 
         #region methods

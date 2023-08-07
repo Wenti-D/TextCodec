@@ -39,16 +39,15 @@
         </Grid.RowDefinitions>
 
         <TextBlock x:Name="Heading"
-                   Style="{StaticResource HeaderTextBlockStyle}"
-                   Text="设置"/>
+                   x:Uid="SettingsPageTitle"
+                   Style="{StaticResource HeaderTextBlockStyle}"/>
         <ScrollViewer Grid.Row="1" 
                       VerticalScrollBarVisibility="Auto"
                       VerticalScrollMode="Auto">
             <StackPanel Spacing="{StaticResource SettingsCardSpacing}">
                 <TextBlock Style="{StaticResource SettingsSectionHeaderTextBlockStyle}"
-                           Text="实验"/>
-                <labs:SettingsCard Header="背景材质"
-                                   Description="更改整个应用的背景材质">
+                           x:Uid="SettingsPageAppSet"/>
+                <labs:SettingsCard x:Uid="SettingsPageBackdropSet">
                     <labs:SettingsCard.HeaderIcon>
                         <FontIcon Glyph="&#xE7F9;" />
                     </labs:SettingsCard.HeaderIcon>
@@ -57,26 +56,29 @@
                               SelectedItem="{Binding SelectedBackdrop, Mode=TwoWay}"/>
                 </labs:SettingsCard>
                 <TextBlock Style="{StaticResource SettingsSectionHeaderTextBlockStyle}"
-                           Text="关于"/>
-                <labs:SettingsExpander Header="这个是标题">
+                           x:Uid="SettingsPageAbout"/>
+                <labs:SettingsExpander x:Uid="SettingsPageAboutAppTitle">
                     <labs:SettingsExpander.HeaderIcon>
                         <FontIcon Glyph="&#xE943;" />
                     </labs:SettingsExpander.HeaderIcon>
-                    <TextBlock Text="这里应该是版本号"
+                    <TextBlock Text="{Binding Version}"
                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                                IsTextSelectionEnabled="True"/>
                     <labs:SettingsExpander.Items>
-                        <labs:SettingsCard Header="这个在左边">
-                            <TextBlock Text="这个应该在右边"
-                                       Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                                       IsTextSelectionEnabled="True"/>
+                        <labs:SettingsCard x:Uid="SettingsPageAboutCopyright">
+                            <HyperlinkButton Content="GitHub"
+                                             NavigateUri="https://github.com/Wenti-D"/>
                         </labs:SettingsCard>
-                        <labs:SettingsCard Header="依赖项"
+                        <labs:SettingsCard x:Uid="SettingsPageAboutDependency"
                                            HorizontalContentAlignment="Left"
                                            ContentAlignment="Vertical">
                             <StackPanel Orientation="Vertical">
-                                <HyperlinkButton Content="WinUI 库" NavigateUri="https://aka.ms/winui" />
-                                <HyperlinkButton Content="Windows Community Toolkit" NavigateUri="https://github.com/CommunityToolkit/WindowsCommunityToolkit" />
+                                <HyperlinkButton x:Uid="SettingsPageAboutDependencyWinUiLib" 
+                                                 NavigateUri="https://aka.ms/winui" />
+                                <HyperlinkButton x:Uid="SettingsPageAboutDependencyWinCommTool" 
+                                                 NavigateUri="https://github.com/CommunityToolkit/WindowsCommunityToolkit" />
+                                <HyperlinkButton x:Uid="SettingsPageAboutDependencyVanara" 
+                                                 NavigateUri="https://github.com/dahall/Vanara" />
                             </StackPanel>
                         </labs:SettingsCard>
                     </labs:SettingsExpander.Items>

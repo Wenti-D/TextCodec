@@ -44,7 +44,7 @@
                     Grid.Row="1" 
                     Grid.Column="1">
             <DropDownButton x:Name="encodeMode"
-                            Content="选择模式"
+                            x:Uid="CodecPageModeSelectButton"
                             Margin="40,0,0,0">
                 <DropDownButton.Flyout>
                     <MenuFlyout>

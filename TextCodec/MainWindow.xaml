@@ -25,11 +25,11 @@
                        VerticalAlignment="Center"
                        Source="/Assets/Square44x44Logo.png" />
                 <TextBlock
+                    x:Uid="AppTitle"
                     Margin="12,0,0,0"
                     Grid.Column="1"
                     VerticalAlignment="Center"
-                    Style="{StaticResource CaptionTextBlockStyle}"
-                    Text="114514"/>
+                    Style="{StaticResource CaptionTextBlockStyle}"/>
             </Grid>
         </Border>
 
@@ -41,7 +41,7 @@
                         BackRequested="NavigationViewController_BackRequested" 
                         ItemInvoked="NavigationViewController_ItemInvoked">
             <NavigationView.MenuItems>
-                <NavigationViewItem Icon="Rename" Content="文本编解码" Tag="TextCodec.Views.Pages.CodecPage"/>
+                <NavigationViewItem Icon="Rename" x:Uid="NaviViewItemCodecPage" Tag="TextCodec.Views.Pages.CodecPage"/>
             </NavigationView.MenuItems>
             <Frame x:Name="ContentFrame" Navigated="ContentFrame_Navigated" Padding="20"/>
         </NavigationView>
