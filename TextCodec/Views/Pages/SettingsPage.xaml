@@ -59,11 +59,11 @@
                            x:Uid="SettingsPageAbout"/>
                 <labs:SettingsExpander x:Uid="SettingsPageAboutAppTitle">
                     <labs:SettingsExpander.HeaderIcon>
-                        <FontIcon Glyph="&#xE943;" />
+                        <BitmapIcon UriSource="/Assets/Square44x44Logo.png"/>
                     </labs:SettingsExpander.HeaderIcon>
-                    <TextBlock Text="{Binding Version}"
-                               Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                               IsTextSelectionEnabled="True"/>
+                        <TextBlock Text="{Binding Version}"
+                                   Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                   IsTextSelectionEnabled="True"/>
                     <labs:SettingsExpander.Items>
                         <labs:SettingsCard x:Uid="SettingsPageAboutCopyright">
                             <HyperlinkButton Content="GitHub"

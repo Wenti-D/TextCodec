@@ -19,8 +19,8 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <Image x:Name="AppFontIcon"
-                       Width="16"
-                       Height="16"
+                       Width="24"
+                       Height="24"
                        HorizontalAlignment="Left"
                        VerticalAlignment="Center"
                        Source="/Assets/Square44x44Logo.png" />
