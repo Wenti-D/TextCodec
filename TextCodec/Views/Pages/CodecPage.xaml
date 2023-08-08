@@ -22,18 +22,42 @@
         <StackPanel Orientation="Vertical">
             <Button x:Name="clearRawText"
                     Click="ClearText_Click">
+                <ToolTipService.ToolTip>
+                    <ToolTip x:Uid="CodecPageClearTextButtonInfo"/>
+                </ToolTipService.ToolTip>
                 <FontIcon Glyph="&#xE711;" />
             </Button>
-            <Button x:Name="copyRawText">
+            
+            <Button x:Name="copyRawText"
+                    Click="copyRawText_Click">
+                <ToolTipService.ToolTip>
+                    <ToolTip x:Uid="CodecPageCopyTextButtonInfo"/>
+                </ToolTipService.ToolTip>
                 <FontIcon Glyph="&#xE8C8;" />
             </Button>
-            <Button x:Name="pasteRawText">
+            <TeachingTip x:Name="rawTextCopiedTip"
+                         x:Uid="CodecPageTextCopiedInfo"
+                         IsLightDismissEnabled="True"
+                         Target="{x:Bind copyRawText}"
+                         FontFamily="{StaticResource SarasaUI}"/>
+            
+            <Button x:Name="pasteRawText"
+                    Click="pasteRawText_Click">
+                <ToolTipService.ToolTip>
+                    <ToolTip x:Uid="CodecPagePasteTextButtonInfo"/>
+                </ToolTipService.ToolTip>
                 <FontIcon Glyph="&#xE77F;" />
             </Button>
+            <TeachingTip x:Name="rawTextPastedTip"
+                         x:Uid="CodecPageTextPastedInfo"
+                         IsLightDismissEnabled="True"
+                         Target="{x:Bind pasteRawText}"
+                         FontFamily="{StaticResource SarasaUI}"/>
         </StackPanel>
         <TextBox x:Name="rawTextBox"
                  AcceptsReturn="True"
                  Margin="20,0,0,0"
+                 TextWrapping="Wrap"
                  IsSpellCheckEnabled="False"
                  Grid.Row="0"
                  Grid.Column="1"
@@ -66,24 +90,48 @@
                 </DropDownButton.Flyout>
             </DropDownButton>
         </StackPanel>
-        
+
 
         <StackPanel Orientation="Vertical" Grid.Row="2">
             <Button x:Name="clearEncodedText"
                     Click="ClearText_Click">
+                <ToolTipService.ToolTip>
+                    <ToolTip x:Uid="CodecPageClearTextButtonInfo"/>
+                </ToolTipService.ToolTip>
                 <FontIcon Glyph="&#xE711;" />
             </Button>
-            <Button x:Name="copyEncodedText">
+            
+            <Button x:Name="copyEncodedText"
+                    Click="copyEncodedText_Click">
+                <ToolTipService.ToolTip>
+                    <ToolTip x:Uid="CodecPageCopyTextButtonInfo"/>
+                </ToolTipService.ToolTip>
                 <FontIcon Glyph="&#xE8C8;" />
             </Button>
-            <Button x:Name="pasteEncodedText">
+            <TeachingTip x:Name="encodedTextCopiedTip"
+                         x:Uid="CodecPageTextCopiedInfo"
+                         IsLightDismissEnabled="True"
+                         Target="{x:Bind copyEncodedText}"
+                         FontFamily="{StaticResource SarasaUI}"/>
+            
+            <Button x:Name="pasteEncodedText"
+                    Click="pasteEncodedText_Click">
+                <ToolTipService.ToolTip>
+                    <ToolTip x:Uid="CodecPagePasteTextButtonInfo"/>
+                </ToolTipService.ToolTip>
                 <FontIcon Glyph="&#xE77F;" />
             </Button>
+            <TeachingTip x:Name="encodedTextPastedTip"
+                         x:Uid="CodecPageTextPastedInfo"
+                         IsLightDismissEnabled="True"
+                         Target="{x:Bind pasteEncodedText}"
+                         FontFamily="{StaticResource SarasaUI}"/>
         </StackPanel>
         <TextBox x:Name="encodedTextBox"
                  AcceptsReturn="True"
                  Margin="20,0,0,0"
                  Style="{ThemeResource MonoTextBoxStyle}"
+                 TextWrapping="Wrap"
                  IsSpellCheckEnabled="False"
                  Grid.Row="2"
                  Grid.Column="1"

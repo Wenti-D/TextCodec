@@ -120,8 +120,23 @@
   <data name="AppTitle.Text" xml:space="preserve">
     <value>Text Codec</value>
   </data>
+  <data name="CodecPageClearTextButtonInfo.Content" xml:space="preserve">
+    <value>清除</value>
+  </data>
+  <data name="CodecPageCopyTextButtonInfo.Content" xml:space="preserve">
+    <value>复制</value>
+  </data>
   <data name="CodecPageModeSelectButton.Content" xml:space="preserve">
     <value>选择模式</value>
+  </data>
+  <data name="CodecPagePasteTextButtonInfo.Content" xml:space="preserve">
+    <value>粘贴</value>
+  </data>
+  <data name="CodecPageTextCopiedInfo.Subtitle" xml:space="preserve">
+    <value>复制成功</value>
+  </data>
+  <data name="CodecPageTextPastedInfo.Subtitle" xml:space="preserve">
+    <value>粘贴成功</value>
   </data>
   <data name="NaviViewItemCodecPage.Content" xml:space="preserve">
     <value>文本编解码</value>
