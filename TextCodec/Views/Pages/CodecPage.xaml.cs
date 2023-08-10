@@ -16,6 +16,7 @@ using TextCodec.Core;
 using Vanara.Extensions.Reflection;
 using Windows.ApplicationModel.DataTransfer;
 using System.Timers;
+using Windows.Storage;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -44,6 +45,12 @@ namespace TextCodec.Views.Pages
             timer = new DispatcherTimer();
             timer.Tick += Timer_Tick;
             timer.Interval = TimeSpan.FromMilliseconds(600);
+
+            if (ApplicationData.Current.LocalSettings.Values["IsUtfEncodeWithSpaceChecked"] is null)
+            {
+                ApplicationData.Current.LocalSettings.Values["IsUtfEncodeWithSpaceChecked"] = true;
+            }
+            encodeWithSpace.IsChecked = (bool)ApplicationData.Current.LocalSettings.Values["IsUtfEncodeWithSpaceChecked"];
         }
 
         private void ClearText_Click(object sender, RoutedEventArgs e)
@@ -108,12 +115,19 @@ namespace TextCodec.Views.Pages
             string newConvertMode = sender.GetPropertyValue<string>("Name");
             encodeMode.Content = newMode;
             converter_mode = (ConverterModes.ConverterMode)Enum.Parse(typeof(ConverterModes.ConverterMode), newConvertMode);
+            if (converter_mode >= (ConverterModes.ConverterMode)Enum.Parse(typeof(ConverterModes.ConverterMode), "UTF8")
+                && converter_mode <= (ConverterModes.ConverterMode)Enum.Parse(typeof(ConverterModes.ConverterMode), "UTF16BE"))
+                encodeWithSpace.Visibility = Visibility.Visible;
+            else 
+                encodeWithSpace.Visibility = Visibility.Collapsed;
             StartCodec();
         }
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            StartCodec();
+            if (last_focused_is_raw_text && sender.GetPropertyValue<string>("Name") == "rawTextBox" ||
+                !last_focused_is_raw_text && sender.GetPropertyValue<string>("Name") == "encodedTextBox")
+                StartCodec();
         }
 
         private void rawTextBox_PointerPressed(object sender, PointerRoutedEventArgs e)
@@ -136,6 +150,9 @@ namespace TextCodec.Views.Pages
                     ConverterModes.ConverterMode.UnicodeOct => UnicodeCodec.OctEncoder(rawTextBox.Text),
                     ConverterModes.ConverterMode.UnicodeDec => UnicodeCodec.DecEncoder(rawTextBox.Text),
                     ConverterModes.ConverterMode.UnicodeHex => UnicodeCodec.HexEncoder(rawTextBox.Text),
+
+                    ConverterModes.ConverterMode.UTF8 => UtfCodec.Utf8Encoder(rawTextBox.Text),
+
                     _ => rawTextBox.Text,
                 };
             }
@@ -147,10 +164,25 @@ namespace TextCodec.Views.Pages
                     ConverterModes.ConverterMode.UnicodeOct => UnicodeCodec.OctDecoder(encodedTextBox.Text),
                     ConverterModes.ConverterMode.UnicodeDec => UnicodeCodec.DecDecoder(encodedTextBox.Text),
                     ConverterModes.ConverterMode.UnicodeHex => UnicodeCodec.HexDecoder(encodedTextBox.Text),
+
+                    ConverterModes.ConverterMode.UTF8 => UtfCodec.Utf8Decoder(encodedTextBox.Text),
+
                     _ => encodedTextBox.Text,
                 };
             }
 
+        }
+
+        private void encodeWithSpace_Checked(object sender, RoutedEventArgs e)
+        {
+            ApplicationData.Current.LocalSettings.Values["IsUtfEncodeWithSpaceChecked"] = true;
+            StartCodec();
+        }
+
+        private void encodeWithSpace_Unchecked(object sender, RoutedEventArgs e)
+        {
+            ApplicationData.Current.LocalSettings.Values["IsUtfEncodeWithSpaceChecked"] = false;
+            StartCodec();
         }
     }
 }

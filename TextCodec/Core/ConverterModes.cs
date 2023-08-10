@@ -21,7 +21,14 @@ namespace TextCodec.Core
             [Description("转换为Unicode码位（十进制）")]
             UnicodeDec,
             [Description("转换为Unicode码位（十六进制）")]
-            UnicodeHex
+            UnicodeHex,
+
+            [Description("转换为十六进制 UTF-8 编码")]
+            UTF8,
+            [Description("转换为十六进制 UTF-16 小端序编码")]
+            UTF16LE,
+            [Description("转换为十六进制 UTF-16 大端序编码")]
+            UTF16BE,
         }
     }
 }

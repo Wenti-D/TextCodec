@@ -63,10 +63,13 @@
                  Grid.Column="1"
                  TextChanged="TextBox_TextChanged"/>
 
-        <StackPanel Orientation="Horizontal"
-                    Padding="20"
-                    Grid.Row="1" 
-                    Grid.Column="1">
+        <Grid Grid.Row="1" 
+              Grid.Column="1"
+              Padding="20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
             <DropDownButton x:Name="encodeMode"
                             x:Uid="CodecPageModeSelectButton"
                             Margin="40,0,0,0">
@@ -86,10 +89,27 @@
                                             Text="Hex"
                                             Click="SelectMode_Click"/>
                         </MenuFlyoutSubItem>
+                        <MenuFlyoutSubItem Text="UTF">
+                            <MenuFlyoutItem x:Name="UTF8"
+                                            Text="UTF-8"
+                                            Click="SelectMode_Click"/>
+                            <!--<MenuFlyoutItem x:Name="UTF16LE"
+                                            Text="UTF-16 小端序"
+                                            Click="SelectMode_Click"/>
+                            <MenuFlyoutItem x:Name="UTF16BE"
+                                            Text="UTF-16 大端序"
+                                            Click="SelectMode_Click"/>-->
+                        </MenuFlyoutSubItem>
                     </MenuFlyout>
                 </DropDownButton.Flyout>
             </DropDownButton>
-        </StackPanel>
+            <CheckBox x:Name="encodeWithSpace"
+                      x:Uid="CodecPageEncodeWithSpaceCheckBox"
+                      Grid.Column="1"
+                      Visibility="Collapsed"
+                      Checked="encodeWithSpace_Checked"
+                      Unchecked="encodeWithSpace_Unchecked"/>
+        </Grid>
 
 
         <StackPanel Orientation="Vertical" Grid.Row="2">

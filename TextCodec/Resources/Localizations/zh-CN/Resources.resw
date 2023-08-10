@@ -126,6 +126,9 @@
   <data name="CodecPageCopyTextButtonInfo.Content" xml:space="preserve">
     <value>复制</value>
   </data>
+  <data name="CodecPageEncodeWithSpaceCheckBox.Content" xml:space="preserve">
+    <value>编码时加空格</value>
+  </data>
   <data name="CodecPageModeSelectButton.Content" xml:space="preserve">
     <value>选择模式</value>
   </data>
