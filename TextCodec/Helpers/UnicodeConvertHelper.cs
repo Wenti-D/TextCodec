@@ -57,7 +57,7 @@ namespace TextCodec.Helpers
         }
 
         /// <summary>
-        /// 将 Unicode 码位字符列表按指定进制转换为对应字符串，不合法码位加空格原样输出
+        /// 将 Unicode 码位字符列表按指定进制转换为对应字符串，不合法输入加标记原样输出
         /// </summary>
         /// <param name="codepoint_strs">Unicode 码位字符列表</param>
         /// <param name="target_base">指定进制（2、8、10、16）</param>
@@ -66,17 +66,32 @@ namespace TextCodec.Helpers
         {
             int code_value;
             string raw_text = string.Empty;
+            string invalid_input = string.Empty;
             foreach (var cp_str in codepoint_strs)
             {
                 try
                 {
                     code_value = Convert.ToInt32(cp_str, target_base);
-                    raw_text += new Rune(code_value).ToString();
+                    string tmp_result = new Rune(code_value).ToString();
+                    if (invalid_input != string.Empty)
+                    {
+                        raw_text += invalid_input + "⁆ ";
+                        invalid_input = string.Empty;
+                    }
+                    raw_text += tmp_result;
                 }
                 catch
                 {
-                    raw_text += ' ' + cp_str + ' ';
+                    if (invalid_input == string.Empty)
+                    {
+                        invalid_input = " ⁅";
+                    }
+                    invalid_input += cp_str;
                 }
+            }
+            if (invalid_input != string.Empty)
+            {
+                raw_text += invalid_input + "⁆ ";
             }
             return raw_text;
         }
