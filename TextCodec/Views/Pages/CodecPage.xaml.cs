@@ -30,7 +30,7 @@ namespace TextCodec.Views.Pages
     {
         // 最后交互的文本框：T-原文；F-编码文本
         private bool last_focused_is_raw_text;
-        private ConverterModes.ConverterMode converter_mode;
+        private CodecMode converter_mode;
         private static DispatcherTimer timer;
 
         public CodecPage()
@@ -38,7 +38,7 @@ namespace TextCodec.Views.Pages
             InitializeComponent();
 
             last_focused_is_raw_text = true;
-            converter_mode = (ConverterModes.ConverterMode)Enum.Parse(typeof(ConverterModes.ConverterMode), "None");
+            converter_mode = (CodecMode)Enum.Parse(typeof(CodecMode), "None");
             encodedTextBox.AddHandler(PointerPressedEvent, new PointerEventHandler(encodedTextBox_PointerPressed), true);
             rawTextBox.AddHandler(PointerPressedEvent, new PointerEventHandler(rawTextBox_PointerPressed), true);
 
@@ -114,9 +114,9 @@ namespace TextCodec.Views.Pages
             string newMode = sender.GetPropertyValue<string>("Text");
             string newConvertMode = sender.GetPropertyValue<string>("Name");
             encodeMode.Content = newMode;
-            converter_mode = (ConverterModes.ConverterMode)Enum.Parse(typeof(ConverterModes.ConverterMode), newConvertMode);
-            if (converter_mode >= (ConverterModes.ConverterMode)Enum.Parse(typeof(ConverterModes.ConverterMode), "UTF8")
-                && converter_mode <= (ConverterModes.ConverterMode)Enum.Parse(typeof(ConverterModes.ConverterMode), "UTF16BE"))
+            converter_mode = (CodecMode)Enum.Parse(typeof(CodecMode), newConvertMode);
+            if (converter_mode >= (CodecMode)Enum.Parse(typeof(CodecMode), "UTF8")
+                && converter_mode <= (CodecMode)Enum.Parse(typeof(CodecMode), "UTF16BE"))
                 encodeWithSpace.Visibility = Visibility.Visible;
             else 
                 encodeWithSpace.Visibility = Visibility.Collapsed;
@@ -146,12 +146,12 @@ namespace TextCodec.Views.Pages
             {
                 encodedTextBox.Text = converter_mode switch
                 {
-                    ConverterModes.ConverterMode.UnicodeBin => UnicodeCodec.BinEncoder(rawTextBox.Text),
-                    ConverterModes.ConverterMode.UnicodeOct => UnicodeCodec.OctEncoder(rawTextBox.Text),
-                    ConverterModes.ConverterMode.UnicodeDec => UnicodeCodec.DecEncoder(rawTextBox.Text),
-                    ConverterModes.ConverterMode.UnicodeHex => UnicodeCodec.HexEncoder(rawTextBox.Text),
+                    CodecMode.UnicodeBin => UnicodeCodec.BinEncoder(rawTextBox.Text),
+                    CodecMode.UnicodeOct => UnicodeCodec.OctEncoder(rawTextBox.Text),
+                    CodecMode.UnicodeDec => UnicodeCodec.DecEncoder(rawTextBox.Text),
+                    CodecMode.UnicodeHex => UnicodeCodec.HexEncoder(rawTextBox.Text),
 
-                    ConverterModes.ConverterMode.UTF8 => UtfCodec.Utf8Encoder(rawTextBox.Text),
+                    CodecMode.UTF8 => UtfCodec.Utf8Encoder(rawTextBox.Text),
 
                     _ => rawTextBox.Text,
                 };
@@ -160,12 +160,12 @@ namespace TextCodec.Views.Pages
             {
                 rawTextBox.Text = converter_mode switch
                 {
-                    ConverterModes.ConverterMode.UnicodeBin => UnicodeCodec.BinDecoder(encodedTextBox.Text),
-                    ConverterModes.ConverterMode.UnicodeOct => UnicodeCodec.OctDecoder(encodedTextBox.Text),
-                    ConverterModes.ConverterMode.UnicodeDec => UnicodeCodec.DecDecoder(encodedTextBox.Text),
-                    ConverterModes.ConverterMode.UnicodeHex => UnicodeCodec.HexDecoder(encodedTextBox.Text),
+                    CodecMode.UnicodeBin => UnicodeCodec.BinDecoder(encodedTextBox.Text),
+                    CodecMode.UnicodeOct => UnicodeCodec.OctDecoder(encodedTextBox.Text),
+                    CodecMode.UnicodeDec => UnicodeCodec.DecDecoder(encodedTextBox.Text),
+                    CodecMode.UnicodeHex => UnicodeCodec.HexDecoder(encodedTextBox.Text),
 
-                    ConverterModes.ConverterMode.UTF8 => UtfCodec.Utf8Decoder(encodedTextBox.Text),
+                    CodecMode.UTF8 => UtfCodec.Utf8Decoder(encodedTextBox.Text),
 
                     _ => encodedTextBox.Text,
                 };
