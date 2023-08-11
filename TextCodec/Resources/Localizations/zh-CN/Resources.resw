@@ -132,6 +132,12 @@
   <data name="CodecPageModeSelectButton.Content" xml:space="preserve">
     <value>选择模式</value>
   </data>
+  <data name="CodecPageModeUtf16Be.Text" xml:space="preserve">
+    <value>UTF-16 大端序</value>
+  </data>
+  <data name="CodecPageModeUtf16Le.Text" xml:space="preserve">
+    <value>UTF-16 小端序</value>
+  </data>
   <data name="CodecPagePasteTextButtonInfo.Content" xml:space="preserve">
     <value>粘贴</value>
   </data>

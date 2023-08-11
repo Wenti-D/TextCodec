@@ -152,6 +152,8 @@ namespace TextCodec.Views.Pages
                     CodecMode.UnicodeHex => UnicodeCodec.HexEncoder(rawTextBox.Text),
 
                     CodecMode.UTF8 => UtfCodec.Utf8Encoder(rawTextBox.Text),
+                    CodecMode.UTF16LE => UtfCodec.Utf16LeEncoder(rawTextBox.Text),
+                    CodecMode.UTF16BE => UtfCodec.Utf16BeEncoder(rawTextBox.Text),
 
                     _ => rawTextBox.Text,
                 };
@@ -166,6 +168,8 @@ namespace TextCodec.Views.Pages
                     CodecMode.UnicodeHex => UnicodeCodec.HexDecoder(encodedTextBox.Text),
 
                     CodecMode.UTF8 => UtfCodec.Utf8Decoder(encodedTextBox.Text),
+                    CodecMode.UTF16LE => UtfCodec.Utf16LeDecoder(encodedTextBox.Text),
+                    CodecMode.UTF16BE => UtfCodec.Utf16BeDecoder(encodedTextBox.Text),
 
                     _ => encodedTextBox.Text,
                 };

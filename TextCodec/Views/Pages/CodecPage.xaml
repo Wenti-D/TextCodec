@@ -68,7 +68,7 @@
               Padding="20">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="1.5*"/>
             </Grid.ColumnDefinitions>
             <DropDownButton x:Name="encodeMode"
                             x:Uid="CodecPageModeSelectButton"
@@ -93,12 +93,12 @@
                             <MenuFlyoutItem x:Name="UTF8"
                                             Text="UTF-8"
                                             Click="SelectMode_Click"/>
-                            <!--<MenuFlyoutItem x:Name="UTF16LE"
-                                            Text="UTF-16 小端序"
+                            <MenuFlyoutItem x:Name="UTF16LE"
+                                            x:Uid="CodecPageModeUtf16Le"
                                             Click="SelectMode_Click"/>
                             <MenuFlyoutItem x:Name="UTF16BE"
-                                            Text="UTF-16 大端序"
-                                            Click="SelectMode_Click"/>-->
+                                            x:Uid="CodecPageModeUtf16Be"
+                                            Click="SelectMode_Click"/>
                         </MenuFlyoutSubItem>
                     </MenuFlyout>
                 </DropDownButton.Flyout>

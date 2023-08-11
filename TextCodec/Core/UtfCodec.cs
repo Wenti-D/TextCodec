@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Text.Unicode;
 using System.Threading.Tasks;
 using TextCodec.Views.Pages;
 using Windows.Storage;
@@ -12,10 +13,16 @@ namespace TextCodec.Core
 {
     partial class UtfCodec
     {
-        public static string Utf8Encoder(string raw_text)
+        public static string Utf8Encoder(string raw_text) => Encoder(raw_text, new UTF8Encoding());
+        public static string Utf8Decoder(string text) => Decoder(text, new UTF8Encoding());
+        public static string Utf16LeEncoder(string raw_text) => Encoder(raw_text, new UnicodeEncoding());
+        public static string Utf16LeDecoder(string text) => Decoder(text, new UnicodeEncoding());
+        public static string Utf16BeEncoder(string raw_text) => Encoder(raw_text, new UnicodeEncoding(true, false));
+        public static string Utf16BeDecoder(string text) => Decoder(text, new UnicodeEncoding(true, false));
+
+        private static string Encoder(string raw_text, Encoding encoding)
         {
-            var utf8 = new UTF8Encoding();
-            byte[] bytes = utf8.GetBytes(raw_text);
+            byte[] bytes = encoding.GetBytes(raw_text);
             string[] res = new string[bytes.Length];
             for (int i = 0; i < bytes.Length; i++)
             {
@@ -27,9 +34,8 @@ namespace TextCodec.Core
                 return string.Join("", res);
         }
 
-        public static string Utf8Decoder(string text)
+        private static string Decoder(string text, Encoding encoding)
         {
-            var utf8 = new UTF8Encoding();
             var list = new List<object>();
             int index = 0;
             string tmp = string.Empty;
@@ -83,7 +89,7 @@ namespace TextCodec.Core
                 {
                     int index_start = index;
                     while (index < list.Count && list[index] is byte) index++;
-                    res += utf8.GetString(Converters.ListToByteArrayConverter(list.GetRange(index_start, index - index_start)));
+                    res += encoding.GetString(Converters.ListToByteArrayConverter(list.GetRange(index_start, index - index_start)));
                 }
             }
             return res;
@@ -96,7 +102,6 @@ namespace TextCodec.Core
                 >= 'a' and <= 'f' or
                 >= 'A' and <= 'F';
         }
-
 
         private static void AppendString(List<object> list, string text)
         {
