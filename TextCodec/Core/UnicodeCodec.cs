@@ -9,21 +9,14 @@ namespace TextCodec.Core
 {
     class UnicodeCodec
     {
-        public static string BinEncoder(string rawText) { return Encoder(rawText, 2); }
-
-        public static string BinDecoder(string text) { return Decoder(text, 2); }
-
-        public static string OctEncoder(string rawText) { return Encoder(rawText, 8); }
-
-        public static string OctDecoder(string text) { return Decoder(text, 8); }
-
-        public static string DecEncoder(string rawText) { return Encoder(rawText, 10); }
-
-        public static string DecDecoder(string text) { return Decoder(text, 10); }
-
-        public static string HexEncoder(string rawText) { return Encoder(rawText, 16); }
-
-        public static string HexDecoder(string text) { return Decoder(text, 16); }
+        public static string BinEncoder(string rawText) => Encoder(rawText, 2);
+        public static string BinDecoder(string text) => Decoder(text, 2);
+        public static string OctEncoder(string rawText) => Encoder(rawText, 8);
+        public static string OctDecoder(string text) => Decoder(text, 8);
+        public static string DecEncoder(string rawText) => Encoder(rawText, 10);
+        public static string DecDecoder(string text) => Decoder(text, 10);
+        public static string HexEncoder(string rawText) => Encoder(rawText, 16);
+        public static string HexDecoder(string text) => Decoder(text, 16);
 
 
         private static string Encoder(string rawText, int target_base)
