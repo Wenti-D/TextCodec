@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace TextCodec.Core
 {
-    class BaseSeriesCodec
+    partial class BaseSeriesCodec
     {
         public static string Base64Encoder(string raw_text)
         {
@@ -24,97 +24,47 @@ namespace TextCodec.Core
             {
                 string tmp = string.Empty;
                 bool valid_ch = true;
-                for (int j = 0; j < encoded_texts[i].Length; j++)
+                foreach (char ch in encoded_texts[i])
                 {
-                    char ch = encoded_texts[i][j];
-                    switch (tmp.Length)
+                    if (tmp.Length == 3)
                     {
-                        case 4:
-                            if (!valid_ch)
-                            {
-                                results[i] += "⁆ ";
-                                valid_ch = true;
-                            }
-                            results[i] += utf8.GetString(Convert.FromBase64String(tmp));
-                            if (Regex.Match(ch.ToString(), "[A-Za-z0-9+/]").Success)
-                            {
-                                tmp = ch.ToString();
-                            }
-                            else
-                            {
-                                valid_ch = false;
-                                tmp = string.Empty;
-                                results[i] += " ⁅" + ch;
-                            }
-                            break;
-                        case 3:
-                            if (Regex.Match(ch.ToString(), "[A-Za-z0-9+/=]").Success)
-                            {
-                                tmp += ch;
-                            }
-                            else
-                            {
-                                if (valid_ch)
-                                {
-                                    results[i] += " ⁅";
-                                    valid_ch = false;
-                                }
-                                results[i] += tmp + ch;
-                                tmp = string.Empty;
-                            }
-                            break;
-                        case 2:
-                            if (Regex.Match(ch.ToString(), "[A-Za-z0-9+/=]").Success)
-                            {
-                                tmp += ch;
-                            }
-                            else
-                            {
-                                if (valid_ch)
-                                {
-                                    results[i] += " ⁅";
-                                    valid_ch = false;
-                                }
-                                results[i] += tmp + ch;
-                                tmp = string.Empty;
-                            }
-                            break;
-                        default:
-                            if (Regex.Match(ch.ToString(), "[A-Za-z0-9+/]").Success)
-                            {
-                                tmp += ch;
-                            }
-                            else
-                            {
-                                if (valid_ch)
-                                {
-                                    results[i] += " ⁅";
-                                    valid_ch = false;
-                                }
-                                tmp = string.Empty;
-                                results[i] += ch;
-                            }
-                            break;
+                        if (!valid_ch) { results[i] += "⁆ "; }
+                        if (Base64CharEnd().Match(ch.ToString()).Success)
+                        {
+                            results[i] += utf8.GetString(Convert.FromBase64String(tmp + ch));
+                            valid_ch = true;
+                        }
+                        else
+                        {
+                            results[i] += " ⁅" + ch;
+                        }
+                        tmp = string.Empty;
+                    }
+                    else if (tmp.Length == 2 && Base64CharEnd().Match(ch.ToString()).Success
+                           || tmp.Length < 2 && Base64Char().Match(ch.ToString()).Success)
+                    {
+                        tmp += ch;
+                    }
+                    else
+                    {
+                        if (valid_ch)
+                        {
+                            results[i] += " ⁅";
+                            valid_ch = false;
+                        }
+                        results[i] += tmp + ch;
+                        tmp = string.Empty;
                     }
                 }
-                if (tmp.Length == 4)
-                {
-                    if (!valid_ch)
-                    {
-                        results[i] += "⁆ ";
-                    }
-                    results[i] += utf8.GetString(Convert.FromBase64String(tmp));
-                }
-                else
-                {
-                    if (valid_ch)
-                    {
-                        results[i] += " ⁅";
-                    }
-                    results[i] += tmp + "⁆ ";
-                }
+                if (tmp != string.Empty && valid_ch) { results[i] += " ⁅"; }
+                if (!(valid_ch && tmp == string.Empty)) { results[i] += tmp + "⁆ "; }
             }
             return string.Join("\n", results);
         }
+
+        [GeneratedRegex("[A-Za-z0-9+/]")]
+        private static partial Regex Base64Char();
+        [GeneratedRegex("[A-Za-z0-9+/=]")]
+        private static partial Regex Base64CharEnd();
     }
 }
