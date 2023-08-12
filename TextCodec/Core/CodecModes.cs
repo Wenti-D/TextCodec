@@ -27,5 +27,10 @@ public enum CodecMode : byte
     UTF16LE,
     [Description("转换为十六进制 UTF-16 大端序编码")]
     UTF16BE,
+
+    [Description("转换为 Base64 编码")]
+    Base64,
+    [Description("转换为 Base58 编码")]
+    Base58,
 }
 

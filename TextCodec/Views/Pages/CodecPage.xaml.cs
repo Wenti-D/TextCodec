@@ -118,7 +118,7 @@ namespace TextCodec.Views.Pages
             if (converter_mode >= (CodecMode)Enum.Parse(typeof(CodecMode), "UTF8")
                 && converter_mode <= (CodecMode)Enum.Parse(typeof(CodecMode), "UTF16BE"))
                 encodeWithSpace.Visibility = Visibility.Visible;
-            else 
+            else
                 encodeWithSpace.Visibility = Visibility.Collapsed;
             StartCodec();
         }
@@ -155,6 +155,8 @@ namespace TextCodec.Views.Pages
                     CodecMode.UTF16LE => UtfCodec.Utf16LeEncoder(rawTextBox.Text),
                     CodecMode.UTF16BE => UtfCodec.Utf16BeEncoder(rawTextBox.Text),
 
+                    CodecMode.Base64 => BaseSeriesCodec.Base64Encoder(rawTextBox.Text),
+
                     _ => rawTextBox.Text,
                 };
             }
@@ -170,6 +172,8 @@ namespace TextCodec.Views.Pages
                     CodecMode.UTF8 => UtfCodec.Utf8Decoder(encodedTextBox.Text),
                     CodecMode.UTF16LE => UtfCodec.Utf16LeDecoder(encodedTextBox.Text),
                     CodecMode.UTF16BE => UtfCodec.Utf16BeDecoder(encodedTextBox.Text),
+
+                    CodecMode.Base64 => BaseSeriesCodec.Base64Decoder(encodedTextBox.Text),
 
                     _ => encodedTextBox.Text,
                 };

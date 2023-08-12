@@ -100,6 +100,11 @@
                                             x:Uid="CodecPageModeUtf16Be"
                                             Click="SelectMode_Click"/>
                         </MenuFlyoutSubItem>
+                        <MenuFlyoutSubItem Text="Base 系列">
+                            <MenuFlyoutItem x:Name="Base64"
+                                            Text="Base64"
+                                            Click="SelectMode_Click"/>
+                        </MenuFlyoutSubItem>
                     </MenuFlyout>
                 </DropDownButton.Flyout>
             </DropDownButton>
