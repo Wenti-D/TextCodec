@@ -89,7 +89,7 @@ namespace TextCodec.Core
                 {
                     int index_start = index;
                     while (index < list.Count && list[index] is byte) index++;
-                    res += encoding.GetString(Converters.ListToByteArrayConverter(list.GetRange(index_start, index - index_start)));
+                    res += encoding.GetString(Converters.ListToByteArrayConverter.Convert(list.GetRange(index_start, index - index_start)));
                 }
             }
             return res;

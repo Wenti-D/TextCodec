@@ -120,6 +120,15 @@ namespace TextCodec.Views.Pages
                 encodeWithSpace.Visibility = Visibility.Visible;
             else
                 encodeWithSpace.Visibility = Visibility.Collapsed;
+            if (converter_mode >= (CodecMode)Enum.Parse(typeof(CodecMode), "Base64")
+                && converter_mode <= (CodecMode)Enum.Parse(typeof(CodecMode), "Base58"))
+                textPreprocessMode.Visibility = Visibility.Visible;
+            else
+                textPreprocessMode.Visibility = Visibility.Collapsed;
+            if (converter_mode == (CodecMode)Enum.Parse(typeof(CodecMode), "Base58"))
+                Base58Style.Visibility = Visibility.Visible;
+            else
+                Base58Style.Visibility = Visibility.Collapsed;
             StartCodec();
         }
 
@@ -156,6 +165,7 @@ namespace TextCodec.Views.Pages
                     CodecMode.UTF16BE => UtfCodec.Utf16BeEncoder(rawTextBox.Text),
 
                     CodecMode.Base64 => BaseSeriesCodec.Base64Encoder(rawTextBox.Text),
+                    CodecMode.Base58 => BaseSeriesCodec.Base58Encoder(rawTextBox.Text),
 
                     _ => rawTextBox.Text,
                 };

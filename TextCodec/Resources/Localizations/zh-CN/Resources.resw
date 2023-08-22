@@ -120,6 +120,12 @@
   <data name="AppTitle.Text" xml:space="preserve">
     <value>Text Codec</value>
   </data>
+  <data name="CodecPageBase58BtcCharList" xml:space="preserve">
+    <value>比特币序列</value>
+  </data>
+  <data name="CodecPageBase58StdCharList" xml:space="preserve">
+    <value>标准序列</value>
+  </data>
   <data name="CodecPageClearTextButtonInfo.Content" xml:space="preserve">
     <value>清除</value>
   </data>
@@ -129,6 +135,9 @@
   <data name="CodecPageEncodeWithSpaceCheckBox.Content" xml:space="preserve">
     <value>编码时加空格</value>
   </data>
+  <data name="CodecPageModeBaseSeries.Text" xml:space="preserve">
+    <value>Base 系列</value>
+  </data>
   <data name="CodecPageModeSelectButton.Content" xml:space="preserve">
     <value>选择模式</value>
   </data>
@@ -137,6 +146,9 @@
   </data>
   <data name="CodecPageModeUtf16Le.Text" xml:space="preserve">
     <value>UTF-16 小端序</value>
+  </data>
+  <data name="CodecPageModeUtf8" xml:space="preserve">
+    <value>UTF-8</value>
   </data>
   <data name="CodecPagePasteTextButtonInfo.Content" xml:space="preserve">
     <value>粘贴</value>
