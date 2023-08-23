@@ -32,6 +32,7 @@ namespace TextCodec.Views.Pages
         private bool last_focused_is_raw_text;
         private CodecMode converter_mode;
         private static DispatcherTimer timer;
+        private static AppSettings AppSettings = MainWindow.AppSettings;
 
         public CodecPage()
         {
@@ -46,11 +47,7 @@ namespace TextCodec.Views.Pages
             timer.Tick += Timer_Tick;
             timer.Interval = TimeSpan.FromMilliseconds(600);
 
-            if (ApplicationData.Current.LocalSettings.Values["IsUtfEncodeWithSpaceChecked"] is null)
-            {
-                ApplicationData.Current.LocalSettings.Values["IsUtfEncodeWithSpaceChecked"] = true;
-            }
-            encodeWithSpace.IsChecked = (bool)ApplicationData.Current.LocalSettings.Values["IsUtfEncodeWithSpaceChecked"];
+            encodeWithSpace.IsChecked = AppSettings.IsUtfEncodeWithSpace;
         }
 
         private void ClearText_Click(object sender, RoutedEventArgs e)
@@ -193,13 +190,13 @@ namespace TextCodec.Views.Pages
 
         private void encodeWithSpace_Checked(object sender, RoutedEventArgs e)
         {
-            ApplicationData.Current.LocalSettings.Values["IsUtfEncodeWithSpaceChecked"] = true;
+            AppSettings.IsUtfEncodeWithSpace = true;
             StartCodec();
         }
 
         private void encodeWithSpace_Unchecked(object sender, RoutedEventArgs e)
         {
-            ApplicationData.Current.LocalSettings.Values["IsUtfEncodeWithSpaceChecked"] = false;
+            AppSettings.IsUtfEncodeWithSpace = false;
             StartCodec();
         }
     }

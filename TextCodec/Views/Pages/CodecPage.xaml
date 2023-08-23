@@ -135,6 +135,8 @@
             <StackPanel Orientation="Horizontal"
                         Grid.Column="1">
                 <ComboBox x:Name="textPreprocessMode"
+                          Width="150"
+                          SelectedValue="{Binding SelectedBaseSeriesTextPreprocessMode, Mode=TwoWay}"
                           Visibility="Collapsed">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
@@ -146,6 +148,8 @@
                     <x:String>CodecPageModeUtf16Be/Text</x:String>
                 </ComboBox>
                 <ComboBox x:Name="Base58Style"
+                          Width="120"
+                          SelectedValue="{Binding SelectedBase58Style, Mode=TwoWay}"
                           Visibility="Collapsed">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>

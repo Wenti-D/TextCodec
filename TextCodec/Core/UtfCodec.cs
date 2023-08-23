@@ -6,13 +6,14 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Text.Unicode;
 using System.Threading.Tasks;
-using TextCodec.Views.Pages;
 using Windows.Storage;
 
 namespace TextCodec.Core
 {
     partial class UtfCodec
     {
+        private static AppSettings AppSettings = MainWindow.AppSettings;
+
         public static string Utf8Encoder(string raw_text) => Encoder(raw_text, new UTF8Encoding());
         public static string Utf8Decoder(string text) => Decoder(text, new UTF8Encoding());
         public static string Utf16LeEncoder(string raw_text) => Encoder(raw_text, new UnicodeEncoding());
@@ -28,7 +29,7 @@ namespace TextCodec.Core
             {
                 res[i] = bytes[i].ToString("X2");
             }
-            if (ApplicationData.Current.LocalSettings.Values["IsUtfEncodeWithSpaceChecked"] is true)
+            if (AppSettings.IsUtfEncodeWithSpace)
                 return string.Join(" ", res);
             else
                 return string.Join("", res);
