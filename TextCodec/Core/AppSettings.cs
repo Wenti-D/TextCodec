@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
+using Windows.Graphics;
 using Windows.Storage;
 
 namespace TextCodec.Core
@@ -11,6 +13,8 @@ namespace TextCodec.Core
     public sealed class AppSettings : ObservableObject
     {
         private BackdropTypes? backdropTypes;
+        private bool? isMainWindowMaximum;
+        private ulong? mainWindowRect;
         private bool? isUtfEncodeWithSpace;
         private string? baseSeriesTextPreprocessMode;
         private string? base58Style;
@@ -26,6 +30,32 @@ namespace TextCodec.Core
             {
                 SetProperty(ref backdropTypes, value);
                 local_settings.Values["BackdropType"] = backdropTypes.ToString();
+            }
+        }
+
+        /// <summary>
+        /// 窗口是否最大化
+        /// </summary>
+        public bool? IsMainWindowMaximum
+        {
+            get => isMainWindowMaximum;
+            set
+            {
+                SetProperty(ref isMainWindowMaximum, value);
+                local_settings.Values["IsMainWindowMaximum"] = isMainWindowMaximum;
+            }
+        }
+
+        /// <summary>
+        /// 主窗口位置大小
+        /// </summary>
+        public ulong? MainWindowRect
+        {
+            get => mainWindowRect;
+            set
+            {
+                SetProperty(ref mainWindowRect, value);
+                local_settings.Values["MainWindowRect"] = mainWindowRect;
             }
         }
 
@@ -89,6 +119,8 @@ namespace TextCodec.Core
         private void GetSettings()
         {
             backdropTypes = Enum.Parse<BackdropTypes>(local_settings.Values["BackdropType"] as string);
+            isMainWindowMaximum = (bool)local_settings.Values["IsMainWindowMaximum"];
+            mainWindowRect = (ulong)local_settings.Values["MainWindowRect"];
             isUtfEncodeWithSpace = (bool)local_settings.Values["IsUtfEncodeWithSpace"];
             baseSeriesTextPreprocessMode = local_settings.Values["BaseSeriesTextPreprocessMode"] as string;
             base58Style = local_settings.Values["Base58Style"] as string;
