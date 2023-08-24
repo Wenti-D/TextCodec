@@ -181,6 +181,7 @@ namespace TextCodec.Views.Pages
                     CodecMode.UTF16BE => UtfCodec.Utf16BeDecoder(encodedTextBox.Text),
 
                     CodecMode.Base64 => BaseSeriesCodec.Base64Decoder(encodedTextBox.Text),
+                    CodecMode.Base58 => BaseSeriesCodec.Base58Decoder(encodedTextBox.Text),
 
                     _ => encodedTextBox.Text,
                 };
@@ -197,6 +198,11 @@ namespace TextCodec.Views.Pages
         private void encodeWithSpace_Unchecked(object sender, RoutedEventArgs e)
         {
             AppSettings.IsUtfEncodeWithSpace = false;
+            StartCodec();
+        }
+
+        private void BaseSeries_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
             StartCodec();
         }
     }

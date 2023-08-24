@@ -137,7 +137,8 @@
                 <ComboBox x:Name="textPreprocessMode"
                           Width="150"
                           SelectedValue="{Binding SelectedBaseSeriesTextPreprocessMode, Mode=TwoWay}"
-                          Visibility="Collapsed">
+                          Visibility="Collapsed"
+                          SelectionChanged="BaseSeries_SelectionChanged">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Converter={StaticResource ResourceTranslationConverter}}"/>
@@ -150,7 +151,8 @@
                 <ComboBox x:Name="Base58Style"
                           Width="120"
                           SelectedValue="{Binding SelectedBase58Style, Mode=TwoWay}"
-                          Visibility="Collapsed">
+                          Visibility="Collapsed"
+                          SelectionChanged="BaseSeries_SelectionChanged">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Converter={StaticResource ResourceTranslationConverter}}"/>
