@@ -272,10 +272,11 @@ namespace TextCodec.Core
                         int eq_len = 8 - tmp_str.Length;
                         try
                         {
-                            while (eq_len > 0 && encoded_texts[i][j++] == '=')
+                            while (eq_len > 0 && encoded_texts[i][j] == '=')
                             {
                                 tmp_str += '=';
                                 eq_len--;
+                                j++;
                             }
                         }
                         catch (Exception) { }
