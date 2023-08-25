@@ -11,11 +11,6 @@ namespace TextCodec.Core
 {
     partial class BaseSeriesCodec
     {
-        [GeneratedRegex("[A-Za-z0-9+/]")]
-        private static partial Regex Base64Char();
-        [GeneratedRegex("[A-Za-z0-9+/=]")]
-        private static partial Regex Base64CharEnd();
-
         private static AppSettings AppSettings = MainWindow.AppSettings;
 
         public static string Base64Encoder(string raw_text)
@@ -28,45 +23,98 @@ namespace TextCodec.Core
         {
             string[] encoded_texts = text.Split(new char[] { ' ', '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
             string[] results = new string[encoded_texts.Length];
+            string code_str = "ABCEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
             var preprocessor = new BaseSeriesHelper().GetPreprocessMode(AppSettings.BaseSeriesTextPreprocessMode);
             for (int i = 0; i < encoded_texts.Length; i++)
             {
-                string tmp = string.Empty;
+                string tmp_str = string.Empty;
+                List<byte> tmp_bytes = new();
                 bool valid_ch = true;
-                foreach (char ch in encoded_texts[i])
+                int j = 0;
+                while (j < encoded_texts[i].Length)
                 {
-                    if (tmp.Length == 3)
+                    if (code_str.Contains(encoded_texts[i][j]))
                     {
-                        if (!valid_ch) { results[i] += "⁆ "; }
-                        if (Base64CharEnd().Match(ch.ToString()).Success)
+                        tmp_str += encoded_texts[i][j];
+                        if (tmp_str.Length == 4)
                         {
-                            results[i] += preprocessor.GetString(Convert.FromBase64String(tmp + ch));
-                            valid_ch = true;
+                            if (!valid_ch)
+                            {
+                                valid_ch = true;
+                                results[i] += "⁆ ";
+                            }
+                            tmp_bytes.AddRange(Convert.FromBase64String(tmp_str));
+                            tmp_str = string.Empty;
+                        }
+                        j++;
+                    }
+                    else if (encoded_texts[i][j] == '=' && (tmp_str.Length == 2 || tmp_str.Length == 3))
+                    {
+                        valid_ch = true;
+                        int eq_len = 4 - tmp_str.Length;
+                        try
+                        {
+                            while (eq_len > 0 && encoded_texts[i][j] == '=')
+                            {
+                                tmp_str += '=';
+                                eq_len--;
+                                j++;
+                            }
+                        }
+                        catch (Exception) { }
+                        if (eq_len > 0)
+                        {
+                            if (valid_ch)
+                            {
+                                valid_ch = false;
+                                results[i] += preprocessor.GetString(tmp_bytes.ToArray()) + " ⁅";
+                                tmp_bytes.Clear();
+                            }
+                            results[i] += tmp_str;
                         }
                         else
                         {
-                            results[i] += " ⁅" + ch;
+                            if (!valid_ch)
+                            {
+                                valid_ch = true;
+                                results[i] += "⁆ ";
+                            }
+                            tmp_bytes.AddRange(Convert.FromBase64String(tmp_str));
                         }
-                        tmp = string.Empty;
-                    }
-                    else if (tmp.Length == 2 && Base64CharEnd().Match(ch.ToString()).Success
-                           || tmp.Length < 2 && Base64Char().Match(ch.ToString()).Success)
-                    {
-                        tmp += ch;
+                        tmp_str = string.Empty;
                     }
                     else
                     {
                         if (valid_ch)
                         {
-                            results[i] += " ⁅";
                             valid_ch = false;
+                            results[i] += preprocessor.GetString(tmp_bytes.ToArray()) + " ⁅";
+                            tmp_bytes.Clear();
                         }
-                        results[i] += tmp + ch;
-                        tmp = string.Empty;
+                        results[i] += tmp_str + encoded_texts[i][j];
+                        tmp_str = string.Empty;
+                        j++;
                     }
                 }
-                if (tmp != string.Empty && valid_ch) { results[i] += " ⁅"; }
-                if (!(valid_ch && tmp == string.Empty)) { results[i] += tmp + "⁆ "; }
+                if (!valid_ch)
+                {
+                    results[i] += tmp_str + "⁆ ";
+                }
+                else
+                {
+                    if (tmp_bytes.Count > 0)
+                    {
+                        results[i] += preprocessor.GetString(tmp_bytes.ToArray());
+                    }
+                    if (tmp_str.Length > 0 && tmp_bytes.Count > 0 || results[i] is null)
+                    {
+                        results[i] += " ⁅";
+                    }
+                    if (tmp_str.Length > 0)
+                    {
+                        results[i] += tmp_str + "⁆ ";
+                    }
+                }
             }
             return string.Join("\n", results);
         }
