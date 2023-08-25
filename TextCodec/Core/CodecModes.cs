@@ -32,5 +32,7 @@ public enum CodecMode : byte
     Base64,
     [Description("转换为 Base58 编码")]
     Base58,
+    [Description("转换为 Base32 编码")]
+    Base32,
 }
 

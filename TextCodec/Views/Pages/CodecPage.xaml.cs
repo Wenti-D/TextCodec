@@ -118,7 +118,7 @@ namespace TextCodec.Views.Pages
             else
                 encodeWithSpace.Visibility = Visibility.Collapsed;
             if (converter_mode >= (CodecMode)Enum.Parse(typeof(CodecMode), "Base64")
-                && converter_mode <= (CodecMode)Enum.Parse(typeof(CodecMode), "Base58"))
+                && converter_mode <= (CodecMode)Enum.Parse(typeof(CodecMode), "Base32"))
                 textPreprocessMode.Visibility = Visibility.Visible;
             else
                 textPreprocessMode.Visibility = Visibility.Collapsed;
@@ -163,6 +163,7 @@ namespace TextCodec.Views.Pages
 
                     CodecMode.Base64 => BaseSeriesCodec.Base64Encoder(rawTextBox.Text),
                     CodecMode.Base58 => BaseSeriesCodec.Base58Encoder(rawTextBox.Text),
+                    CodecMode.Base32 => BaseSeriesCodec.Base32Encoder(rawTextBox.Text),
 
                     _ => rawTextBox.Text,
                 };
@@ -182,6 +183,7 @@ namespace TextCodec.Views.Pages
 
                     CodecMode.Base64 => BaseSeriesCodec.Base64Decoder(encodedTextBox.Text),
                     CodecMode.Base58 => BaseSeriesCodec.Base58Decoder(encodedTextBox.Text),
+                    CodecMode.Base32 => BaseSeriesCodec.Base32Decoder(encodedTextBox.Text),
 
                     _ => encodedTextBox.Text,
                 };

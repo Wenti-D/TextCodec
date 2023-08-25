@@ -38,6 +38,52 @@ namespace TextCodec.Helpers
             return preprocessor.GetString(bytes);
         }
 
+
+        public static List<byte> Base32DecodeHelper(string encoded_text)
+        {
+            string code_str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
+            List<byte> bytes = new();
+            uint eq_pos = (uint)encoded_text.IndexOf('=');
+            if (eq_pos >= 2)
+            {
+                bytes.Add((byte)
+                    ((code_str.IndexOf(encoded_text[0]) << 3)
+                    + (code_str.IndexOf(encoded_text[1]) >> 2))
+                    );
+            }
+            if (eq_pos >= 4)
+            {
+                bytes.Add((byte)
+                    (((code_str.IndexOf(encoded_text[1]) & 0b11) << 6)
+                    + (code_str.IndexOf(encoded_text[2]) << 1)
+                    + (code_str.IndexOf(encoded_text[3]) >> 4))
+                    );
+            }
+            if (eq_pos >= 5)
+            {
+                bytes.Add((byte)
+                    (((code_str.IndexOf(encoded_text[3]) & 0b1111) << 4)
+                    + (code_str.IndexOf(encoded_text[4]) >> 1))
+                    );
+            }
+            if (eq_pos >= 7)
+            {
+                bytes.Add((byte)
+                    (((code_str.IndexOf(encoded_text[4]) & 0b1) << 7)
+                    + (code_str.IndexOf(encoded_text[5]) << 2)
+                    + (code_str.IndexOf(encoded_text[6]) >> 3))
+                    );
+            }
+            if (eq_pos >= 8)
+            {
+                bytes.Add((byte)
+                    (((code_str.IndexOf(encoded_text[6]) & 0b111) << 5)
+                    + (code_str.IndexOf(encoded_text[7])))
+                    );
+            }
+            return bytes;
+        }
+
         public BaseSeriesHelper()
         {
             PreprocessMode.Add("CodecPageModeUtf8", new UTF8Encoding());

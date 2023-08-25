@@ -118,6 +118,9 @@
                             <MenuFlyoutItem x:Name="Base58"
                                             Text="Base58"
                                             Click="SelectMode_Click"/>
+                            <MenuFlyoutItem x:Name="Base32"
+                                            Text="Base32"
+                                            Click="SelectMode_Click"/>
                         </MenuFlyoutSubItem>
                     </MenuFlyout>
                 </DropDownButton.Flyout>
