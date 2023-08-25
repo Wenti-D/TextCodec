@@ -26,6 +26,8 @@ namespace TextCodec.Core
         public readonly int Top => y;
         public readonly int Right => x + width;
         public readonly int Bottom => y + height;
+        public readonly int Width => width;
+        public readonly int Height => height;
 
         public WindowRect(int X, int Y, int Width, int Height)
         {

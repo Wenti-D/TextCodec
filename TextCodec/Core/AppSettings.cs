@@ -18,6 +18,7 @@ namespace TextCodec.Core
         private bool? isUtfEncodeWithSpace;
         private string? baseSeriesTextPreprocessMode;
         private string? base58Style;
+        private bool? onReset;
         private ApplicationDataContainer local_settings = ApplicationData.Current.LocalSettings;
 
         /// <summary>
@@ -25,37 +26,37 @@ namespace TextCodec.Core
         /// </summary>
         public BackdropTypes BackdropType
         {
-            get => backdropTypes.Value;
+            get => backdropTypes ?? Enum.Parse<BackdropTypes>("Mica");
             set
             {
                 SetProperty(ref backdropTypes, value);
-                local_settings.Values["BackdropType"] = backdropTypes.ToString();
+                local_settings.Values["BackdropType"] = value.ToString();
             }
         }
 
         /// <summary>
         /// 窗口是否最大化
         /// </summary>
-        public bool? IsMainWindowMaximum
+        public bool IsMainWindowMaximum
         {
-            get => isMainWindowMaximum;
+            get => isMainWindowMaximum ?? false;
             set
             {
                 SetProperty(ref isMainWindowMaximum, value);
-                local_settings.Values["IsMainWindowMaximum"] = isMainWindowMaximum;
+                local_settings.Values["IsMainWindowMaximum"] = value;
             }
         }
 
         /// <summary>
         /// 主窗口位置大小
         /// </summary>
-        public ulong? MainWindowRect
+        public ulong MainWindowRect
         {
-            get => mainWindowRect;
+            get => mainWindowRect ?? 0;
             set
             {
                 SetProperty(ref mainWindowRect, value);
-                local_settings.Values["MainWindowRect"] = mainWindowRect;
+                local_settings.Values["MainWindowRect"] = value;
             }
         }
 
@@ -64,11 +65,11 @@ namespace TextCodec.Core
         /// </summary>
         public bool IsUtfEncodeWithSpace
         {
-            get => isUtfEncodeWithSpace.Value;
+            get => isUtfEncodeWithSpace ?? true;
             set
             {
                 SetProperty(ref isUtfEncodeWithSpace, value);
-                local_settings.Values["IsUtfEncodeWithSpace"] = isUtfEncodeWithSpace;
+                local_settings.Values["IsUtfEncodeWithSpace"] = value;
             }
         }
 
@@ -77,11 +78,11 @@ namespace TextCodec.Core
         /// </summary>
         public string BaseSeriesTextPreprocessMode
         {
-            get => baseSeriesTextPreprocessMode;
+            get => baseSeriesTextPreprocessMode ?? "CodecPageModeUtf8";
             set
             {
                 SetProperty(ref baseSeriesTextPreprocessMode, value);
-                local_settings.Values["BaseSeriesTextPreprocessMode"] = baseSeriesTextPreprocessMode;
+                local_settings.Values["BaseSeriesTextPreprocessMode"] = value;
             }
         }
 
@@ -90,11 +91,24 @@ namespace TextCodec.Core
         /// </summary>
         public string Base58Style
         {
-            get => base58Style;
+            get => base58Style ?? "CodecPageBase58StdCharList";
             set
             {
                 SetProperty(ref base58Style, value);
-                local_settings.Values["Base58Style"] = base58Style;
+                local_settings.Values["Base58Style"] = value;
+            }
+        }
+
+        /// <summary>
+        /// 是否处于重置状态
+        /// </summary>
+        public bool OnReset
+        {
+            get => onReset ?? false;
+            set
+            {
+                SetProperty(ref onReset, value);
+                local_settings.Values["OnReset"] = value;
             }
         }
 
@@ -110,25 +124,23 @@ namespace TextCodec.Core
             {
                 local_settings.Values["IsInitialized"] = true;
                 local_settings.Values["BackdropType"] = "Mica";
+                local_settings.Values["IsMainWindowMaximum"] = false;
                 local_settings.Values["IsUtfEncodeWithSpace"] = true;
                 local_settings.Values["BaseSeriesTextPreprocessMode"] = "CodecPageModeUtf8";
                 local_settings.Values["Base58Style"] = "CodecPageBase58StdCharList";
+                local_settings.Values["OnReset"] = false;
             }
         }
 
         private void GetSettings()
         {
             backdropTypes = Enum.Parse<BackdropTypes>(local_settings.Values["BackdropType"] as string);
-            isMainWindowMaximum = (bool)local_settings.Values["IsMainWindowMaximum"];
-            mainWindowRect = (ulong)local_settings.Values["MainWindowRect"];
-            isUtfEncodeWithSpace = (bool)local_settings.Values["IsUtfEncodeWithSpace"];
+            isMainWindowMaximum = (bool?)local_settings.Values["IsMainWindowMaximum"];
+            mainWindowRect = (ulong?)local_settings.Values["MainWindowRect"];
+            isUtfEncodeWithSpace = (bool?)local_settings.Values["IsUtfEncodeWithSpace"];
             baseSeriesTextPreprocessMode = local_settings.Values["BaseSeriesTextPreprocessMode"] as string;
             base58Style = local_settings.Values["Base58Style"] as string;
-        }
-
-        public async void Clear()
-        {
-            await ApplicationData.Current.ClearAsync(ApplicationDataLocality.Local);
+            onReset = (bool?)local_settings.Values["OnReset"];
         }
     }
 }

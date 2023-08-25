@@ -58,14 +58,21 @@ namespace TextCodec
             {
                 User32.ShowWindow(hwnd, ShowWindowCommand.SW_SHOWMAXIMIZED);
             }
-            else if (appSettings.MainWindowRect is ulong value)
+            else
             {
-                var rect = new WindowRect(value);
+                var rect = new WindowRect(appSettings.MainWindowRect);
                 var scr_area = DisplayArea.GetFromWindowId(id, DisplayAreaFallback.Primary);
 
-                if (rect.Left >= 0 && rect.Top >= 0 && rect.Right <= scr_area.WorkArea.Width && rect.Bottom <= scr_area.WorkArea.Height)
+                if (rect.Left >= 0 && rect.Top >= 0
+                 && rect.Width > 0 && rect.Height > 0
+                 && rect.Right <= scr_area.WorkArea.Width 
+                 && rect.Bottom <= scr_area.WorkArea.Height)
                 {
                     appWindow.MoveAndResize(rect.ToRectInt32());
+                }
+                else
+                {
+                    appWindow.Resize(new SizeInt32(1100, 800));
                 }
             }
         }
@@ -95,7 +102,7 @@ namespace TextCodec
             };
         }
 
-        private void MainWindow_Closed(object sender, WindowEventArgs args)
+        private async void MainWindow_Closed(object sender, WindowEventArgs args)
         {
             var window_placement = new User32.WINDOWPLACEMENT();
             if (User32.GetWindowPlacement(hwnd, ref window_placement))
@@ -105,6 +112,10 @@ namespace TextCodec
                 var size = appWindow.Size;
                 var rect = new WindowRect(pos.X, pos.Y, size.Width, size.Height);
                 appSettings.MainWindowRect = rect.val;
+            }
+            if (appSettings.OnReset)
+            {
+                await ApplicationData.Current.ClearAsync(ApplicationDataLocality.Local);
             }
         }
 

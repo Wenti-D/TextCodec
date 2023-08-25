@@ -33,7 +33,7 @@ namespace TextCodec.Views.Pages
 
         private void SettingsPageResetAppCard_Click(object sender, RoutedEventArgs e)
         {
-            AppSettings.Clear();
+            AppSettings.OnReset = true;
         }
     }
 }
