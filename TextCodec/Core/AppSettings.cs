@@ -111,7 +111,7 @@ namespace TextCodec.Core
                 local_settings.Values["IsInitialized"] = true;
                 local_settings.Values["BackdropType"] = "Mica";
                 local_settings.Values["IsUtfEncodeWithSpace"] = true;
-                local_settings.Values["BaseSeriesTextPreprocessMode"] = "CodecPageModeUtf16Le/Text";
+                local_settings.Values["BaseSeriesTextPreprocessMode"] = "CodecPageModeUtf8";
                 local_settings.Values["Base58Style"] = "CodecPageBase58StdCharList";
             }
         }
@@ -124,6 +124,11 @@ namespace TextCodec.Core
             isUtfEncodeWithSpace = (bool)local_settings.Values["IsUtfEncodeWithSpace"];
             baseSeriesTextPreprocessMode = local_settings.Values["BaseSeriesTextPreprocessMode"] as string;
             base58Style = local_settings.Values["Base58Style"] as string;
+        }
+
+        public async void Clear()
+        {
+            await ApplicationData.Current.ClearAsync(ApplicationDataLocality.Local);
         }
     }
 }

@@ -192,6 +192,15 @@
   <data name="SettingsPageBackdropSet.Header" xml:space="preserve">
     <value>背景材质</value>
   </data>
+  <data name="SettingsPageDevSet.Text" xml:space="preserve">
+    <value>开发</value>
+  </data>
+  <data name="SettingsPageResetAppSet.Description" xml:space="preserve">
+    <value>需要重启应用</value>
+  </data>
+  <data name="SettingsPageResetAppSet.Header" xml:space="preserve">
+    <value>恢复默认设置</value>
+  </data>
   <data name="SettingsPageTitle.Text" xml:space="preserve">
     <value>设置</value>
   </data>

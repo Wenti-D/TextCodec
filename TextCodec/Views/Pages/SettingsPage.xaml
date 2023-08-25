@@ -45,6 +45,7 @@
                       VerticalScrollBarVisibility="Auto"
                       VerticalScrollMode="Auto">
             <StackPanel Spacing="{StaticResource SettingsCardSpacing}">
+                <!--应用程序设置-->
                 <TextBlock Style="{StaticResource SettingsSectionHeaderTextBlockStyle}"
                            x:Uid="SettingsPageAppSet"/>
                 <labs:SettingsCard x:Uid="SettingsPageBackdropSet">
@@ -55,6 +56,19 @@
                               ItemsSource="{Binding SysBackdrops}"
                               SelectedItem="{Binding SelectedBackdrop, Mode=TwoWay}"/>
                 </labs:SettingsCard>
+
+                <!--开发人员测试-->
+                <TextBlock Style="{StaticResource SettingsSectionHeaderTextBlockStyle}"
+                           x:Uid="SettingsPageDevSet"/>
+                <labs:SettingsCard x:Uid="SettingsPageResetAppSet"
+                                   IsClickEnabled="True"
+                                   Click="SettingsPageResetAppCard_Click">
+                    <labs:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xE777;" />
+                    </labs:SettingsCard.HeaderIcon>
+                </labs:SettingsCard>
+
+                <!--关于-->
                 <TextBlock Style="{StaticResource SettingsSectionHeaderTextBlockStyle}"
                            x:Uid="SettingsPageAbout"/>
                 <labs:SettingsExpander x:Uid="SettingsPageAboutAppTitle">
