@@ -41,7 +41,15 @@
                         BackRequested="NavigationViewController_BackRequested" 
                         ItemInvoked="NavigationViewController_ItemInvoked">
             <NavigationView.MenuItems>
-                <NavigationViewItem Icon="Rename" x:Uid="NaviViewItemCodecPage" Tag="TextCodec.Views.Pages.CodecPage"/>
+                <NavigationViewItem Icon="Rename"
+                                    x:Uid="NaviViewItemCodecPage"
+                                    Tag="TextCodec.Views.Pages.CodecPage"/>
+                <NavigationViewItem x:Uid="NaviViewItemHashPage"
+                                    Tag="TextCodec.Views.Pages.HashPage">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE943;"/>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
             </NavigationView.MenuItems>
             <Frame x:Name="ContentFrame" Navigated="ContentFrame_Navigated" Padding="20"/>
         </NavigationView>

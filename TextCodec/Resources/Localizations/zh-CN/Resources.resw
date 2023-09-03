@@ -162,8 +162,20 @@
   <data name="CodecPageTextPastedInfo.Subtitle" xml:space="preserve">
     <value>粘贴成功</value>
   </data>
+  <data name="HashPreprocessModeUtf16Be" xml:space="preserve">
+    <value>UTF-16 大端序</value>
+  </data>
+  <data name="HashPreprocessModeUtf16Le" xml:space="preserve">
+    <value>UTF-16 小端序</value>
+  </data>
+  <data name="HashPreprocessModeUtf8" xml:space="preserve">
+    <value>UTF-8</value>
+  </data>
   <data name="NaviViewItemCodecPage.Content" xml:space="preserve">
     <value>文本编解码</value>
+  </data>
+  <data name="NaviViewItemHashPage.Content" xml:space="preserve">
+    <value>散列计算</value>
   </data>
   <data name="SettingsPageAbout.Text" xml:space="preserve">
     <value>关于</value>
@@ -206,5 +218,14 @@
   </data>
   <data name="SettingsPageTitle.Text" xml:space="preserve">
     <value>设置</value>
+  </data>
+  <data name="SHA1" xml:space="preserve">
+    <value>SHA-1</value>
+  </data>
+  <data name="SHA256" xml:space="preserve">
+    <value>SHA-256</value>
+  </data>
+  <data name="SHA512" xml:space="preserve">
+    <value>SHA-512</value>
   </data>
 </root>

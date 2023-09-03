@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="TextCodec.Views.Pages.HashPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:TextCodec.Views.Pages"
+    xmlns:local_vm="using:TextCodec.ViewModels"
+    xmlns:local_cvt="using:TextCodec.Core.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <!--Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"-->
+
+    <Page.Resources>
+        <local_cvt:ResourceTranslationConverter x:Name="ResourceTranslationConverter"/>
+    </Page.Resources>
+
+    <Page.DataContext>
+        <local_vm:HashViewModel/>
+    </Page.DataContext>
+    
+
+    <Grid Width="Auto" Height="Auto">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Orientation="Vertical">
+            <Button x:Name="clearRawText"
+                    Click="ClearText_Click">
+                <ToolTipService.ToolTip>
+                    <ToolTip x:Uid="CodecPageClearTextButtonInfo"/>
+                </ToolTipService.ToolTip>
+                <FontIcon Glyph="&#xE711;" />
+            </Button>
+
+            <Button x:Name="copyRawText"
+                    Click="copyRawText_Click">
+                <ToolTipService.ToolTip>
+                    <ToolTip x:Uid="CodecPageCopyTextButtonInfo"/>
+                </ToolTipService.ToolTip>
+                <FontIcon Glyph="&#xE8C8;" />
+            </Button>
+            <TeachingTip x:Name="rawTextCopiedTip"
+                         x:Uid="CodecPageTextCopiedInfo"
+                         IsLightDismissEnabled="True"
+                         Target="{x:Bind copyRawText}"
+                         FontFamily="{StaticResource SarasaUI}"/>
+
+            <Button x:Name="pasteRawText"
+                    Click="pasteRawText_Click">
+                <ToolTipService.ToolTip>
+                    <ToolTip x:Uid="CodecPagePasteTextButtonInfo"/>
+                </ToolTipService.ToolTip>
+                <FontIcon Glyph="&#xE77F;" />
+            </Button>
+            <TeachingTip x:Name="rawTextPastedTip"
+                         x:Uid="CodecPageTextPastedInfo"
+                         IsLightDismissEnabled="True"
+                         Target="{x:Bind pasteRawText}"
+                         FontFamily="{StaticResource SarasaUI}"/>
+        </StackPanel>
+        <TextBox x:Name="rawTextBox"
+                 AcceptsReturn="True"
+                 Margin="20,0,0,0"
+                 TextWrapping="Wrap"
+                 IsSpellCheckEnabled="False"
+                 Grid.Row="0"
+                 Grid.Column="1"
+                 TextChanged="TextBox_TextChanged"/>
+
+        <Grid Grid.Row="1" 
+              Grid.Column="1"
+              Padding="20">
+
+            <StackPanel Orientation="Horizontal"
+                        Margin="40,0,0,0">
+                <ComboBox x:Name="hashMode"
+                          Width="120"
+                          SelectedValue="{Binding SelectedHashMode, Mode=TwoWay}"
+                          SelectionChanged="hashMode_SelectionChanged">
+                    <x:String>MD5</x:String>
+                    <x:String>SHA1</x:String>
+                    <x:String>SHA256</x:String>
+                    <x:String>SHA512</x:String>
+                </ComboBox>
+                <ComboBox x:Name="textPreprocessMode"
+                          Width="150"
+                          SelectedValue="{Binding SelectedHashTextPreprocessMode, Mode=TwoWay}"
+                          SelectionChanged="textPreprocessMode_SelectionChanged">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Converter={StaticResource ResourceTranslationConverter}}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                    <x:String>HashPreprocessModeUtf8</x:String>
+                    <x:String>HashPreprocessModeUtf16Le</x:String>
+                    <x:String>HashPreprocessModeUtf16Be</x:String>
+                </ComboBox>
+            </StackPanel>
+        </Grid>
+
+
+        <StackPanel Orientation="Vertical" Grid.Row="2">
+            <Button x:Name="copyEncodedText"
+                    Click="copyEncodedText_Click">
+                <ToolTipService.ToolTip>
+                    <ToolTip x:Uid="CodecPageCopyTextButtonInfo"/>
+                </ToolTipService.ToolTip>
+                <FontIcon Glyph="&#xE8C8;" />
+            </Button>
+            <TeachingTip x:Name="encodedTextCopiedTip"
+                         x:Uid="CodecPageTextCopiedInfo"
+                         IsLightDismissEnabled="True"
+                         Target="{x:Bind copyEncodedText}"
+                         FontFamily="{StaticResource SarasaUI}"/>
+        </StackPanel>
+        <TextBox x:Name="encodedTextBox"
+                 IsReadOnly="True"
+                 Margin="20,0,0,0"
+                 Style="{ThemeResource MonoTextBoxStyle}"
+                 TextWrapping="Wrap"
+                 IsSpellCheckEnabled="False"
+                 Grid.Row="2"
+                 Grid.Column="1"/>
+    </Grid>
+</Page>

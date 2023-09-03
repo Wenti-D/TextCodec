@@ -18,6 +18,10 @@ namespace TextCodec.Core
         private bool? isUtfEncodeWithSpace;
         private string? baseSeriesTextPreprocessMode;
         private string? base58Style;
+
+        private string? hashTextPreprocessMode;
+        private string? hashMode;
+
         private bool? onReset;
         private ApplicationDataContainer local_settings = ApplicationData.Current.LocalSettings;
 
@@ -100,6 +104,32 @@ namespace TextCodec.Core
         }
 
         /// <summary>
+        /// 散列计算的文本预处理编码方式
+        /// </summary>
+        public string HashTextPreprocessMode
+        {
+            get => hashTextPreprocessMode ?? "HashPreprocessModeUtf8";
+            set
+            {
+                SetProperty(ref hashTextPreprocessMode, value);
+                local_settings.Values["HashTextPreprocessMode"] = value;
+            }
+        }
+
+        /// <summary>
+        /// 散列算法
+        /// </summary>
+        public string HashMode
+        {
+            get => hashMode ?? "MD5";
+            set
+            {
+                SetProperty(ref hashMode, value);
+                local_settings.Values["HashMode"] = value;
+            }
+        }
+
+        /// <summary>
         /// 是否处于重置状态
         /// </summary>
         public bool OnReset
@@ -123,11 +153,17 @@ namespace TextCodec.Core
             if (local_settings.Values["IsInitialized"] is null)
             {
                 local_settings.Values["IsInitialized"] = true;
+
                 local_settings.Values["BackdropType"] = "Mica";
                 local_settings.Values["IsMainWindowMaximum"] = false;
+
                 local_settings.Values["IsUtfEncodeWithSpace"] = true;
                 local_settings.Values["BaseSeriesTextPreprocessMode"] = "CodecPageModeUtf8";
                 local_settings.Values["Base58Style"] = "CodecPageBase58StdCharList";
+
+                local_settings.Values["HashTextPreprocessMode"] = "HashPreprocessModeUtf8";
+                local_settings.Values["HashMode"] = "MD5";
+
                 local_settings.Values["OnReset"] = false;
             }
         }
@@ -137,9 +173,14 @@ namespace TextCodec.Core
             backdropTypes = Enum.Parse<BackdropTypes>(local_settings.Values["BackdropType"] as string);
             isMainWindowMaximum = (bool?)local_settings.Values["IsMainWindowMaximum"];
             mainWindowRect = (ulong?)local_settings.Values["MainWindowRect"];
+
             isUtfEncodeWithSpace = (bool?)local_settings.Values["IsUtfEncodeWithSpace"];
             baseSeriesTextPreprocessMode = local_settings.Values["BaseSeriesTextPreprocessMode"] as string;
             base58Style = local_settings.Values["Base58Style"] as string;
+
+            hashTextPreprocessMode = local_settings.Values["HashTextPreprocessMode"] as string;
+            hashMode = local_settings.Values["HashMode"] as string;
+
             onReset = (bool?)local_settings.Values["OnReset"];
         }
     }
