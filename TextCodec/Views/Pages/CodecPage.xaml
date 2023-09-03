@@ -133,9 +133,10 @@
             <CheckBox x:Name="encodeWithSpace"
                       x:Uid="CodecPageEncodeWithSpaceCheckBox"
                       Grid.Column="1"
+                      IsChecked="{Binding IsEncodeWithSpaceChecked, Mode=TwoWay}"
                       Visibility="Collapsed"
-                      Checked="encodeWithSpace_Checked"
-                      Unchecked="encodeWithSpace_Unchecked"/>
+                      Checked="encodeWithSpace_Changed"
+                      Unchecked="encodeWithSpace_Changed"/>
 
             <!--Base系列编码时出现的编码方式与序列选项-->
             <StackPanel Orientation="Horizontal"

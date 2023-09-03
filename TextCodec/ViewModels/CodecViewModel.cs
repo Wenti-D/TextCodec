@@ -16,12 +16,23 @@ namespace TextCodec.ViewModels
         private static AppSettings AppSettings = MainWindow.AppSettings;
         private static ResourceLoader resource_loader = ResourceLoader.GetForViewIndependentUse();
 
+        private bool isEncodeWithSpaceChecked;
         private string selectedBaseSeriesTextPreprocessMode;
         private string selectedBase58Style;
 
         public static string GetTranslation(string resource)
         {
             return resource_loader.GetString(resource);
+        }
+
+        public bool IsEncodeWithSpaceChecked
+        {
+            get { return isEncodeWithSpaceChecked = AppSettings.IsUtfEncodeWithSpace; }
+            set
+            {
+                SetProperty(ref isEncodeWithSpaceChecked, value);
+                AppSettings.IsUtfEncodeWithSpace = value;
+            }
         }
 
         public string SelectedBaseSeriesTextPreprocessMode

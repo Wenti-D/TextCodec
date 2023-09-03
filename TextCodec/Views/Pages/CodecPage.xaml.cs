@@ -46,8 +46,6 @@ namespace TextCodec.Views.Pages
             timer = new DispatcherTimer();
             timer.Tick += Timer_Tick;
             timer.Interval = TimeSpan.FromMilliseconds(600);
-
-            encodeWithSpace.IsChecked = AppSettings.IsUtfEncodeWithSpace;
         }
 
         private void ClearText_Click(object sender, RoutedEventArgs e)
@@ -195,15 +193,8 @@ namespace TextCodec.Views.Pages
 
         }
 
-        private void encodeWithSpace_Checked(object sender, RoutedEventArgs e)
+        private void encodeWithSpace_Changed(object sender, RoutedEventArgs e)
         {
-            AppSettings.IsUtfEncodeWithSpace = true;
-            StartCodec();
-        }
-
-        private void encodeWithSpace_Unchecked(object sender, RoutedEventArgs e)
-        {
-            AppSettings.IsUtfEncodeWithSpace = false;
             StartCodec();
         }
 
