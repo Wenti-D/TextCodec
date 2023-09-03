@@ -122,6 +122,9 @@
                                             Text="Base32"
                                             Click="SelectMode_Click"/>
                         </MenuFlyoutSubItem>
+                        <MenuFlyoutItem x:Name="JsonString"
+                                        Text="Json 字符串"
+                                        Click="SelectMode_Click"/>
                     </MenuFlyout>
                 </DropDownButton.Flyout>
             </DropDownButton>

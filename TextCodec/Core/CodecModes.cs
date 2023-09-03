@@ -34,5 +34,8 @@ public enum CodecMode : byte
     Base58,
     [Description("转换为 Base32 编码")]
     Base32,
+
+    [Description("转换为 JSON 字符串")]
+    JsonString,
 }
 

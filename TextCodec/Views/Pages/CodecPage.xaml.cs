@@ -165,6 +165,8 @@ namespace TextCodec.Views.Pages
                     CodecMode.Base58 => BaseSeriesCodec.Base58Encoder(rawTextBox.Text),
                     CodecMode.Base32 => BaseSeriesCodec.Base32Encoder(rawTextBox.Text),
 
+                    CodecMode.JsonString => JsonStringCodec.Encoder(rawTextBox.Text),
+
                     _ => rawTextBox.Text,
                 };
             }
@@ -184,6 +186,8 @@ namespace TextCodec.Views.Pages
                     CodecMode.Base64 => BaseSeriesCodec.Base64Decoder(encodedTextBox.Text),
                     CodecMode.Base58 => BaseSeriesCodec.Base58Decoder(encodedTextBox.Text),
                     CodecMode.Base32 => BaseSeriesCodec.Base32Decoder(encodedTextBox.Text),
+
+                    CodecMode.JsonString => JsonStringCodec.Decoder(encodedTextBox.Text),
 
                     _ => encodedTextBox.Text,
                 };

@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using System.Text.Unicode;
 using System.Threading.Tasks;
 using Windows.Storage;
+using TextCodec.Helpers;
 
 namespace TextCodec.Core
 {
@@ -46,7 +47,7 @@ namespace TextCodec.Core
                 {
                     list.Add(byte.Parse(tmp, NumberStyles.AllowHexSpecifier));
                     tmp = string.Empty;
-                    if (IsHexChar(text[index]))
+                    if (Utilities.IsHexChar(text[index]))
                     {
                         tmp += text[index];
                     }
@@ -57,7 +58,7 @@ namespace TextCodec.Core
                 }
                 else
                 {
-                    if (IsHexChar(text[index]))
+                    if (Utilities.IsHexChar(text[index]))
                     {
                         tmp += text[index];
                     }
@@ -94,14 +95,6 @@ namespace TextCodec.Core
                 }
             }
             return res;
-        }
-
-        private static bool IsHexChar(char ch)
-        {
-            return ch is
-                >= '0' and <= '9' or
-                >= 'a' and <= 'f' or
-                >= 'A' and <= 'F';
         }
 
         private static void AppendString(List<object> list, string text)
