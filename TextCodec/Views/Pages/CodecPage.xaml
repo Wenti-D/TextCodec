@@ -123,7 +123,7 @@
                                             Click="SelectMode_Click"/>
                         </MenuFlyoutSubItem>
                         <MenuFlyoutItem x:Name="JsonString"
-                                        Text="Json 字符串"
+                                        x:Uid="CodecPageModeJsonString"
                                         Click="SelectMode_Click"/>
                     </MenuFlyout>
                 </DropDownButton.Flyout>

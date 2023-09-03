@@ -138,6 +138,9 @@
   <data name="CodecPageModeBaseSeries.Text" xml:space="preserve">
     <value>Base 系列</value>
   </data>
+  <data name="CodecPageModeJsonString.Text" xml:space="preserve">
+    <value>Json 字符串</value>
+  </data>
   <data name="CodecPageModeSelectButton.Content" xml:space="preserve">
     <value>选择模式</value>
   </data>
