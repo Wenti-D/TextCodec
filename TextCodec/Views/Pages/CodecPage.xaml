@@ -125,6 +125,9 @@
                         <MenuFlyoutItem x:Name="JsonString"
                                         x:Uid="CodecPageModeJsonString"
                                         Click="SelectMode_Click"/>
+                        <MenuFlyoutItem x:Name="InternationalMorseCode"
+                                        x:Uid="CodecPageModeIntMorseCode"
+                                        Click="SelectMode_Click"/>
                     </MenuFlyout>
                 </DropDownButton.Flyout>
             </DropDownButton>

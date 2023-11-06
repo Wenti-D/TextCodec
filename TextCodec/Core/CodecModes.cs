@@ -37,5 +37,7 @@ public enum CodecMode : byte
 
     [Description("转换为 JSON 字符串")]
     JsonString,
+    [Description("转换为国际摩尔斯电码")]
+    InternationalMorseCode,
 }
 

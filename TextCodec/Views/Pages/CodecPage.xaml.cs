@@ -164,6 +164,7 @@ namespace TextCodec.Views.Pages
                     CodecMode.Base32 => BaseSeriesCodec.Base32Encoder(rawTextBox.Text),
 
                     CodecMode.JsonString => JsonStringCodec.Encoder(rawTextBox.Text),
+                    CodecMode.InternationalMorseCode => MorseCodeCodec.Encoder(rawTextBox.Text),
 
                     _ => rawTextBox.Text,
                 };
@@ -186,6 +187,7 @@ namespace TextCodec.Views.Pages
                     CodecMode.Base32 => BaseSeriesCodec.Base32Decoder(encodedTextBox.Text),
 
                     CodecMode.JsonString => JsonStringCodec.Decoder(encodedTextBox.Text),
+                    CodecMode.InternationalMorseCode => MorseCodeCodec.Decoder(encodedTextBox.Text),
 
                     _ => encodedTextBox.Text,
                 };

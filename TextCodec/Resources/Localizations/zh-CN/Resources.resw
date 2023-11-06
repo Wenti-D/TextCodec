@@ -138,6 +138,9 @@
   <data name="CodecPageModeBaseSeries.Text" xml:space="preserve">
     <value>Base 系列</value>
   </data>
+  <data name="CodecPageModeIntMorseCode" xml:space="preserve">
+    <value>国际摩尔斯电码</value>
+  </data>
   <data name="CodecPageModeJsonString.Text" xml:space="preserve">
     <value>Json 字符串</value>
   </data>
@@ -170,6 +173,12 @@
   </data>
   <data name="HashPreprocessModeUtf8" xml:space="preserve">
     <value>UTF-8</value>
+  </data>
+  <data name="MorseCodeAsciiStyle" xml:space="preserve">
+    <value>ASCII 风格</value>
+  </data>
+  <data name="MorseCodeNatrualStyle" xml:space="preserve">
+    <value>自然风格</value>
   </data>
   <data name="NaviViewItemCodecPage.Content" xml:space="preserve">
     <value>文本编解码</value>

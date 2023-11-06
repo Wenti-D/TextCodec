@@ -15,6 +15,7 @@ namespace TextCodec.Core
         private BackdropTypes? backdropTypes;
         private bool? isMainWindowMaximum;
         private ulong? mainWindowRect;
+
         private bool? isUtfEncodeWithSpace;
         private string? baseSeriesTextPreprocessMode;
         private string? base58Style;

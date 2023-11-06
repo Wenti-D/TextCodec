@@ -25,6 +25,9 @@ namespace TextCodec.ViewModels
             return resource_loader.GetString(resource);
         }
 
+        /// <summary>
+        /// UTF 系列「编码时带空格」是否勾选
+        /// </summary>
         public bool IsEncodeWithSpaceChecked
         {
             get { return isEncodeWithSpaceChecked = AppSettings.IsUtfEncodeWithSpace; }
@@ -35,6 +38,9 @@ namespace TextCodec.ViewModels
             }
         }
 
+        /// <summary>
+        /// 已选的 Base 系列文本预编码模式
+        /// </summary>
         public string SelectedBaseSeriesTextPreprocessMode
         {
             get { return selectedBaseSeriesTextPreprocessMode ??= AppSettings.BaseSeriesTextPreprocessMode; }
@@ -45,6 +51,9 @@ namespace TextCodec.ViewModels
             }
         }
 
+        /// <summary>
+        /// 已选的 Base58 样式
+        /// </summary>
         public string SelectedBase58Style
         {
             get { return selectedBase58Style ??= AppSettings.Base58Style; }
