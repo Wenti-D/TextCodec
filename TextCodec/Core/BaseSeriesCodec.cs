@@ -121,7 +121,7 @@ namespace TextCodec.Core
                     tmp_string_buff.Clear();
                 }
             }
-            return string.Join<StringBuilder>('\n', result_buffs);
+            return string.Join('\n', result_buffs);
         }
 
         public static string Base58Encoder(string raw_text)
