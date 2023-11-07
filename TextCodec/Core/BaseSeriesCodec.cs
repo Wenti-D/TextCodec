@@ -19,104 +19,109 @@ namespace TextCodec.Core
             return Convert.ToBase64String(preprocessor.GetBytes(raw_text));
         }
 
-        public static string Base64Decoder(string text)
+        public static string Base64Decoder(string code_text)
         {
-            string[] encoded_texts = text.Split(new char[] { ' ', '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-            string[] results = new string[encoded_texts.Length];
-            string code_str = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+            string[] encoded_texts = code_text.Split(new char[] { ' ', '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+            const string code_str = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
             var preprocessor = new BaseSeriesHelper().GetPreprocessMode(AppSettings.BaseSeriesTextPreprocessMode);
+
+            List<StringBuilder> result_buffs = new();
+            StringBuilder tmp_string_buff = new();
+            List<byte> tmp_bytes = new();
+
             for (int i = 0; i < encoded_texts.Length; i++)
             {
-                string tmp_str = string.Empty;
-                List<byte> tmp_bytes = new();
-                bool valid_ch = true;
-                int j = 0;
-                while (j < encoded_texts[i].Length)
+                bool is_valid = true;
+                result_buffs.Add(new StringBuilder());
+                foreach (char ch in encoded_texts[i])
                 {
-                    if (code_str.Contains(encoded_texts[i][j]))
+                    if (code_str.Contains(ch))
                     {
-                        tmp_str += encoded_texts[i][j];
-                        if (tmp_str.Length == 4)
+                        tmp_string_buff.Append(ch);
+                        if (tmp_string_buff.Length == 4)
                         {
-                            if (!valid_ch)
+                            if (tmp_string_buff[2] == '=')
                             {
-                                valid_ch = true;
-                                results[i] += "⁆ ";
+                                if (is_valid)
+                                {
+                                    is_valid = false;
+                                    result_buffs[i].Append(preprocessor.GetString(tmp_bytes.ToArray()));
+                                    result_buffs[i].Append(" ⁅");
+                                    tmp_bytes.Clear();
+                                }
+                                result_buffs[i].Append(tmp_string_buff);
+                                tmp_string_buff.Clear();
                             }
-                            tmp_bytes.AddRange(Convert.FromBase64String(tmp_str));
-                            tmp_str = string.Empty;
+                            else
+                            {
+                                if (!is_valid)
+                                {
+                                    is_valid = true;
+                                    result_buffs[i].Append("⁆ ");
+                                }
+                                tmp_bytes.AddRange(Convert.FromBase64String(tmp_string_buff.ToString()));
+                                tmp_string_buff.Clear();
+                            }
                         }
-                        j++;
                     }
-                    else if (encoded_texts[i][j] == '=' && (tmp_str.Length == 2 || tmp_str.Length == 3))
+                    else if (ch == '=')
                     {
-                        valid_ch = true;
-                        int eq_len = 4 - tmp_str.Length;
-                        try
+                        switch (tmp_string_buff.Length)
                         {
-                            while (eq_len > 0 && encoded_texts[i][j] == '=')
-                            {
-                                tmp_str += '=';
-                                eq_len--;
-                                j++;
-                            }
+                            case 2:
+                                tmp_string_buff.Append('=');
+                                break;
+                            case 3:
+                                if (!is_valid)
+                                {
+                                    is_valid = true;
+                                    result_buffs[i].Append("⁆ ");
+                                }
+                                tmp_string_buff.Append('=');
+                                tmp_bytes.AddRange(Convert.FromBase64String(tmp_string_buff.ToString()));
+                                tmp_string_buff.Clear();
+                                break;
+                            default:
+                                if (is_valid)
+                                {
+                                    is_valid = false;
+                                    result_buffs[i].Append(preprocessor.GetString(tmp_bytes.ToArray()));
+                                    result_buffs[i].Append(" ⁅");
+                                    tmp_bytes.Clear();
+                                }
+                                result_buffs[i].Append(tmp_string_buff);
+                                tmp_string_buff.Clear();
+                                break;
                         }
-                        catch (Exception) { }
-                        if (eq_len > 0)
-                        {
-                            if (valid_ch)
-                            {
-                                valid_ch = false;
-                                results[i] += preprocessor.GetString(tmp_bytes.ToArray()) + " ⁅";
-                                tmp_bytes.Clear();
-                            }
-                            results[i] += tmp_str;
-                        }
-                        else
-                        {
-                            if (!valid_ch)
-                            {
-                                valid_ch = true;
-                                results[i] += "⁆ ";
-                            }
-                            tmp_bytes.AddRange(Convert.FromBase64String(tmp_str));
-                        }
-                        tmp_str = string.Empty;
                     }
                     else
                     {
-                        if (valid_ch)
+                        if (is_valid)
                         {
-                            valid_ch = false;
-                            results[i] += preprocessor.GetString(tmp_bytes.ToArray()) + " ⁅";
+                            is_valid = false;
+                            result_buffs[i].Append(preprocessor.GetString(tmp_bytes.ToArray()));
+                            result_buffs[i].Append(" ⁅");
                             tmp_bytes.Clear();
+                            result_buffs[i].Append(tmp_string_buff);
+                            tmp_string_buff.Clear();
                         }
-                        results[i] += tmp_str + encoded_texts[i][j];
-                        tmp_str = string.Empty;
-                        j++;
+                        result_buffs[i].Append(ch);
                     }
                 }
-                if (!valid_ch)
+                result_buffs[i].Append(preprocessor.GetString(tmp_bytes.ToArray()));
+                tmp_bytes.Clear();
+                if (tmp_string_buff.Length > 0 || !is_valid)
                 {
-                    results[i] += tmp_str + "⁆ ";
-                }
-                else
-                {
-                    if (tmp_bytes.Count > 0)
+                    if (is_valid)
                     {
-                        results[i] += preprocessor.GetString(tmp_bytes.ToArray());
+                        result_buffs[i].Append(" ⁅");
                     }
-                    if (tmp_str.Length > 0 && tmp_bytes.Count > 0 || results[i] is null)
-                    {
-                        results[i] += " ⁅";
-                    }
-                    if (tmp_str.Length > 0)
-                    {
-                        results[i] += tmp_str + "⁆ ";
-                    }
+                    result_buffs[i].Append(tmp_string_buff);
+                    result_buffs[i].Append("⁆ ");
+                    tmp_string_buff.Clear();
                 }
             }
-            return string.Join("\n", results);
+            return string.Join<StringBuilder>('\n', result_buffs);
         }
 
         public static string Base58Encoder(string raw_text)
