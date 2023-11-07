@@ -129,55 +129,61 @@ namespace TextCodec.Core
             BaseSeriesHelper BaseSeriesHelper = new();
             var preprocessor = BaseSeriesHelper.GetPreprocessMode(AppSettings.BaseSeriesTextPreprocessMode);
             string code_str = BaseSeriesHelper.GetBase58Style(AppSettings.Base58Style);
+
             List<byte> bytes = preprocessor.GetBytes(raw_text).Reverse().ToList();
             bytes.Add(0);
             BigInteger big_int = new(bytes.ToArray());
-            List<char> chars = new();
+
+            StringBuilder result_buff = new();
+
             while (big_int > 0)
             {
-                chars.Insert(0, code_str[(int)(big_int % 58)]);
+                result_buff.Insert(0, code_str[(int)(big_int % 58)]);
                 big_int /= 58;
             }
-            return string.Join("", chars.ToArray());
+            return result_buff.ToString();
         }
 
         public static string Base58Decoder(string text)
         {
             BaseSeriesHelper BaseSeriesHelper = new();
             string[] encoded_texts = text.Split(new char[] { ' ', '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-            string[] results = new string[encoded_texts.Length];
             string code_str = BaseSeriesHelper.GetBase58Style(AppSettings.Base58Style);
+
+            List<StringBuilder> result_buffs = new();
+            StringBuilder tmp_buff = new();
+
             for (int i = 0; i < encoded_texts.Length; i++)
             {
-                string tmp = string.Empty;
-                bool valid_ch = true;
+                result_buffs.Add(new StringBuilder());
+                bool is_valid = true;
                 foreach (char ch in encoded_texts[i])
                 {
-                    if (!code_str.Contains(ch))
+                    if (code_str.Contains(ch))
                     {
-                        results[i] += BaseSeriesHelper.Base58DecodeHelper(tmp);
-                        tmp = string.Empty;
-                        if (valid_ch)
+                        if (!is_valid)
                         {
-                            results[i] += " ⁅";
-                            valid_ch = false;
+                            result_buffs[i].Append("⁆ ");
+                            is_valid = true;
                         }
-                        results[i] += ch;
+                        tmp_buff.Append(ch);
                     }
                     else
                     {
-                        if (!valid_ch)
+                        result_buffs[i].Append(BaseSeriesHelper.Base58DecodeHelper(tmp_buff.ToString()));
+                        tmp_buff.Clear();
+                        if (is_valid)
                         {
-                            results[i] += "⁆ ";
-                            valid_ch = true;
+                            result_buffs[i].Append(" ⁅");
+                            is_valid = false;
                         }
-                        tmp += ch;
+                        result_buffs[i].Append(ch);
                     }
                 }
-                if (!valid_ch) { results[i] += "⁆ "; }
-                results[i] += BaseSeriesHelper.Base58DecodeHelper(tmp);
+                if (!is_valid) { result_buffs[i].Append("⁆ "); }
+                result_buffs[i].Append(BaseSeriesHelper.Base58DecodeHelper(tmp_buff.ToString()));
             }
-            return string.Join("\n", results);
+            return string.Join("\n", result_buffs);
         }
 
         public static string Base32Encoder(string raw_text)
