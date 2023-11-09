@@ -188,165 +188,173 @@ namespace TextCodec.Core
 
         public static string Base32Encoder(string raw_text)
         {
-            var preprocessor = new BaseSeriesHelper().GetPreprocessMode(AppSettings.BaseSeriesTextPreprocessMode);
             string code_str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
-            byte[] bytes = preprocessor.GetBytes(raw_text);
-            int group_num = bytes.Length / 5, tail_num = bytes.Length % 5;
-            string result = string.Empty;
+
+            byte[] bytes = new BaseSeriesHelper()
+                .GetPreprocessMode(AppSettings.BaseSeriesTextPreprocessMode)
+                .GetBytes(raw_text);
+            int group_num = bytes.Length / 5,
+                tail_num = bytes.Length % 5;
+            StringBuilder result_buff = new();
+
             for (int i = 0; i < group_num; i++)
             {
-                result += code_str[bytes[i] >> 3].ToString()
-                        + code_str[((bytes[i] & 0b111) << 2) + (bytes[i + 1] >> 6)]
-                        + code_str[(bytes[i + 1] & 0b111110) >> 1]
-                        + code_str[((bytes[i + 1] & 0b1) << 4) + (bytes[i + 2] >> 4)]
+                result_buff.Append(code_str[bytes[i] >> 3]);
+                result_buff.Append(code_str[((bytes[i] & 0b111) << 2) + (bytes[i + 1] >> 6)]);
+                result_buff.Append(code_str[(bytes[i + 1] & 0b111110) >> 1]);
+                result_buff.Append(code_str[((bytes[i + 1] & 0b1) << 4) + (bytes[i + 2] >> 4)]);
 
-                        + code_str[((bytes[i + 2] & 0b1111) << 1) + (bytes[i + 3] >> 7)]
-                        + code_str[(bytes[i + 3] & 0b1111100) >> 2]
-                        + code_str[((bytes[i + 3] & 0b11) << 3) + (bytes[i + 4] >> 5)]
-                        + code_str[bytes[i + 4] & 0b11111];
+                result_buff.Append(code_str[((bytes[i + 2] & 0b1111) << 1) + (bytes[i + 3] >> 7)]);
+                result_buff.Append(code_str[(bytes[i + 3] & 0b1111100) >> 2]);
+                result_buff.Append(code_str[((bytes[i + 3] & 0b11) << 3) + (bytes[i + 4] >> 5)]);
+                result_buff.Append(code_str[bytes[i + 4] & 0b11111]);
             }
             int tail_begin = 5 * group_num;
             switch (tail_num)
             {
                 case 1:
-                    result += code_str[bytes[tail_begin] >> 3].ToString()
-                            + code_str[(bytes[tail_begin] & 0b111) << 2]
-                            + "======";
+                    result_buff.Append(code_str[bytes[tail_begin] >> 3]);
+                    result_buff.Append(code_str[(bytes[tail_begin] & 0b111) << 2]);
+                    result_buff.Append("======");
                     break;
                 case 2:
-                    result += code_str[bytes[tail_begin] >> 3].ToString()
-                            + code_str[((bytes[tail_begin] & 0b111) << 2) + (bytes[tail_begin + 1] >> 6)]
-                            + code_str[(bytes[tail_begin + 1] & 0b111110) >> 1]
-                            + code_str[(bytes[tail_begin + 1] & 0b1) << 4]
-                            + "====";
+                    result_buff.Append(code_str[bytes[tail_begin] >> 3]);
+                    result_buff.Append(code_str[((bytes[tail_begin] & 0b111) << 2) + (bytes[tail_begin + 1] >> 6)]);
+                    result_buff.Append(code_str[(bytes[tail_begin + 1] & 0b111110) >> 1]);
+                    result_buff.Append(code_str[(bytes[tail_begin + 1] & 0b1) << 4]);
+                    result_buff.Append("====");
                     break;
                 case 3:
-                    result += code_str[bytes[tail_begin] >> 3].ToString()
-                            + code_str[((bytes[tail_begin] & 0b111) << 2) + (bytes[tail_begin + 1] >> 6)]
-                            + code_str[(bytes[tail_begin + 1] & 0b111110) >> 1]
-                            + code_str[((bytes[tail_begin + 1] & 0b1) << 4) + (bytes[tail_begin + 2] >> 4)]
+                    result_buff.Append(code_str[bytes[tail_begin] >> 3].ToString());
+                    result_buff.Append(code_str[((bytes[tail_begin] & 0b111) << 2) + (bytes[tail_begin + 1] >> 6)]);
+                    result_buff.Append(code_str[(bytes[tail_begin + 1] & 0b111110) >> 1]);
+                    result_buff.Append(code_str[((bytes[tail_begin + 1] & 0b1) << 4) + (bytes[tail_begin + 2] >> 4)]);
 
-                            + code_str[(bytes[tail_begin + 2] & 0b1111) << 1]
-                            + "===";
+                    result_buff.Append(code_str[(bytes[tail_begin + 2] & 0b1111) << 1]);
+                    result_buff.Append("===");
                     break;
                 case 4:
-                    result += code_str[bytes[tail_begin] >> 3].ToString()
-                            + code_str[((bytes[tail_begin] & 0b111) << 2) + (bytes[tail_begin + 1] >> 6)]
-                            + code_str[(bytes[tail_begin + 1] & 0b111110) >> 1]
-                            + code_str[((bytes[tail_begin + 1] & 0b1) << 4) + (bytes[tail_begin + 2] >> 4)]
+                    result_buff.Append(code_str[bytes[tail_begin] >> 3]);
+                    result_buff.Append(code_str[((bytes[tail_begin] & 0b111) << 2) + (bytes[tail_begin + 1] >> 6)]);
+                    result_buff.Append(code_str[(bytes[tail_begin + 1] & 0b111110) >> 1]);
+                    result_buff.Append(code_str[((bytes[tail_begin + 1] & 0b1) << 4) + (bytes[tail_begin + 2] >> 4)]);
 
-                            + code_str[((bytes[tail_begin + 2] & 0b1111) << 1) + (bytes[tail_begin + 3] >> 7)]
-                            + code_str[(bytes[tail_begin + 3] & 0b1111100) >> 2]
-                            + code_str[(bytes[tail_begin + 3] & 0b11) << 3]
-                            + "=";
+                    result_buff.Append(code_str[((bytes[tail_begin + 2] & 0b1111) << 1) + (bytes[tail_begin + 3] >> 7)]);
+                    result_buff.Append(code_str[(bytes[tail_begin + 3] & 0b1111100) >> 2]);
+                    result_buff.Append(code_str[(bytes[tail_begin + 3] & 0b11) << 3]);
+                    result_buff.Append('=');
                     break;
             }
-            return result;
+            return result_buff.ToString();
         }
 
         public static string Base32Decoder(string encoded_text)
         {
             string[] encoded_texts = encoded_text.Split(new char[] { ' ', '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-            string[] results = new string[encoded_texts.Length];
             string code_str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
             var preprocessor = new BaseSeriesHelper().GetPreprocessMode(AppSettings.BaseSeriesTextPreprocessMode);
+
+            List<StringBuilder> result_buffs = new();
+            StringBuilder tmp_string_buff = new();
+            List<byte> tmp_bytes = new();
+
             for (int i = 0; i < encoded_texts.Length; i++)
             {
-                string tmp_str = string.Empty;
-                List<byte> tmp_bytes = new();
-                bool valid_ch = true;
-                int j = 0;
-                while (j < encoded_texts[i].Length)
+                bool is_valid = true;
+                result_buffs.Add(new StringBuilder());
+                foreach (char ch in encoded_texts[i])
                 {
-                    if (code_str.Contains(encoded_texts[i][j]))
+                    if (code_str.Contains(ch))
                     {
-                        tmp_str += encoded_texts[i][j];
-                        if (tmp_str.Length == 8)
+                        tmp_string_buff.Append(ch);
+                        if (tmp_string_buff.Length == 8)
                         {
-                            if (!valid_ch)
+                            string tmp_string = tmp_string_buff.ToString();
+                            if (tmp_string.Contains('='))
                             {
-                                valid_ch = true;
-                                results[i] += "⁆ ";
+                                if (is_valid)
+                                {
+                                    is_valid = false;
+                                    result_buffs[i].Append(preprocessor.GetString(tmp_bytes.ToArray()));
+                                    result_buffs[i].Append(" ⁅");
+                                    tmp_bytes.Clear();
+                                }
+                                result_buffs[i].Append(tmp_string_buff);
+                                tmp_string_buff.Clear();
                             }
-                            tmp_bytes.AddRange(BaseSeriesHelper.Base32DecodeHelper(tmp_str));
-                            tmp_str = string.Empty;
+                            else
+                            {
+                                if (!is_valid)
+                                {
+                                    is_valid = true;
+                                    result_buffs[i].Append("⁆ ");
+                                }
+                                tmp_bytes.AddRange(BaseSeriesHelper.Base32DecodeHelper(tmp_string));
+                                tmp_string_buff.Clear();
+                            }
                         }
-                        j++;
                     }
-                    else if (encoded_texts[i][j] == '='
-                        && (tmp_str.Length == 2
-                         || tmp_str.Length == 4
-                         || tmp_str.Length == 5
-                         || tmp_str.Length == 7))
+                    else if (ch == '=')
                     {
-                        valid_ch = true;
-                        int eq_len = 8 - tmp_str.Length;
-                        try
+                        int tmp_string_len = tmp_string_buff.Length;
+                        if (tmp_string_len == 2 || tmp_string_len == 4 || tmp_string_len == 5
+                            || (tmp_string_len == 3 || tmp_string_len == 6) && tmp_string_buff[tmp_string_len - 1] == '=')
                         {
-                            while (eq_len > 0 && encoded_texts[i][j] == '=')
-                            {
-                                tmp_str += '=';
-                                eq_len--;
-                                j++;
-                            }
+                            tmp_string_buff.Append(ch);
                         }
-                        catch (Exception) { }
-                        if (eq_len > 0)
+                        else if (tmp_string_len == 7)
                         {
-                            if (valid_ch)
+                            if (!is_valid)
                             {
-                                valid_ch = false;
-                                results[i] += preprocessor.GetString(tmp_bytes.ToArray()) + " ⁅";
-                                tmp_bytes.Clear();
+                                is_valid = true;
+                                result_buffs[i].Append("⁆ ");
                             }
-                            results[i] += tmp_str;
+                            tmp_string_buff.Append(ch);
+                            tmp_bytes.AddRange(BaseSeriesHelper.Base32DecodeHelper(tmp_string_buff.ToString()));
+                            tmp_string_buff.Clear();
                         }
                         else
                         {
-                            if (!valid_ch)
+                            tmp_string_buff.Append(ch);
+                            if (is_valid)
                             {
-                                valid_ch = true;
-                                results[i] += "⁆ ";
+                                is_valid = false;
+                                result_buffs[i].Append(preprocessor.GetString(tmp_bytes.ToArray()));
+                                result_buffs[i].Append(" ⁅");
+                                tmp_bytes.Clear();
                             }
-                            tmp_bytes.AddRange(BaseSeriesHelper.Base32DecodeHelper(tmp_str));
+                            result_buffs[i].Append(tmp_string_buff);
+                            tmp_string_buff.Clear();
                         }
-                        tmp_str = string.Empty;
                     }
                     else
                     {
-                        if (valid_ch)
+                        if (is_valid)
                         {
-                            valid_ch = false;
-                            results[i] += preprocessor.GetString(tmp_bytes.ToArray()) + " ⁅";
+                            is_valid = false;
+                            result_buffs[i].Append(preprocessor.GetString(tmp_bytes.ToArray()));
+                            result_buffs[i].Append(" ⁅");
                             tmp_bytes.Clear();
+                            result_buffs[i].Append(tmp_string_buff);
+                            tmp_string_buff.Clear();
                         }
-                        results[i] += tmp_str + encoded_texts[i][j];
-                        tmp_str = string.Empty;
-                        j++;
+                        result_buffs[i].Append(ch);
                     }
                 }
-                if (!valid_ch)
+                result_buffs[i].Append(preprocessor.GetString(tmp_bytes.ToArray()));
+                tmp_bytes.Clear();
+                if (tmp_string_buff.Length > 0 || !is_valid)
                 {
-                    results[i] += tmp_str + "⁆ ";
+                    if (is_valid)
+                    {
+                        result_buffs[i].Append(" ⁅");
+                    }
+                    result_buffs[i].Append(tmp_string_buff);
+                    result_buffs[i].Append("⁆ ");
+                    tmp_string_buff.Clear();
                 }
-                else
-                {
-                    if (tmp_bytes.Count > 0)
-                    {
-                        results[i] += preprocessor.GetString(tmp_bytes.ToArray());
-                    }
-                    if (tmp_str.Length > 0 && tmp_bytes.Count > 0 || results[i] is null)
-                    {
-                        results[i] += " ⁅";
-                    }
-                    if (tmp_str.Length > 0)
-                    {
-                        results[i] += tmp_str + "⁆ ";
-                    }
-                }
-
             }
-            return string.Join("\n", results);
+            return string.Join("\n", result_buffs);
         }
     }
 }
