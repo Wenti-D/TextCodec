@@ -82,6 +82,7 @@ namespace TextCodec.Core
                                 tmp_string_buff.Clear();
                                 break;
                             default:
+                                tmp_string_buff.Append(ch);
                                 if (is_valid)
                                 {
                                     is_valid = false;
