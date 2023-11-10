@@ -24,89 +24,88 @@ namespace TextCodec.Core
 
         private static string Encoder(string raw_text, Encoding encoding)
         {
-            byte[] bytes = encoding.GetBytes(raw_text);
-            string[] res = new string[bytes.Length];
-            for (int i = 0; i < bytes.Length; i++)
+            StringBuilder result_buff = new();
+            foreach (byte b in encoding.GetBytes(raw_text))
             {
-                res[i] = bytes[i].ToString("X2");
+                result_buff.Append(b.ToString("X2"));
+                if (AppSettings.IsUtfEncodeWithSpace)
+                    result_buff.Append(' ');
             }
-            if (AppSettings.IsUtfEncodeWithSpace)
-                return string.Join(" ", res);
-            else
-                return string.Join("", res);
+            if (result_buff.Length > 0 && AppSettings.IsUtfEncodeWithSpace)
+                result_buff.Length--;
+            return result_buff.ToString();
         }
 
-        private static string Decoder(string text, Encoding encoding)
+        private static string Decoder(string encoded_text, Encoding encoding)
         {
-            var list = new List<object>();
-            int index = 0;
-            string tmp = string.Empty;
-            while (index < text.Length)
+            StringBuilder result_buff = new(), tmp_buff = new();
+            List<byte> bytes = new();
+            bool is_valid = true;
+            foreach (char ch in encoded_text)
             {
-                if (tmp.Length == 2)
+                if (Utilities.IsHexChar(ch))
                 {
-                    list.Add(byte.Parse(tmp, NumberStyles.AllowHexSpecifier));
-                    tmp = string.Empty;
-                    if (Utilities.IsHexChar(text[index]))
+                    tmp_buff.Append(ch);
+                    if (tmp_buff.Length == 2)
                     {
-                        tmp += text[index];
+                        if (!is_valid)
+                        {
+                            result_buff.Append("⁆ ");
+                            is_valid = true;
+                        }
+                        bytes.Add(byte.Parse(tmp_buff.ToString(), NumberStyles.AllowHexSpecifier));
+                        tmp_buff.Clear();
                     }
-                    else if (!BlankRegex().Match(text[index].ToString()).Success)
+                }
+                else if (BlankRegex().Match(ch.ToString()).Success)
+                {
+                    if (tmp_buff.Length == 1)
                     {
-                        AppendString(list, text[index].ToString());
+                        if (bytes.Count > 0)
+                        {
+                            is_valid = false;
+                            result_buff.Append(encoding.GetString(bytes.ToArray()));
+                            bytes.Clear();
+                            result_buff.Append(" ⁅");
+                        }
+                        result_buff.Append(tmp_buff);
+                        result_buff.Append(ch);
+                        tmp_buff.Clear();
+                    }
+                    else if (!is_valid)
+                    {
+                        result_buff.Append(ch);
                     }
                 }
                 else
                 {
-                    if (Utilities.IsHexChar(text[index]))
+                    result_buff.Append(encoding.GetString(bytes.ToArray()));
+                    bytes.Clear();
+                    if (is_valid)
                     {
-                        tmp += text[index];
+                        is_valid = false;
+                        result_buff.Append(" ⁅");
+                        result_buff.Append(tmp_buff);
+                        tmp_buff.Clear();
                     }
-                    else
-                    {
-                        AppendString(list, tmp + BlankRegex().Replace(text[index].ToString(), " "));
-                        tmp = string.Empty;
-                    }
+                    result_buff.Append(ch);
                 }
-                index++;
             }
-            switch (tmp.Length)
+            if (is_valid)
             {
-                case 2:
-                    list.Add(byte.Parse(tmp, NumberStyles.AllowHexSpecifier));
-                    break;
-                case 1:
-                    AppendString(list, tmp);
-                    break;
-            }
-            string res = string.Empty;
-            index = 0;
-            while (index < list.Count)
-            {
-                if (list[index] is string)
+                result_buff.Append(encoding.GetString(bytes.ToArray()));
+                bytes.Clear();
+                if (tmp_buff.Length > 0)
                 {
-                    res += " ⁅" + list[index++] + "⁆ ";
-                }
-                else
-                {
-                    int index_start = index;
-                    while (index < list.Count && list[index] is byte) index++;
-                    res += encoding.GetString(Converters.ListToByteArrayConverter.Convert(list.GetRange(index_start, index - index_start)));
+                    result_buff.Append(" ⁅");
                 }
             }
-            return res;
-        }
-
-        private static void AppendString(List<object> list, string text)
-        {
-            if (list.Count > 0 && list[^1] is string)
+            result_buff.Append(tmp_buff);
+            if (!is_valid || tmp_buff.Length > 0)
             {
-                list[^1] += text;
+                result_buff.Append("⁆ ");
             }
-            else
-            {
-                list.Add(text);
-            }
+            return result_buff.ToString();
         }
 
         [GeneratedRegex("\\s")]
