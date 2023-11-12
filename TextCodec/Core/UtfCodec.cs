@@ -11,7 +11,7 @@ using TextCodec.Helpers;
 
 namespace TextCodec.Core;
 
-partial class UtfCodec
+class UtfCodec
 {
     private static AppSettings AppSettings = MainWindow.AppSettings;
 
