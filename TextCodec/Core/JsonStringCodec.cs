@@ -6,28 +6,31 @@ using System.Text;
 using System.Threading.Tasks;
 using TextCodec.Helpers;
 
-namespace TextCodec.Core
+namespace TextCodec.Core;
+
+class JsonStringCodec
 {
-    class JsonStringCodec
+    public static string Encoder(string raw_text)
     {
-        public static string Encoder(string raw_text)
+        raw_text = raw_text.Replace("\r\n", "\n").Replace("\r", "\n");
+        StringBuilder result_buff = new();
+        foreach (char ch in raw_text)
         {
-            raw_text = raw_text.Replace("\r\n", "\n").Replace("\r", "\n");
-            string result = string.Empty;
-            foreach (char ch in raw_text)
+            if (ch >= ' ' && ch <= '~')
             {
-                if (ch >= ' ' && ch <= '~')
-                {
-                    result += ch switch
+                result_buff.Append(
+                    ch switch
                     {
                         '"' => @"\""",
                         '\\' => @"\\",
                         _ => ch,
-                    };
-                }
-                else
-                {
-                    result += ch switch
+                    }
+                );
+            }
+            else
+            {
+                result_buff.Append(
+                    ch switch
                     {
                         '\t' => @"\t",
                         '\n' => @"\n",
@@ -35,52 +38,38 @@ namespace TextCodec.Core
                         '\b' => @"\b",
                         '\r' => @"\r",
                         _ => string.Format("\\u{0:x4}", (int)ch),
-                    };
-                }
+                    }
+                );
             }
-            return result;
         }
+        return result_buff.ToString();
+    }
 
-        public static string Decoder(string encoded_text)
+    public static string Decoder(string encoded_text)
+    {
+        string[] encoded_texts = encoded_text.Split(
+            new char[] { '\r', '\n' },
+            StringSplitOptions.RemoveEmptyEntries);
+        List<StringBuilder> result_buffs = new();
+        StringBuilder tmp_buff = new();
+        for (int i = 0; i < encoded_texts.Length; i++)
         {
-            string[] encoded_texts = encoded_text.Split(
-                new char[] { '\r', '\n' },
-                StringSplitOptions.RemoveEmptyEntries);
-            string[] results = new string[encoded_texts.Length];
-            for (int i = 0; i < encoded_texts.Length; i++)
+            result_buffs.Add(new StringBuilder());
+            tmp_buff.Clear();
+            bool is_valid = true;
+            bool is_backslash_mode = false, is_uni_mode = false;
+            int uni_cnt = 0;
+            foreach (char ch in encoded_texts[i])
             {
-                string tmp_str = string.Empty;
-                List<char> tmp_chars = new();
-                bool valid_ch = true;
-                int j = 0;
-                while (j < encoded_texts[i].Length)
+                if (is_backslash_mode)
                 {
-                    if (encoded_texts[i][j] == '\\')
+                    is_backslash_mode = false;
+                    if ("\"btnfr\\".Contains(ch))
                     {
-                        char char_after_backslash;
-                        try
-                        {
-                            char_after_backslash = encoded_texts[i][++j];
-                        }
-                        catch (IndexOutOfRangeException)
-                        {
-                            if (valid_ch)
-                            {
-                                valid_ch = false;
-                                results[i] += new string(tmp_chars.ToArray()) + " ⁅";
-                                tmp_chars.Clear();
-                            }
-                            results[i] += "\\";
-                            break;
-                        }
-                        if ("\"btnfr\\".Contains(char_after_backslash))
-                        {
-                            if (!valid_ch)
-                            {
-                                valid_ch = true;
-                                results[i] += "⁆ ";
-                            }
-                            results[i] += new string(tmp_chars.ToArray()) + char_after_backslash switch
+                        tmp_buff.Clear();
+                        SwitchValid(ref is_valid, result_buffs[i]);
+                        result_buffs[i].Append(
+                            ch switch
                             {
                                 '"' => '"',
                                 'b' => '\b',
@@ -89,96 +78,92 @@ namespace TextCodec.Core
                                 'f' => '\f',
                                 'r' => '\r',
                                 '\\' => '\\',
-                            };
-                            j++;
-                        }
-                        else if (char_after_backslash == 'u')
-                        {
-                            j++;
-                            for (int _ = 0; _ < 4; _++)
-                            {
-                                try
-                                {
-                                    if (Utilities.IsHexChar(encoded_texts[i][j]))
-                                    {
-                                        tmp_str += encoded_texts[i][j];
-                                        j++;
-                                    }
-                                    else
-                                    {
-                                        throw new Exception();
-                                    }
-                                }
-                                catch (Exception)
-                                {
-                                    if (valid_ch)
-                                    {
-                                        valid_ch = false;
-                                        results[i] += new string(tmp_chars.ToArray()) + " ⁅";
-                                        tmp_chars.Clear();
-                                    }
-                                    results[i] += "\\u" + tmp_str;
-                                    tmp_str = string.Empty;
-                                    break;
-                                }
                             }
-                            if (tmp_str.Length == 4)
-                            {
-                                if (!valid_ch)
-                                {
-                                    valid_ch = true;
-                                    results[i] += "⁆ ";
-                                }
-                                tmp_chars.Add((char)Int16.Parse(tmp_str, NumberStyles.AllowHexSpecifier));
-                                tmp_str = string.Empty;
-                            }
-                        }
-                        else
-                        {
-                            if (valid_ch)
-                            {
-                                valid_ch = false;
-                                results[i] += new string(tmp_chars.ToArray()) + " ⁅";
-                                tmp_chars.Clear();
-                            }
-                            results[i] += "\\";
-                        }
+                        );
+                        continue;
                     }
-                    else if (encoded_texts[i][j] == '"' || encoded_texts[i][j] < ' ' || encoded_texts[i][j] == (char)0x7f)
+                    else if (ch == 'u')
                     {
-                        results[i] += new string(tmp_chars.ToArray());
-                        tmp_chars.Clear();
-                        if (valid_ch)
-                        {
-                            valid_ch = false;
-                            results[i] += " ⁅";
-                        }
-                        results[i] += encoded_texts[i][j];
-                        j++;
+                        is_uni_mode = true;
+                        continue;
                     }
                     else
                     {
-                        if (!valid_ch)
-                        {
-                            valid_ch = true;
-                            results[i] += "⁆ ";
-                        }
-                        results[i] += new string(tmp_chars.ToArray());
-                        tmp_chars.Clear();
-                        results[i] += encoded_texts[i][j];
-                        j++;
+                        SwitchInvalid(ref is_valid, result_buffs[i]);
+                        result_buffs[i].Append('\\');
                     }
                 }
-                if (!valid_ch)
+                if (is_uni_mode)
                 {
-                    results[i] += tmp_str + "⁆ ";
+                    if (Utilities.IsHexChar(ch))
+                    {
+                        tmp_buff.Append(ch);
+                        uni_cnt++;
+                        if (uni_cnt == 4)
+                        {
+                            uni_cnt = 0;
+                            is_uni_mode = false;
+                            SwitchValid(ref is_valid, result_buffs[i]);
+                            result_buffs[i].Append((char)Int16.Parse(tmp_buff.ToString(), NumberStyles.AllowHexSpecifier));
+                            tmp_buff.Clear();
+                        }
+                        continue;
+                    }
+                    else
+                    {
+                        uni_cnt = 0;
+                        is_uni_mode = false;
+                        SwitchInvalid(ref is_valid, result_buffs[i]);
+                        result_buffs[i].Append("\\u");
+                        result_buffs[i].Append(tmp_buff);
+                        tmp_buff.Clear();
+                    }
+                }
+                if (ch == '\\')
+                {
+                    is_backslash_mode = true;
+                }
+                else if (ch == '"' || ch < ' ' || ch == 0x7f)
+                {
+                    SwitchInvalid(ref is_valid, result_buffs[i]);
+                    result_buffs[i].Append(ch);
                 }
                 else
                 {
-                    results[i] += new string(tmp_chars.ToArray());
+                    SwitchValid(ref is_valid, result_buffs[i]);
+                    result_buffs[i].Append(ch);
                 }
             }
-            return string.Join("\n", results);
+            if (is_backslash_mode || is_uni_mode)
+            {
+                SwitchInvalid(ref is_valid, result_buffs[i]);
+                result_buffs[i].Append('\\');
+                if (is_uni_mode)
+                {
+                    result_buffs[i].Append('u');
+                    result_buffs[i].Append(tmp_buff);
+                }
+            }
+            SwitchValid(ref is_valid, result_buffs[i]);
+        }
+        return string.Join('\n', result_buffs);
+    }
+
+    private static void SwitchValid(ref bool is_valid, StringBuilder string_buff)
+    {
+        if (!is_valid)
+        {
+            is_valid = true;
+            string_buff.Append("⁆ ");
+        }
+    }
+
+    private static void SwitchInvalid(ref bool is_valid, StringBuilder string_buff)
+    {
+        if (is_valid)
+        {
+            is_valid = false;
+            string_buff.Append(" ⁅");
         }
     }
 }
