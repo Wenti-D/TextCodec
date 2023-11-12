@@ -57,7 +57,7 @@ namespace TextCodec.Core
                         tmp_buff.Clear();
                     }
                 }
-                else if (BlankRegex().Match(ch.ToString()).Success)
+                else if (char.IsWhiteSpace(ch))
                 {
                     if (tmp_buff.Length == 1)
                     {
@@ -107,8 +107,5 @@ namespace TextCodec.Core
             }
             return result_buff.ToString();
         }
-
-        [GeneratedRegex("\\s")]
-        private static partial Regex BlankRegex();
     }
 }
