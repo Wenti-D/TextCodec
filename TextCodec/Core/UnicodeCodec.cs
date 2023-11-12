@@ -37,7 +37,7 @@ namespace TextCodec.Core
                 }
                 else
                 {
-                    UnicodeConvertHelper.TryParseCodepointStr(ref result_buff, ref tmp_buff, target_base, ref is_valid);
+                    UnicodeConvertHelper.TryParseCodepointStr(result_buff, tmp_buff, target_base, ref is_valid);
                     if (char.IsWhiteSpace(ch))
                     {
                         if (!is_valid)
@@ -54,7 +54,7 @@ namespace TextCodec.Core
                     }
                 }
             }
-            UnicodeConvertHelper.TryParseCodepointStr(ref result_buff, ref tmp_buff, target_base, ref is_valid);
+            UnicodeConvertHelper.TryParseCodepointStr(result_buff, tmp_buff, target_base, ref is_valid);
             if (!is_valid)
             {
                 result_buff.Append("⁆ ");

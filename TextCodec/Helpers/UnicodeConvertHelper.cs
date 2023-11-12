@@ -54,7 +54,7 @@ namespace TextCodec.Helpers
         /// <param name="tmp_buff">临时存储码位字符串的 StringBuilder，引用</param>
         /// <param name="target_base">目标进制</param>
         /// <param name="is_valid">目前接收到的字符是否合法，引用</param>
-        internal static void TryParseCodepointStr(ref StringBuilder result_buff, ref StringBuilder tmp_buff, int target_base, ref bool is_valid)
+        internal static void TryParseCodepointStr(StringBuilder result_buff, StringBuilder tmp_buff, int target_base, ref bool is_valid)
         {
             try
             {
