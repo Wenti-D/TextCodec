@@ -32,7 +32,6 @@ namespace TextCodec.Views.Pages
         private bool last_focused_is_raw_text;
         private CodecMode converter_mode;
         private static DispatcherTimer timer;
-        private static AppSettings AppSettings = MainWindow.AppSettings;
 
         public CodecPage()
         {
@@ -124,6 +123,10 @@ namespace TextCodec.Views.Pages
                 Base58Style.Visibility = Visibility.Visible;
             else
                 Base58Style.Visibility = Visibility.Collapsed;
+            if (converter_mode == (CodecMode)Enum.Parse(typeof(CodecMode), "ChineseTelegraphCode"))
+                ChineseTeleCodeStyle.Visibility = Visibility.Visible;
+            else
+                ChineseTeleCodeStyle.Visibility = Visibility.Collapsed;
             StartCodec();
         }
 
@@ -165,6 +168,7 @@ namespace TextCodec.Views.Pages
 
                     CodecMode.JsonString => JsonStringCodec.Encoder(rawTextBox.Text),
                     CodecMode.InternationalMorseCode => MorseCodeCodec.Encoder(rawTextBox.Text),
+                    CodecMode.ChineseTelegraphCode => ChineseTelegraphCodec.Encoder(rawTextBox.Text),
 
                     _ => rawTextBox.Text,
                 };
@@ -188,6 +192,7 @@ namespace TextCodec.Views.Pages
 
                     CodecMode.JsonString => JsonStringCodec.Decoder(encodedTextBox.Text),
                     CodecMode.InternationalMorseCode => MorseCodeCodec.Decoder(encodedTextBox.Text),
+                    CodecMode.ChineseTelegraphCode => ChineseTelegraphCodec.Decoder(encodedTextBox.Text),
 
                     _ => encodedTextBox.Text,
                 };
@@ -201,6 +206,11 @@ namespace TextCodec.Views.Pages
         }
 
         private void BaseSeries_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            StartCodec();
+        }
+
+        private void ChineseTeleCodeStyle_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             StartCodec();
         }

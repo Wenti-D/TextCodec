@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace TextCodec.Core.Dicts;
 
-class MorseCodeDict
+static class MorseCodeDict
 {
     public static IReadOnlyDictionary<char, string> CharMorsePairs
         = new Dictionary<char, string>

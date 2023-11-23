@@ -19,6 +19,7 @@ namespace TextCodec.Core
         private bool? isUtfEncodeWithSpace;
         private string? baseSeriesTextPreprocessMode;
         private string? base58Style;
+        private string? chineseTelegraphCodeStyle;
 
         private string? hashTextPreprocessMode;
         private string? hashMode;
@@ -101,6 +102,19 @@ namespace TextCodec.Core
             {
                 SetProperty(ref base58Style, value);
                 local_settings.Values["Base58Style"] = value;
+            }
+        }
+
+        /// <summary>
+        /// 中文电码编码样式
+        /// </summary>
+        public string ChineseTelegraphCodeStyle
+        {
+            get => chineseTelegraphCodeStyle ?? "ChineseTeleCodeNumber";
+            set
+            {
+                SetProperty(ref chineseTelegraphCodeStyle, value);
+                local_settings.Values["ChineseTelegraphCodeStyle"] = value;
             }
         }
 

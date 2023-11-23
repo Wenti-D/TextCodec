@@ -128,6 +128,9 @@
                         <MenuFlyoutItem x:Name="InternationalMorseCode"
                                         x:Uid="CodecPageModeIntMorseCode"
                                         Click="SelectMode_Click"/>
+                        <MenuFlyoutItem x:Name="ChineseTelegraphCode"
+                                        Text="中文电码"
+                                        Click="SelectMode_Click"/>
                     </MenuFlyout>
                 </DropDownButton.Flyout>
             </DropDownButton>
@@ -172,6 +175,23 @@
                     <x:String>CodecPageBase58BtcCharList</x:String>
                 </ComboBox>
             </StackPanel>
+
+            <!--中文电码编码时出现的编码样式-->
+            <ComboBox x:Name="ChineseTeleCodeStyle"
+                      Width="150"
+                      Grid.Column="1"
+                      SelectedValue="{Binding SelectedChineseTelegraphCodeStyle, Mode=TwoWay}"
+                      Visibility="Collapsed"
+                      SelectionChanged="ChineseTeleCodeStyle_SelectionChanged">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Converter={StaticResource ResourceTranslationConverter}}"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+                <x:String>ChineseTeleCodeNumber</x:String>
+                <x:String>ChineseTeleCodeNumberSimp</x:String>
+                <x:String>ChineseTeleCodeNumberFull</x:String>
+            </ComboBox>
         </Grid>
 
 

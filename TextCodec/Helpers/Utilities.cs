@@ -33,4 +33,22 @@ static class Utilities
         }
         return false;
     }
+
+    public static void SwitchToInvalid(ref bool is_valid, StringBuilder result_buff)
+    {
+        if (is_valid)
+        {
+            is_valid = false;
+            result_buff.Append(" ⁅");
+        }
+    }
+
+    public static void SwitchToValid(ref bool is_valid, StringBuilder result_buff)
+    {
+        if (!is_valid)
+        {
+            is_valid = true;
+            result_buff.Append("⁆ ");
+        }
+    }
 }

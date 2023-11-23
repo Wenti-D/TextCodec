@@ -120,6 +120,15 @@
   <data name="AppTitle.Text" xml:space="preserve">
     <value>Text Codec</value>
   </data>
+  <data name="ChineseTeleCodeNumber" xml:space="preserve">
+    <value>数字序号</value>
+  </data>
+  <data name="ChineseTeleCodeNumberFull" xml:space="preserve">
+    <value>数字全码</value>
+  </data>
+  <data name="ChineseTeleCodeNumberSimp" xml:space="preserve">
+    <value>数字简码</value>
+  </data>
   <data name="CodecPageBase58BtcCharList" xml:space="preserve">
     <value>比特币序列</value>
   </data>

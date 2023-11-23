@@ -39,5 +39,7 @@ public enum CodecMode : byte
     JsonString,
     [Description("转换为国际摩尔斯电码")]
     InternationalMorseCode,
+    [Description("转换为中文电码")]
+    ChineseTelegraphCode,
 }
 

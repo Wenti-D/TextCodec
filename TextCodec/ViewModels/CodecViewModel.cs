@@ -19,6 +19,7 @@ namespace TextCodec.ViewModels
         private bool isEncodeWithSpaceChecked;
         private string selectedBaseSeriesTextPreprocessMode;
         private string selectedBase58Style;
+        private string selectedChineseTelegraphCodeStyle;
 
         public static string GetTranslation(string resource)
         {
@@ -61,6 +62,19 @@ namespace TextCodec.ViewModels
             {
                 SetProperty(ref selectedBase58Style, value);
                 AppSettings.Base58Style = value;
+            }
+        }
+
+        /// <summary>
+        /// 中文电码编码样式
+        /// </summary>
+        public string SelectedChineseTelegraphCodeStyle
+        {
+            get { return selectedChineseTelegraphCodeStyle ??= AppSettings.ChineseTelegraphCodeStyle; }
+            set
+            {
+                SetProperty(ref selectedChineseTelegraphCodeStyle, value);
+                AppSettings.ChineseTelegraphCodeStyle = value;
             }
         }
     }
