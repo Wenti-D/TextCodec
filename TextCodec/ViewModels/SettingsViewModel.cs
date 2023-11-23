@@ -1,12 +1,9 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TextCodec.Core;
-using CommunityToolkit.Mvvm.ComponentModel;
-using Windows.ApplicationModel;
 using TextCodec.Extensions;
+using Windows.ApplicationModel;
 
 namespace TextCodec.ViewModels
 {
