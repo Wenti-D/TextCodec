@@ -60,11 +60,7 @@ namespace TextCodec.Helpers
             {
                 char _ = tmp_buff[0];
                 Rune rune = new(Convert.ToInt32(tmp_buff.ToString(), target_base));
-                if (!is_valid)
-                {
-                    is_valid = true;
-                    result_buff.Append("⁆ ");
-                }
+                Utilities.SwitchToValid(ref is_valid, result_buff);
                 result_buff.Append(rune);
             }
             catch (IndexOutOfRangeException)
@@ -73,11 +69,7 @@ namespace TextCodec.Helpers
             }
             catch (Exception)
             {
-                if (is_valid)
-                {
-                    result_buff.Append(" ⁅");
-                    is_valid = false;
-                }
+                Utilities.SwitchToInvalid(ref is_valid, result_buff);
                 result_buff.Append(tmp_buff);
             }
             finally

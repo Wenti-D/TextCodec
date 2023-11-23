@@ -162,27 +162,19 @@ class BaseSeriesCodec
             {
                 if (code_str.Contains(ch))
                 {
-                    if (!is_valid)
-                    {
-                        result_buffs[i].Append("⁆ ");
-                        is_valid = true;
-                    }
+                    Utilities.SwitchToValid(ref is_valid, result_buffs[i]);
                     tmp_buff.Append(ch);
                 }
                 else
                 {
                     result_buffs[i].Append(BaseSeriesHelper.Base58DecodeHelper(tmp_buff.ToString()));
                     tmp_buff.Clear();
-                    if (is_valid)
-                    {
-                        result_buffs[i].Append(" ⁅");
-                        is_valid = false;
-                    }
+                    Utilities.SwitchToInvalid(ref is_valid, result_buffs[i]);
                     result_buffs[i].Append(ch);
                 }
             }
-            if (!is_valid) { result_buffs[i].Append("⁆ "); }
             result_buffs[i].Append(BaseSeriesHelper.Base58DecodeHelper(tmp_buff.ToString()));
+            if (!is_valid) { result_buffs[i].Append('⁆'); }
         }
         return string.Join("\n", result_buffs);
     }
@@ -285,11 +277,7 @@ class BaseSeriesCodec
                         }
                         else
                         {
-                            if (!is_valid)
-                            {
-                                is_valid = true;
-                                result_buffs[i].Append("⁆ ");
-                            }
+                            Utilities.SwitchToValid(ref is_valid, result_buffs[i]);
                             tmp_bytes.AddRange(BaseSeriesHelper.Base32DecodeHelper(tmp_string));
                             tmp_string_buff.Clear();
                         }
@@ -305,11 +293,7 @@ class BaseSeriesCodec
                     }
                     else if (tmp_string_len == 7)
                     {
-                        if (!is_valid)
-                        {
-                            is_valid = true;
-                            result_buffs[i].Append("⁆ ");
-                        }
+                        Utilities.SwitchToValid(ref is_valid, result_buffs[i]);
                         tmp_string_buff.Append(ch);
                         tmp_bytes.AddRange(BaseSeriesHelper.Base32DecodeHelper(tmp_string_buff.ToString()));
                         tmp_string_buff.Clear();

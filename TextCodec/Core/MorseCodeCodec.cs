@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TextCodec.Core.Dicts;
+using TextCodec.Helpers;
 
 namespace TextCodec.Core;
 
@@ -18,24 +19,14 @@ class MorseCodeCodec
         {
             try
             {
-                if (!is_valid)
-                {
-                    encoded_text_buff.Append("⁆ " + morse_dict[ch]);
-                }
-                else
-                {
-                    encoded_text_buff.Append(morse_dict[ch]);
-                }
-                is_valid = true;
+                string tmp_str = morse_dict[ch];
+                Utilities.SwitchToValid(ref is_valid, encoded_text_buff);
+                encoded_text_buff.Append(tmp_str);
                 encoded_text_buff.Append(' ');
             }
             catch (KeyNotFoundException)
             {
-                if (is_valid)
-                {
-                    is_valid = false;
-                    encoded_text_buff.Append(" ⁅");
-                }
+                Utilities.SwitchToInvalid(ref is_valid, encoded_text_buff);
                 encoded_text_buff.Append(ch);
             }
         }
@@ -55,30 +46,16 @@ class MorseCodeCodec
             {
                 try
                 {
-                    if (!is_valid)
-                    {
-                        decoded_text_buff.Append("⁆ " + morse_dict[tmp_text_buff.ToString()]);
-                    }
-                    else
-                    {
-                        decoded_text_buff.Append(morse_dict[tmp_text_buff.ToString()]);
-                    }
-                    is_valid = true;
+                    char? tmp_ch = morse_dict[tmp_text_buff.ToString()];
+                    Utilities.SwitchToValid(ref is_valid, decoded_text_buff);
+                    decoded_text_buff.Append(tmp_ch);
                 }
                 catch (KeyNotFoundException)
                 {
-                    if (is_valid)
-                    {
-                        is_valid = false;
-                        decoded_text_buff.Append(" ⁅");
-                    }
+                    Utilities.SwitchToInvalid(ref is_valid, decoded_text_buff);
                     decoded_text_buff.Append(tmp_text_buff);
                 }
-                if (is_valid)
-                {
-                    is_valid = false;
-                    decoded_text_buff.Append(" ⁅");
-                }
+                Utilities.SwitchToInvalid(ref is_valid, decoded_text_buff);
                 tmp_text_buff.Clear();
                 decoded_text_buff.Append(ch);
             }
@@ -92,23 +69,13 @@ class MorseCodeCodec
                 {
                     try
                     {
-                        if (!is_valid)
-                        {
-                            decoded_text_buff.Append("⁆ " + morse_dict[tmp_text_buff.ToString()]);
-                        }
-                        else
-                        {
-                            decoded_text_buff.Append(morse_dict[tmp_text_buff.ToString()]);
-                        }
-                        is_valid = true;
+                        char? tmp_ch = morse_dict[tmp_text_buff.ToString()];
+                        Utilities.SwitchToValid(ref is_valid, decoded_text_buff);
+                        decoded_text_buff.Append(tmp_ch);
                     }
                     catch (KeyNotFoundException)
                     {
-                        if (is_valid)
-                        {
-                            is_valid = false;
-                            decoded_text_buff.Append(" ⁅");
-                        }
+                        Utilities.SwitchToInvalid(ref is_valid, decoded_text_buff);
                         decoded_text_buff.Append(tmp_text_buff);
                     }
                     tmp_text_buff.Clear();
@@ -131,23 +98,13 @@ class MorseCodeCodec
         }
         try
         {
-            if (!is_valid)
-            {
-                decoded_text_buff.Append("⁆ " + morse_dict[tmp_text_buff.ToString()]);
-            }
-            else
-            {
-                decoded_text_buff.Append(morse_dict[tmp_text_buff.ToString()]);
-            }
-            is_valid = true;
+            char? tmp_ch = morse_dict[tmp_text_buff.ToString()];
+            Utilities.SwitchToValid(ref is_valid, decoded_text_buff);
+            decoded_text_buff.Append(tmp_ch);
         }
         catch (KeyNotFoundException)
         {
-            if (is_valid)
-            {
-                is_valid = false;
-                decoded_text_buff.Append(" ⁅");
-            }
+            Utilities.SwitchToInvalid(ref is_valid, decoded_text_buff);
             decoded_text_buff.Append(tmp_text_buff);
         }
         if (!is_valid)

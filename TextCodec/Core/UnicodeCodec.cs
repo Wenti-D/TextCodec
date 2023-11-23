@@ -45,11 +45,7 @@ class UnicodeCodec
                 }
                 else
                 {
-                    if (is_valid)
-                    {
-                        result_buff.Append(" ⁅");
-                        is_valid = false;
-                    }
+                    Utilities.SwitchToInvalid(ref is_valid, result_buff);
                     result_buff.Append(ch);
                 }
             }

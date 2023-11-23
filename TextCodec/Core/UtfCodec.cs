@@ -48,11 +48,7 @@ class UtfCodec
                 tmp_buff.Append(ch);
                 if (tmp_buff.Length == 2)
                 {
-                    if (!is_valid)
-                    {
-                        result_buff.Append("⁆ ");
-                        is_valid = true;
-                    }
+                    Utilities.SwitchToValid(ref is_valid, result_buff);
                     bytes.Add(byte.Parse(tmp_buff.ToString(), NumberStyles.AllowHexSpecifier));
                     tmp_buff.Clear();
                 }
@@ -103,7 +99,7 @@ class UtfCodec
         result_buff.Append(tmp_buff);
         if (!is_valid || tmp_buff.Length > 0)
         {
-            result_buff.Append("⁆ ");
+            result_buff.Append('⁆');
         }
         return result_buff.ToString();
     }

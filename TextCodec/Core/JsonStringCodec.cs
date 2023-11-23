@@ -67,7 +67,7 @@ class JsonStringCodec
                     if ("\"btnfr\\".Contains(ch))
                     {
                         tmp_buff.Clear();
-                        SwitchValid(ref is_valid, result_buffs[i]);
+                        Utilities.SwitchToValid(ref is_valid, result_buffs[i]);
                         result_buffs[i].Append(
                             ch switch
                             {
@@ -89,7 +89,7 @@ class JsonStringCodec
                     }
                     else
                     {
-                        SwitchInvalid(ref is_valid, result_buffs[i]);
+                        Utilities.SwitchToInvalid(ref is_valid, result_buffs[i]);
                         result_buffs[i].Append('\\');
                     }
                 }
@@ -103,7 +103,7 @@ class JsonStringCodec
                         {
                             uni_cnt = 0;
                             is_uni_mode = false;
-                            SwitchValid(ref is_valid, result_buffs[i]);
+                            Utilities.SwitchToValid(ref is_valid, result_buffs[i]);
                             result_buffs[i].Append((char)Int16.Parse(tmp_buff.ToString(), NumberStyles.AllowHexSpecifier));
                             tmp_buff.Clear();
                         }
@@ -113,7 +113,7 @@ class JsonStringCodec
                     {
                         uni_cnt = 0;
                         is_uni_mode = false;
-                        SwitchInvalid(ref is_valid, result_buffs[i]);
+                        Utilities.SwitchToInvalid(ref is_valid, result_buffs[i]);
                         result_buffs[i].Append("\\u");
                         result_buffs[i].Append(tmp_buff);
                         tmp_buff.Clear();
@@ -125,18 +125,18 @@ class JsonStringCodec
                 }
                 else if (ch == '"' || ch < ' ' || ch == 0x7f)
                 {
-                    SwitchInvalid(ref is_valid, result_buffs[i]);
+                    Utilities.SwitchToInvalid(ref is_valid, result_buffs[i]);
                     result_buffs[i].Append(ch);
                 }
                 else
                 {
-                    SwitchValid(ref is_valid, result_buffs[i]);
+                    Utilities.SwitchToValid(ref is_valid, result_buffs[i]);
                     result_buffs[i].Append(ch);
                 }
             }
             if (is_backslash_mode || is_uni_mode)
             {
-                SwitchInvalid(ref is_valid, result_buffs[i]);
+                Utilities.SwitchToInvalid(ref is_valid, result_buffs[i]);
                 result_buffs[i].Append('\\');
                 if (is_uni_mode)
                 {
@@ -144,26 +144,8 @@ class JsonStringCodec
                     result_buffs[i].Append(tmp_buff);
                 }
             }
-            SwitchValid(ref is_valid, result_buffs[i]);
+            Utilities.SwitchToValid(ref is_valid, result_buffs[i]);
         }
         return string.Join('\n', result_buffs);
-    }
-
-    private static void SwitchValid(ref bool is_valid, StringBuilder string_buff)
-    {
-        if (!is_valid)
-        {
-            is_valid = true;
-            string_buff.Append("⁆ ");
-        }
-    }
-
-    private static void SwitchInvalid(ref bool is_valid, StringBuilder string_buff)
-    {
-        if (is_valid)
-        {
-            is_valid = false;
-            string_buff.Append(" ⁅");
-        }
     }
 }
