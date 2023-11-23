@@ -42,18 +42,31 @@ namespace TextCodec
         {
             InitializeComponent();
 
+            Title = $"Text Codec";
+
+            // 初始化程序设定
             appSettings = new AppSettings();
-            ChangeSystemBackdrop(appSettings.BackdropType);
             appSettings.PropertyChanged += Settings_PropertyChanged;
 
+            // 根据设定更改背景
+            ChangeSystemBackdrop(appSettings.BackdropType);
+
+            // 获取窗体句柄
             hwnd = WindowNative.GetWindowHandle(this);
             WindowId id = Win32Interop.GetWindowIdFromWindow(hwnd);
             appWindow = AppWindow.GetFromWindowId(id);
+
+            // 设置图标
+            IntPtr h_icon = User32.LoadImage(hwnd, "Assets/AppIcon.ico",
+                User32.LoadImageType.IMAGE_ICON, 16, 16, User32.LoadImageOptions.LR_LOADFROMFILE);
+            User32.SendMessage(hwnd, User32.WindowMessage.WM_SETICON, (IntPtr)0, h_icon);
 
             NavigationViewController.SelectedItem = NavigationViewController.MenuItems[0];
             ContentFrame.Navigate(typeof(Views.Pages.CodecPage), null, new EntranceNavigationTransitionInfo());
 
             Closed += MainWindow_Closed;
+
+            // 按上次关闭时的窗口位置、大小显示窗口
             if (appSettings.IsMainWindowMaximum is true)
             {
                 User32.ShowWindow(hwnd, ShowWindowCommand.SW_SHOWMAXIMIZED);
@@ -91,6 +104,10 @@ namespace TextCodec
             }
         }
 
+        /// <summary>
+        /// 更改应用背景材质样式
+        /// </summary>
+        /// <param name="backdrop">背景材质</param>
         private void ChangeSystemBackdrop(BackdropTypes backdrop)
         {
             SystemBackdrop = backdrop switch
@@ -102,6 +119,11 @@ namespace TextCodec
             };
         }
 
+        /// <summary>
+        /// 关闭窗口时的附加工作
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
         private async void MainWindow_Closed(object sender, WindowEventArgs args)
         {
             var window_placement = new User32.WINDOWPLACEMENT();
