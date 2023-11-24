@@ -31,7 +31,7 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <StackPanel Orientation="Vertical">
-            <Button x:Name="clearRawText"
+            <Button x:Name="ClearRawText"
                     Click="ClearText_Click">
                 <ToolTipService.ToolTip>
                     <ToolTip x:Uid="CodecPageClearTextButtonInfo"/>
@@ -39,33 +39,33 @@
                 <FontIcon Glyph="&#xE711;" />
             </Button>
 
-            <Button x:Name="copyRawText"
-                    Click="copyRawText_Click">
+            <Button x:Name="CopyRawText"
+                    Click="CopyRawText_Click">
                 <ToolTipService.ToolTip>
                     <ToolTip x:Uid="CodecPageCopyTextButtonInfo"/>
                 </ToolTipService.ToolTip>
                 <FontIcon Glyph="&#xE8C8;" />
             </Button>
-            <TeachingTip x:Name="rawTextCopiedTip"
+            <TeachingTip x:Name="RawTextCopiedTip"
                          x:Uid="CodecPageTextCopiedInfo"
                          IsLightDismissEnabled="True"
-                         Target="{x:Bind copyRawText}"
+                         Target="{x:Bind CopyRawText}"
                          FontFamily="{StaticResource SarasaUI}"/>
 
-            <Button x:Name="pasteRawText"
-                    Click="pasteRawText_Click">
+            <Button x:Name="PasteRawText"
+                    Click="PasteRawText_Click">
                 <ToolTipService.ToolTip>
                     <ToolTip x:Uid="CodecPagePasteTextButtonInfo"/>
                 </ToolTipService.ToolTip>
                 <FontIcon Glyph="&#xE77F;" />
             </Button>
-            <TeachingTip x:Name="rawTextPastedTip"
+            <TeachingTip x:Name="RawTextPastedTip"
                          x:Uid="CodecPageTextPastedInfo"
                          IsLightDismissEnabled="True"
-                         Target="{x:Bind pasteRawText}"
+                         Target="{x:Bind PasteRawText}"
                          FontFamily="{StaticResource SarasaUI}"/>
         </StackPanel>
-        <TextBox x:Name="rawTextBox"
+        <TextBox x:Name="RawTextBox"
                  AcceptsReturn="True"
                  Margin="20,0,0,0"
                  TextWrapping="Wrap"
@@ -81,7 +81,7 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="1.5*"/>
             </Grid.ColumnDefinitions>
-            <DropDownButton x:Name="encodeMode"
+            <DropDownButton x:Name="EncodeMode"
                             x:Uid="CodecPageModeSelectButton"
                             Margin="40,0,0,0">
                 <DropDownButton.Flyout>
@@ -136,18 +136,18 @@
             </DropDownButton>
 
             <!--UTF编码时出现的「编码时带空格」勾选选项-->
-            <CheckBox x:Name="encodeWithSpace"
+            <CheckBox x:Name="EncodeWithSpace"
                       x:Uid="CodecPageEncodeWithSpaceCheckBox"
                       Grid.Column="1"
                       IsChecked="{Binding IsEncodeWithSpaceChecked, Mode=TwoWay}"
                       Visibility="Collapsed"
-                      Checked="encodeWithSpace_Changed"
-                      Unchecked="encodeWithSpace_Changed"/>
+                      Checked="EncodeWithSpace_Changed"
+                      Unchecked="EncodeWithSpace_Changed"/>
 
             <!--Base系列编码时出现的编码方式与序列选项-->
             <StackPanel Orientation="Horizontal"
                         Grid.Column="1">
-                <ComboBox x:Name="textPreprocessMode"
+                <ComboBox x:Name="TextPreprocessMode"
                           Width="150"
                           SelectedValue="{Binding SelectedBaseSeriesTextPreprocessMode, Mode=TwoWay}"
                           Visibility="Collapsed"
@@ -196,7 +196,7 @@
 
 
         <StackPanel Orientation="Vertical" Grid.Row="2">
-            <Button x:Name="clearEncodedText"
+            <Button x:Name="ClearEncodedText"
                     Click="ClearText_Click">
                 <ToolTipService.ToolTip>
                     <ToolTip x:Uid="CodecPageClearTextButtonInfo"/>
@@ -204,33 +204,33 @@
                 <FontIcon Glyph="&#xE711;" />
             </Button>
 
-            <Button x:Name="copyEncodedText"
-                    Click="copyEncodedText_Click">
+            <Button x:Name="CopyEncodedText"
+                    Click="CopyEncodedText_Click">
                 <ToolTipService.ToolTip>
                     <ToolTip x:Uid="CodecPageCopyTextButtonInfo"/>
                 </ToolTipService.ToolTip>
                 <FontIcon Glyph="&#xE8C8;" />
             </Button>
-            <TeachingTip x:Name="encodedTextCopiedTip"
+            <TeachingTip x:Name="EncodedTextCopiedTip"
                          x:Uid="CodecPageTextCopiedInfo"
                          IsLightDismissEnabled="True"
-                         Target="{x:Bind copyEncodedText}"
+                         Target="{x:Bind CopyEncodedText}"
                          FontFamily="{StaticResource SarasaUI}"/>
 
-            <Button x:Name="pasteEncodedText"
-                    Click="pasteEncodedText_Click">
+            <Button x:Name="PasteEncodedText"
+                    Click="PasteEncodedText_Click">
                 <ToolTipService.ToolTip>
                     <ToolTip x:Uid="CodecPagePasteTextButtonInfo"/>
                 </ToolTipService.ToolTip>
                 <FontIcon Glyph="&#xE77F;" />
             </Button>
-            <TeachingTip x:Name="encodedTextPastedTip"
+            <TeachingTip x:Name="EncodedTextPastedTip"
                          x:Uid="CodecPageTextPastedInfo"
                          IsLightDismissEnabled="True"
-                         Target="{x:Bind pasteEncodedText}"
+                         Target="{x:Bind PasteEncodedText}"
                          FontFamily="{StaticResource SarasaUI}"/>
         </StackPanel>
-        <TextBox x:Name="encodedTextBox"
+        <TextBox x:Name="EncodedTextBox"
                  AcceptsReturn="True"
                  Margin="20,0,0,0"
                  Style="{ThemeResource MonoTextBoxStyle}"

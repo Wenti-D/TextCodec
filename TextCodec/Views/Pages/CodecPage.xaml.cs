@@ -27,8 +27,8 @@ namespace TextCodec.Views.Pages
 
             last_focused_is_raw_text = true;
             converter_mode = (CodecMode)Enum.Parse(typeof(CodecMode), "None");
-            encodedTextBox.AddHandler(PointerPressedEvent, new PointerEventHandler(encodedTextBox_PointerPressed), true);
-            rawTextBox.AddHandler(PointerPressedEvent, new PointerEventHandler(rawTextBox_PointerPressed), true);
+            EncodedTextBox.AddHandler(PointerPressedEvent, new PointerEventHandler(EncodedTextBox_PointerPressed), true);
+            RawTextBox.AddHandler(PointerPressedEvent, new PointerEventHandler(RawTextBox_PointerPressed), true);
 
             timer = new DispatcherTimer();
             timer.Tick += Timer_Tick;
@@ -37,76 +37,76 @@ namespace TextCodec.Views.Pages
 
         private void ClearText_Click(object sender, RoutedEventArgs e)
         {
-            rawTextBox.Text = encodedTextBox.Text = string.Empty;
+            RawTextBox.Text = EncodedTextBox.Text = string.Empty;
         }
 
-        private void copyRawText_Click(object sender, RoutedEventArgs e)
+        private void CopyRawText_Click(object sender, RoutedEventArgs e)
         {
             var package = new DataPackage();
-            package.SetText(rawTextBox.Text);
+            package.SetText(RawTextBox.Text);
             Clipboard.SetContent(package);
-            rawTextCopiedTip.IsOpen = true;
+            RawTextCopiedTip.IsOpen = true;
             timer.Start();
         }
 
-        private async void pasteRawText_Click(object sender, RoutedEventArgs e)
+        private async void PasteRawText_Click(object sender, RoutedEventArgs e)
         {
             last_focused_is_raw_text = true;
             var package = Clipboard.GetContent();
             if (package.Contains(StandardDataFormats.Text))
             {
-                rawTextBox.Text = await package.GetTextAsync();
+                RawTextBox.Text = await package.GetTextAsync();
             }
-            rawTextPastedTip.IsOpen = true;
+            RawTextPastedTip.IsOpen = true;
             timer.Start();
         }
 
-        private void copyEncodedText_Click(object sender, RoutedEventArgs e)
+        private void CopyEncodedText_Click(object sender, RoutedEventArgs e)
         {
             var package = new DataPackage();
-            package.SetText(encodedTextBox.Text);
+            package.SetText(EncodedTextBox.Text);
             Clipboard.SetContent(package);
-            encodedTextCopiedTip.IsOpen = true;
+            EncodedTextCopiedTip.IsOpen = true;
             timer.Start();
         }
 
-        private async void pasteEncodedText_Click(object sender, RoutedEventArgs e)
+        private async void PasteEncodedText_Click(object sender, RoutedEventArgs e)
         {
             last_focused_is_raw_text = false;
             var package = Clipboard.GetContent();
             if (package.Contains(StandardDataFormats.Text))
             {
-                encodedTextBox.Text = await package.GetTextAsync();
+                EncodedTextBox.Text = await package.GetTextAsync();
             }
-            encodedTextPastedTip.IsOpen = true;
+            EncodedTextPastedTip.IsOpen = true;
             timer.Start();
         }
 
         private void Timer_Tick(object sender, object e)
         {
             (sender as DispatcherTimer).Stop();
-            if (rawTextCopiedTip.IsOpen) rawTextCopiedTip.IsOpen = false;
-            if (rawTextPastedTip.IsOpen) rawTextPastedTip.IsOpen = false;
-            if (encodedTextCopiedTip.IsOpen) encodedTextCopiedTip.IsOpen = false;
-            if (encodedTextPastedTip.IsOpen) encodedTextPastedTip.IsOpen = false;
+            if (RawTextCopiedTip.IsOpen) RawTextCopiedTip.IsOpen = false;
+            if (RawTextPastedTip.IsOpen) RawTextPastedTip.IsOpen = false;
+            if (EncodedTextCopiedTip.IsOpen) EncodedTextCopiedTip.IsOpen = false;
+            if (EncodedTextPastedTip.IsOpen) EncodedTextPastedTip.IsOpen = false;
         }
 
         private void SelectMode_Click(object sender, RoutedEventArgs e)
         {
             string newMode = sender.GetPropertyValue<string>("Text");
             string newConvertMode = sender.GetPropertyValue<string>("Name");
-            encodeMode.Content = newMode;
+            EncodeMode.Content = newMode;
             converter_mode = (CodecMode)Enum.Parse(typeof(CodecMode), newConvertMode);
             if (converter_mode >= (CodecMode)Enum.Parse(typeof(CodecMode), "UTF8")
                 && converter_mode <= (CodecMode)Enum.Parse(typeof(CodecMode), "UTF16BE"))
-                encodeWithSpace.Visibility = Visibility.Visible;
+                EncodeWithSpace.Visibility = Visibility.Visible;
             else
-                encodeWithSpace.Visibility = Visibility.Collapsed;
+                EncodeWithSpace.Visibility = Visibility.Collapsed;
             if (converter_mode >= (CodecMode)Enum.Parse(typeof(CodecMode), "Base64")
                 && converter_mode <= (CodecMode)Enum.Parse(typeof(CodecMode), "Base32"))
-                textPreprocessMode.Visibility = Visibility.Visible;
+                TextPreprocessMode.Visibility = Visibility.Visible;
             else
-                textPreprocessMode.Visibility = Visibility.Collapsed;
+                TextPreprocessMode.Visibility = Visibility.Collapsed;
             if (converter_mode == (CodecMode)Enum.Parse(typeof(CodecMode), "Base58"))
                 Base58Style.Visibility = Visibility.Visible;
             else
@@ -125,12 +125,12 @@ namespace TextCodec.Views.Pages
                 StartCodec();
         }
 
-        private void rawTextBox_PointerPressed(object sender, PointerRoutedEventArgs e)
+        private void RawTextBox_PointerPressed(object sender, PointerRoutedEventArgs e)
         {
             last_focused_is_raw_text = true;
         }
 
-        private void encodedTextBox_PointerPressed(object sender, PointerRoutedEventArgs e)
+        private void EncodedTextBox_PointerPressed(object sender, PointerRoutedEventArgs e)
         {
             last_focused_is_raw_text = false;
         }
@@ -139,56 +139,56 @@ namespace TextCodec.Views.Pages
         {
             if (last_focused_is_raw_text)
             {
-                encodedTextBox.Text = converter_mode switch
+                EncodedTextBox.Text = converter_mode switch
                 {
-                    CodecMode.UnicodeBin => UnicodeCodec.BinEncoder(rawTextBox.Text),
-                    CodecMode.UnicodeOct => UnicodeCodec.OctEncoder(rawTextBox.Text),
-                    CodecMode.UnicodeDec => UnicodeCodec.DecEncoder(rawTextBox.Text),
-                    CodecMode.UnicodeHex => UnicodeCodec.HexEncoder(rawTextBox.Text),
+                    CodecMode.UnicodeBin => UnicodeCodec.BinEncoder(RawTextBox.Text),
+                    CodecMode.UnicodeOct => UnicodeCodec.OctEncoder(RawTextBox.Text),
+                    CodecMode.UnicodeDec => UnicodeCodec.DecEncoder(RawTextBox.Text),
+                    CodecMode.UnicodeHex => UnicodeCodec.HexEncoder(RawTextBox.Text),
 
-                    CodecMode.UTF8 => UtfCodec.Utf8Encoder(rawTextBox.Text),
-                    CodecMode.UTF16LE => UtfCodec.Utf16LeEncoder(rawTextBox.Text),
-                    CodecMode.UTF16BE => UtfCodec.Utf16BeEncoder(rawTextBox.Text),
+                    CodecMode.UTF8 => UtfCodec.Utf8Encoder(RawTextBox.Text),
+                    CodecMode.UTF16LE => UtfCodec.Utf16LeEncoder(RawTextBox.Text),
+                    CodecMode.UTF16BE => UtfCodec.Utf16BeEncoder(RawTextBox.Text),
 
-                    CodecMode.Base64 => BaseSeriesCodec.Base64Encoder(rawTextBox.Text),
-                    CodecMode.Base58 => BaseSeriesCodec.Base58Encoder(rawTextBox.Text),
-                    CodecMode.Base32 => BaseSeriesCodec.Base32Encoder(rawTextBox.Text),
+                    CodecMode.Base64 => BaseSeriesCodec.Base64Encoder(RawTextBox.Text),
+                    CodecMode.Base58 => BaseSeriesCodec.Base58Encoder(RawTextBox.Text),
+                    CodecMode.Base32 => BaseSeriesCodec.Base32Encoder(RawTextBox.Text),
 
-                    CodecMode.JsonString => JsonStringCodec.Encoder(rawTextBox.Text),
-                    CodecMode.InternationalMorseCode => MorseCodeCodec.Encoder(rawTextBox.Text),
-                    CodecMode.ChineseTelegraphCode => ChineseTelegraphCodec.Encoder(rawTextBox.Text),
+                    CodecMode.JsonString => JsonStringCodec.Encoder(RawTextBox.Text),
+                    CodecMode.InternationalMorseCode => MorseCodeCodec.Encoder(RawTextBox.Text),
+                    CodecMode.ChineseTelegraphCode => ChineseTelegraphCodec.Encoder(RawTextBox.Text),
 
-                    _ => rawTextBox.Text,
+                    _ => RawTextBox.Text,
                 };
             }
             else
             {
-                rawTextBox.Text = converter_mode switch
+                RawTextBox.Text = converter_mode switch
                 {
-                    CodecMode.UnicodeBin => UnicodeCodec.BinDecoder(encodedTextBox.Text),
-                    CodecMode.UnicodeOct => UnicodeCodec.OctDecoder(encodedTextBox.Text),
-                    CodecMode.UnicodeDec => UnicodeCodec.DecDecoder(encodedTextBox.Text),
-                    CodecMode.UnicodeHex => UnicodeCodec.HexDecoder(encodedTextBox.Text),
+                    CodecMode.UnicodeBin => UnicodeCodec.BinDecoder(EncodedTextBox.Text),
+                    CodecMode.UnicodeOct => UnicodeCodec.OctDecoder(EncodedTextBox.Text),
+                    CodecMode.UnicodeDec => UnicodeCodec.DecDecoder(EncodedTextBox.Text),
+                    CodecMode.UnicodeHex => UnicodeCodec.HexDecoder(EncodedTextBox.Text),
 
-                    CodecMode.UTF8 => UtfCodec.Utf8Decoder(encodedTextBox.Text),
-                    CodecMode.UTF16LE => UtfCodec.Utf16LeDecoder(encodedTextBox.Text),
-                    CodecMode.UTF16BE => UtfCodec.Utf16BeDecoder(encodedTextBox.Text),
+                    CodecMode.UTF8 => UtfCodec.Utf8Decoder(EncodedTextBox.Text),
+                    CodecMode.UTF16LE => UtfCodec.Utf16LeDecoder(EncodedTextBox.Text),
+                    CodecMode.UTF16BE => UtfCodec.Utf16BeDecoder(EncodedTextBox.Text),
 
-                    CodecMode.Base64 => BaseSeriesCodec.Base64Decoder(encodedTextBox.Text),
-                    CodecMode.Base58 => BaseSeriesCodec.Base58Decoder(encodedTextBox.Text),
-                    CodecMode.Base32 => BaseSeriesCodec.Base32Decoder(encodedTextBox.Text),
+                    CodecMode.Base64 => BaseSeriesCodec.Base64Decoder(EncodedTextBox.Text),
+                    CodecMode.Base58 => BaseSeriesCodec.Base58Decoder(EncodedTextBox.Text),
+                    CodecMode.Base32 => BaseSeriesCodec.Base32Decoder(EncodedTextBox.Text),
 
-                    CodecMode.JsonString => JsonStringCodec.Decoder(encodedTextBox.Text),
-                    CodecMode.InternationalMorseCode => MorseCodeCodec.Decoder(encodedTextBox.Text),
-                    CodecMode.ChineseTelegraphCode => ChineseTelegraphCodec.Decoder(encodedTextBox.Text),
+                    CodecMode.JsonString => JsonStringCodec.Decoder(EncodedTextBox.Text),
+                    CodecMode.InternationalMorseCode => MorseCodeCodec.Decoder(EncodedTextBox.Text),
+                    CodecMode.ChineseTelegraphCode => ChineseTelegraphCodec.Decoder(EncodedTextBox.Text),
 
-                    _ => encodedTextBox.Text,
+                    _ => EncodedTextBox.Text,
                 };
             }
 
         }
 
-        private void encodeWithSpace_Changed(object sender, RoutedEventArgs e)
+        private void EncodeWithSpace_Changed(object sender, RoutedEventArgs e)
         {
             StartCodec();
         }
