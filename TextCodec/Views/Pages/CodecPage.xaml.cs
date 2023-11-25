@@ -86,36 +86,39 @@ namespace TextCodec.Views.Pages
         private void Timer_Tick(object sender, object e)
         {
             (sender as DispatcherTimer).Stop();
-            if (RawTextCopiedTip.IsOpen) RawTextCopiedTip.IsOpen = false;
-            if (RawTextPastedTip.IsOpen) RawTextPastedTip.IsOpen = false;
-            if (EncodedTextCopiedTip.IsOpen) EncodedTextCopiedTip.IsOpen = false;
-            if (EncodedTextPastedTip.IsOpen) EncodedTextPastedTip.IsOpen = false;
+            RawTextCopiedTip.IsOpen = false;
+            RawTextPastedTip.IsOpen = false;
+            EncodedTextCopiedTip.IsOpen = false;
+            EncodedTextPastedTip.IsOpen = false;
         }
 
         private async void SelectMode_Click(object sender, RoutedEventArgs e)
         {
-            string newMode = sender.GetPropertyValue<string>("Text");
-            string newConvertMode = sender.GetPropertyValue<string>("Name");
-            EncodeMode.Content = newMode;
-            converter_mode = (CodecMode)Enum.Parse(typeof(CodecMode), newConvertMode);
+            EncodeMode.Content = sender.GetPropertyValue<string>("Text");
+            converter_mode = (CodecMode)Enum.Parse(typeof(CodecMode), sender.GetPropertyValue<string>("Name"));
+
             if (converter_mode >= (CodecMode)Enum.Parse(typeof(CodecMode), "UTF8")
                 && converter_mode <= (CodecMode)Enum.Parse(typeof(CodecMode), "UTF16BE"))
                 EncodeWithSpace.Visibility = Visibility.Visible;
             else
                 EncodeWithSpace.Visibility = Visibility.Collapsed;
+
             if (converter_mode >= (CodecMode)Enum.Parse(typeof(CodecMode), "Base64")
                 && converter_mode <= (CodecMode)Enum.Parse(typeof(CodecMode), "Base32"))
                 TextPreprocessMode.Visibility = Visibility.Visible;
             else
                 TextPreprocessMode.Visibility = Visibility.Collapsed;
+
             if (converter_mode == (CodecMode)Enum.Parse(typeof(CodecMode), "Base58"))
                 Base58Style.Visibility = Visibility.Visible;
             else
                 Base58Style.Visibility = Visibility.Collapsed;
+
             if (converter_mode == (CodecMode)Enum.Parse(typeof(CodecMode), "ChineseTelegraphCode"))
                 ChineseTeleCodeStyle.Visibility = Visibility.Visible;
             else
                 ChineseTeleCodeStyle.Visibility = Visibility.Collapsed;
+
             await StartCodecAsync();
         }
 
@@ -136,6 +139,21 @@ namespace TextCodec.Views.Pages
             last_focused_is_raw_text = false;
         }
 
+        private async void EncodeWithSpace_Changed(object sender, RoutedEventArgs e)
+        {
+            await StartCodecAsync();
+        }
+
+        private async void BaseSeries_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            await StartCodecAsync();
+        }
+
+        private async void ChineseTeleCodeStyle_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            await StartCodecAsync();
+        }
+
         private async Task StartCodecAsync()
         {
             if (last_focused_is_raw_text)
@@ -150,7 +168,6 @@ namespace TextCodec.Views.Pages
                 var decoded_text = await Task.Run(() => GetDecodedText(encoded_text));
                 RawTextBox.Text = decoded_text;
             }
-
         }
 
         private string GetEncodedText(string raw_text)
@@ -201,21 +218,6 @@ namespace TextCodec.Views.Pages
 
                 _ => encoded_text,
             };
-        }
-
-        private async void EncodeWithSpace_Changed(object sender, RoutedEventArgs e)
-        {
-            await StartCodecAsync();
-        }
-
-        private async void BaseSeries_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            await StartCodecAsync();
-        }
-
-        private async void ChineseTeleCodeStyle_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            await StartCodecAsync();
         }
     }
 }
