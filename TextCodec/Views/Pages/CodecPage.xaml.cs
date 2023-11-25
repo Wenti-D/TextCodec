@@ -2,6 +2,7 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
 using System;
+using System.Threading.Tasks;
 using TextCodec.Core;
 using Vanara.Extensions.Reflection;
 using Windows.ApplicationModel.DataTransfer;
@@ -91,7 +92,7 @@ namespace TextCodec.Views.Pages
             if (EncodedTextPastedTip.IsOpen) EncodedTextPastedTip.IsOpen = false;
         }
 
-        private void SelectMode_Click(object sender, RoutedEventArgs e)
+        private async void SelectMode_Click(object sender, RoutedEventArgs e)
         {
             string newMode = sender.GetPropertyValue<string>("Text");
             string newConvertMode = sender.GetPropertyValue<string>("Name");
@@ -115,14 +116,14 @@ namespace TextCodec.Views.Pages
                 ChineseTeleCodeStyle.Visibility = Visibility.Visible;
             else
                 ChineseTeleCodeStyle.Visibility = Visibility.Collapsed;
-            StartCodec();
+            await StartCodecAsync();
         }
 
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        private async void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (last_focused_is_raw_text && sender.GetPropertyValue<string>("Name") == "RawTextBox" ||
                 !last_focused_is_raw_text && sender.GetPropertyValue<string>("Name") == "EncodedTextBox")
-                StartCodec();
+                await StartCodecAsync();
         }
 
         private void RawTextBox_PointerPressed(object sender, PointerRoutedEventArgs e)
@@ -135,72 +136,86 @@ namespace TextCodec.Views.Pages
             last_focused_is_raw_text = false;
         }
 
-        private void StartCodec()
+        private async Task StartCodecAsync()
         {
             if (last_focused_is_raw_text)
             {
-                EncodedTextBox.Text = converter_mode switch
-                {
-                    CodecMode.UnicodeBin => UnicodeCodec.BinEncoder(RawTextBox.Text),
-                    CodecMode.UnicodeOct => UnicodeCodec.OctEncoder(RawTextBox.Text),
-                    CodecMode.UnicodeDec => UnicodeCodec.DecEncoder(RawTextBox.Text),
-                    CodecMode.UnicodeHex => UnicodeCodec.HexEncoder(RawTextBox.Text),
-
-                    CodecMode.UTF8 => UtfCodec.Utf8Encoder(RawTextBox.Text),
-                    CodecMode.UTF16LE => UtfCodec.Utf16LeEncoder(RawTextBox.Text),
-                    CodecMode.UTF16BE => UtfCodec.Utf16BeEncoder(RawTextBox.Text),
-
-                    CodecMode.Base64 => BaseSeriesCodec.Base64Encoder(RawTextBox.Text),
-                    CodecMode.Base58 => BaseSeriesCodec.Base58Encoder(RawTextBox.Text),
-                    CodecMode.Base32 => BaseSeriesCodec.Base32Encoder(RawTextBox.Text),
-
-                    CodecMode.JsonString => JsonStringCodec.Encoder(RawTextBox.Text),
-                    CodecMode.InternationalMorseCode => MorseCodeCodec.Encoder(RawTextBox.Text),
-                    CodecMode.ChineseTelegraphCode => ChineseTelegraphCodec.Encoder(RawTextBox.Text),
-
-                    _ => RawTextBox.Text,
-                };
+                var raw_text = RawTextBox.Text;
+                var encoded_text = await Task.Run(() => GetEncodedText(raw_text));
+                EncodedTextBox.Text = encoded_text;
             }
             else
             {
-                RawTextBox.Text = converter_mode switch
-                {
-                    CodecMode.UnicodeBin => UnicodeCodec.BinDecoder(EncodedTextBox.Text),
-                    CodecMode.UnicodeOct => UnicodeCodec.OctDecoder(EncodedTextBox.Text),
-                    CodecMode.UnicodeDec => UnicodeCodec.DecDecoder(EncodedTextBox.Text),
-                    CodecMode.UnicodeHex => UnicodeCodec.HexDecoder(EncodedTextBox.Text),
-
-                    CodecMode.UTF8 => UtfCodec.Utf8Decoder(EncodedTextBox.Text),
-                    CodecMode.UTF16LE => UtfCodec.Utf16LeDecoder(EncodedTextBox.Text),
-                    CodecMode.UTF16BE => UtfCodec.Utf16BeDecoder(EncodedTextBox.Text),
-
-                    CodecMode.Base64 => BaseSeriesCodec.Base64Decoder(EncodedTextBox.Text),
-                    CodecMode.Base58 => BaseSeriesCodec.Base58Decoder(EncodedTextBox.Text),
-                    CodecMode.Base32 => BaseSeriesCodec.Base32Decoder(EncodedTextBox.Text),
-
-                    CodecMode.JsonString => JsonStringCodec.Decoder(EncodedTextBox.Text),
-                    CodecMode.InternationalMorseCode => MorseCodeCodec.Decoder(EncodedTextBox.Text),
-                    CodecMode.ChineseTelegraphCode => ChineseTelegraphCodec.Decoder(EncodedTextBox.Text),
-
-                    _ => EncodedTextBox.Text,
-                };
+                var encoded_text = EncodedTextBox.Text;
+                var decoded_text = await Task.Run(() => GetDecodedText(encoded_text));
+                RawTextBox.Text = decoded_text;
             }
 
         }
 
-        private void EncodeWithSpace_Changed(object sender, RoutedEventArgs e)
+        private string GetEncodedText(string raw_text)
         {
-            StartCodec();
+            return converter_mode switch
+            {
+                CodecMode.UnicodeBin => UnicodeCodec.BinEncoder(raw_text),
+                CodecMode.UnicodeOct => UnicodeCodec.OctEncoder(raw_text),
+                CodecMode.UnicodeDec => UnicodeCodec.DecEncoder(raw_text),
+                CodecMode.UnicodeHex => UnicodeCodec.HexEncoder(raw_text),
+
+                CodecMode.UTF8 => UtfCodec.Utf8Encoder(raw_text),
+                CodecMode.UTF16LE => UtfCodec.Utf16LeEncoder(raw_text),
+                CodecMode.UTF16BE => UtfCodec.Utf16BeEncoder(raw_text),
+
+                CodecMode.Base64 => BaseSeriesCodec.Base64Encoder(raw_text),
+                CodecMode.Base58 => BaseSeriesCodec.Base58Encoder(raw_text),
+                CodecMode.Base32 => BaseSeriesCodec.Base32Encoder(raw_text),
+
+                CodecMode.JsonString => JsonStringCodec.Encoder(raw_text),
+                CodecMode.InternationalMorseCode => MorseCodeCodec.Encoder(raw_text),
+                CodecMode.ChineseTelegraphCode => ChineseTelegraphCodec.Encoder(raw_text),
+
+                _ => raw_text,
+            };
         }
 
-        private void BaseSeries_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private string GetDecodedText(string encoded_text)
         {
-            StartCodec();
+            return converter_mode switch
+            {
+                CodecMode.UnicodeBin => UnicodeCodec.BinDecoder(encoded_text),
+                CodecMode.UnicodeOct => UnicodeCodec.OctDecoder(encoded_text),
+                CodecMode.UnicodeDec => UnicodeCodec.DecDecoder(encoded_text),
+                CodecMode.UnicodeHex => UnicodeCodec.HexDecoder(encoded_text),
+
+                CodecMode.UTF8 => UtfCodec.Utf8Decoder(encoded_text),
+                CodecMode.UTF16LE => UtfCodec.Utf16LeDecoder(encoded_text),
+                CodecMode.UTF16BE => UtfCodec.Utf16BeDecoder(encoded_text),
+
+                CodecMode.Base64 => BaseSeriesCodec.Base64Decoder(encoded_text),
+                CodecMode.Base58 => BaseSeriesCodec.Base58Decoder(encoded_text),
+                CodecMode.Base32 => BaseSeriesCodec.Base32Decoder(encoded_text),
+
+                CodecMode.JsonString => JsonStringCodec.Decoder(encoded_text),
+                CodecMode.InternationalMorseCode => MorseCodeCodec.Decoder(encoded_text),
+                CodecMode.ChineseTelegraphCode => ChineseTelegraphCodec.Decoder(encoded_text),
+
+                _ => encoded_text,
+            };
         }
 
-        private void ChineseTeleCodeStyle_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private async void EncodeWithSpace_Changed(object sender, RoutedEventArgs e)
         {
-            StartCodec();
+            await StartCodecAsync();
+        }
+
+        private async void BaseSeries_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            await StartCodecAsync();
+        }
+
+        private async void ChineseTeleCodeStyle_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            await StartCodecAsync();
         }
     }
 }
