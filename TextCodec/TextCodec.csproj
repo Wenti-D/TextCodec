@@ -23,6 +23,7 @@
     <AppInstallerUri>E:\Many_Things\C#</AppInstallerUri>
     <HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+    <ApplicationIcon>Assets\AppIcon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Controls\FontTheme.xaml" />
