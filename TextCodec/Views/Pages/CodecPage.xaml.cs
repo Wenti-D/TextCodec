@@ -120,8 +120,8 @@ namespace TextCodec.Views.Pages
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (last_focused_is_raw_text && sender.GetPropertyValue<string>("Name") == "rawTextBox" ||
-                !last_focused_is_raw_text && sender.GetPropertyValue<string>("Name") == "encodedTextBox")
+            if (last_focused_is_raw_text && sender.GetPropertyValue<string>("Name") == "RawTextBox" ||
+                !last_focused_is_raw_text && sender.GetPropertyValue<string>("Name") == "EncodedTextBox")
                 StartCodec();
         }
 
