@@ -129,7 +129,7 @@
                                         x:Uid="CodecPageModeIntMorseCode"
                                         Click="SelectMode_Click"/>
                         <MenuFlyoutItem x:Name="ChineseTelegraphCode"
-                                        Text="中文电码"
+                                        x:Uid="CodecPageChnTeleCode"
                                         Click="SelectMode_Click"/>
                     </MenuFlyout>
                 </DropDownButton.Flyout>

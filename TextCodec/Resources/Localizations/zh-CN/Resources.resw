@@ -135,6 +135,9 @@
   <data name="CodecPageBase58StdCharList" xml:space="preserve">
     <value>标准序列</value>
   </data>
+  <data name="CodecPageChnTeleCode.Text" xml:space="preserve">
+    <value>中文电码</value>
+  </data>
   <data name="CodecPageClearTextButtonInfo.Content" xml:space="preserve">
     <value>清除</value>
   </data>
