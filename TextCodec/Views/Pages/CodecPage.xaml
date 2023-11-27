@@ -83,7 +83,7 @@
             </Grid.ColumnDefinitions>
             <DropDownButton x:Name="EncodeMode"
                             x:Uid="CodecPageModeSelectButton"
-                            Margin="40,0,0,0">
+                            Margin="40,0,5,5">
                 <DropDownButton.Flyout>
                     <MenuFlyout>
                         <MenuFlyoutSubItem Text="Unicode">
