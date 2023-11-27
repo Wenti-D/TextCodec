@@ -135,6 +135,12 @@
   <data name="CodecPageBase58StdCharList" xml:space="preserve">
     <value>标准序列</value>
   </data>
+  <data name="CodecPageCaesarCipher.Text" xml:space="preserve">
+    <value>凯撒密码</value>
+  </data>
+  <data name="CodecPageCaesarCipherShift.PlaceholderText" xml:space="preserve">
+    <value>偏移量</value>
+  </data>
   <data name="CodecPageChnTeleCode.Text" xml:space="preserve">
     <value>中文电码</value>
   </data>

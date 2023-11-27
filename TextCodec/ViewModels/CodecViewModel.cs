@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System;
 using TextCodec.Core;
 using Windows.ApplicationModel.Resources;
 
@@ -13,6 +14,18 @@ namespace TextCodec.ViewModels
         private string selectedBaseSeriesTextPreprocessMode;
         private string selectedBase58Style;
         private string selectedChineseTelegraphCodeStyle;
+        private int currentCaesarShift;
+        private string currentCaesarShiftText;
+
+        public CodecViewModel()
+        {
+            isEncodeWithSpaceChecked = AppSettings.IsUtfEncodeWithSpace;
+            selectedBaseSeriesTextPreprocessMode = AppSettings.BaseSeriesTextPreprocessMode;
+            selectedBase58Style = AppSettings.Base58Style;
+            selectedChineseTelegraphCodeStyle = AppSettings.ChineseTelegraphCodeStyle;
+            currentCaesarShift = 0;
+            currentCaesarShiftText = string.Empty;
+        }
 
         public static string GetTranslation(string resource)
         {
@@ -24,7 +37,7 @@ namespace TextCodec.ViewModels
         /// </summary>
         public bool IsEncodeWithSpaceChecked
         {
-            get { return isEncodeWithSpaceChecked = AppSettings.IsUtfEncodeWithSpace; }
+            get { return isEncodeWithSpaceChecked; }
             set
             {
                 SetProperty(ref isEncodeWithSpaceChecked, value);
@@ -37,7 +50,7 @@ namespace TextCodec.ViewModels
         /// </summary>
         public string SelectedBaseSeriesTextPreprocessMode
         {
-            get { return selectedBaseSeriesTextPreprocessMode ??= AppSettings.BaseSeriesTextPreprocessMode; }
+            get { return selectedBaseSeriesTextPreprocessMode; }
             set
             {
                 SetProperty(ref selectedBaseSeriesTextPreprocessMode, value);
@@ -50,7 +63,7 @@ namespace TextCodec.ViewModels
         /// </summary>
         public string SelectedBase58Style
         {
-            get { return selectedBase58Style ??= AppSettings.Base58Style; }
+            get { return selectedBase58Style; }
             set
             {
                 SetProperty(ref selectedBase58Style, value);
@@ -63,11 +76,41 @@ namespace TextCodec.ViewModels
         /// </summary>
         public string SelectedChineseTelegraphCodeStyle
         {
-            get { return selectedChineseTelegraphCodeStyle ??= AppSettings.ChineseTelegraphCodeStyle; }
+            get { return selectedChineseTelegraphCodeStyle; }
             set
             {
                 SetProperty(ref selectedChineseTelegraphCodeStyle, value);
                 AppSettings.ChineseTelegraphCodeStyle = value;
+            }
+        }
+
+        /// <summary>
+        /// 当前的凯撒密码偏移值
+        /// </summary>
+        public int CurrentCaesarShift
+        {
+            get { return currentCaesarShift; }
+            set
+            {
+                SetProperty(ref currentCaesarShift, value);
+                //CurrentCaesarShiftText = value.ToString();
+            }
+        }
+
+        public string CurrentCaesarShiftText
+        {
+            get { return currentCaesarShiftText; }
+            set
+            {
+                SetProperty(ref currentCaesarShiftText, value);
+                try
+                {
+                    CurrentCaesarShift = int.Parse(value);
+                }
+                catch (Exception)
+                {
+                    CurrentCaesarShift = 0;
+                }
             }
         }
     }

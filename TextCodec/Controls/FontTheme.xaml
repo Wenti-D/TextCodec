@@ -5,7 +5,7 @@
     <!--xmlns:local="using:TextCodec.Controls"-->
     <ResourceDictionary.MergedDictionaries>
         <!--硬要往这里加一句才认识 BodyTextBlockFontSize 是吧-->
-        <XamlControlsResources xmlns="using:Microsoft.UI.Xaml.Controls" />
+        <XamlControlsResources xmlns="using:Microsoft.UI.Xaml.Controls"/>
     </ResourceDictionary.MergedDictionaries>
 
     <FontFamily x:Key="SarasaUI">ms-appx:///Resources/Fonts/Sarasa-UI-SC-Regular.ttf#Sarasa UI SC</FontFamily>
@@ -16,6 +16,9 @@
     <!--直接应用在控件类型的字体样式-->
     <Style TargetType="TextBlock"
            BasedOn="{StaticResource BodyTextBlockStyle}"/>
+    <Style TargetType="NumberBox">
+        <Setter Property="FontFamily" Value="{StaticResource SarasaUI}"/>
+    </Style>
     <Style TargetType="MenuFlyoutSubItem"
            BasedOn="{StaticResource DefaultMenuFlyoutSubItemStyle}">
         <Setter Property="FontFamily" Value="{StaticResource SarasaUI}"/>

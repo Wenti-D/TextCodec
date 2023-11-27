@@ -131,6 +131,9 @@
                         <MenuFlyoutItem x:Name="ChineseTelegraphCode"
                                         x:Uid="CodecPageChnTeleCode"
                                         Click="SelectMode_Click"/>
+                        <MenuFlyoutItem x:Name="CaesarCipher"
+                                        x:Uid="CodecPageCaesarCipher"
+                                        Click="SelectMode_Click"/>
                     </MenuFlyout>
                 </DropDownButton.Flyout>
             </DropDownButton>
@@ -192,6 +195,24 @@
                 <x:String>ChineseTeleCodeNumberSimp</x:String>
                 <x:String>ChineseTeleCodeNumberFull</x:String>
             </ComboBox>
+
+            <!--凯撒密码偏移量-->
+            <StackPanel Orientation="Horizontal"
+                        Grid.Column="1">
+                <NumberBox x:Name="CaesarCipherShift"
+                           x:Uid="CodecPageCaesarCipherShift"
+                           Grid.Column="1"
+                           Text="{Binding CurrentCaesarShiftText, Mode=TwoWay}"
+                           Visibility="Collapsed"
+                           MinWidth="150"
+                           MaxWidth="300"
+                           ValueChanged="CaesarCipherShift_ValueChanged"
+                           Minimum="-32768"
+                           Maximum="32767"
+                           SpinButtonPlacementMode="Compact"
+                           SmallChange="1"
+                           LargeChange="5"/>
+            </StackPanel>
         </Grid>
 
 

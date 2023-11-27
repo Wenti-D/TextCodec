@@ -2,10 +2,13 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
 using System;
+using System.ComponentModel;
 using System.Threading.Tasks;
 using TextCodec.Core;
+using TextCodec.ViewModels;
 using Vanara.Extensions.Reflection;
 using Windows.ApplicationModel.DataTransfer;
+using Windows.Globalization.NumberFormatting;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -21,15 +24,21 @@ namespace TextCodec.Views.Pages
         private bool last_focused_is_raw_text;
         private CodecMode converter_mode;
         private static DispatcherTimer timer;
+        private CodecViewModel CodecViewModel;
+        TaskCompletionSource<bool> tcs = null;
 
         public CodecPage()
         {
             InitializeComponent();
+            CodecViewModel = new CodecViewModel();
+            DataContext = CodecViewModel;
+            CodecViewModel.PropertyChanged += CodecViewModel_PropertyChanged;
 
             last_focused_is_raw_text = true;
             converter_mode = (CodecMode)Enum.Parse(typeof(CodecMode), "None");
             EncodedTextBox.AddHandler(PointerPressedEvent, new PointerEventHandler(EncodedTextBox_PointerPressed), true);
             RawTextBox.AddHandler(PointerPressedEvent, new PointerEventHandler(RawTextBox_PointerPressed), true);
+            SetCaesarCipherShiftNumberFormatter();
 
             timer = new DispatcherTimer();
             timer.Tick += Timer_Tick;
@@ -119,6 +128,11 @@ namespace TextCodec.Views.Pages
             else
                 ChineseTeleCodeStyle.Visibility = Visibility.Collapsed;
 
+            if (converter_mode == (CodecMode)Enum.Parse(typeof(CodecMode), "CaesarCipher"))
+                CaesarCipherShift.Visibility = Visibility.Visible;
+            else
+                CaesarCipherShift.Visibility = Visibility.Collapsed;
+
             await StartCodecAsync();
         }
 
@@ -152,6 +166,34 @@ namespace TextCodec.Views.Pages
         private async void ChineseTeleCodeStyle_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             await StartCodecAsync();
+        }
+
+        private void SetCaesarCipherShiftNumberFormatter()
+        {
+            IncrementNumberRounder rounder = new()
+            {
+                Increment = 1,
+                RoundingAlgorithm = RoundingAlgorithm.RoundTowardsZero,
+            };
+            DecimalFormatter formatter = new()
+            {
+                FractionDigits = 0,
+                NumberRounder = rounder,
+            };
+            CaesarCipherShift.NumberFormatter = formatter;
+        }
+
+        private async void CaesarCipherShift_ValueChanged(NumberBox sender, NumberBoxValueChangedEventArgs args)
+        {
+            tcs = new();
+            await tcs.Task;
+            await StartCodecAsync();
+        }
+
+        private void CodecViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "CurrentCaesarShift")
+                tcs?.TrySetResult(true);
         }
 
         private async Task StartCodecAsync()
@@ -191,6 +233,8 @@ namespace TextCodec.Views.Pages
                 CodecMode.InternationalMorseCode => MorseCodeCodec.Encoder(raw_text),
                 CodecMode.ChineseTelegraphCode => ChineseTelegraphCodec.Encoder(raw_text),
 
+                CodecMode.CaesarCipher => Core.CaesarCipher.Encoder(raw_text, CodecViewModel.CurrentCaesarShift),
+
                 _ => raw_text,
             };
         }
@@ -216,8 +260,11 @@ namespace TextCodec.Views.Pages
                 CodecMode.InternationalMorseCode => MorseCodeCodec.Decoder(encoded_text),
                 CodecMode.ChineseTelegraphCode => ChineseTelegraphCodec.Decoder(encoded_text),
 
+                CodecMode.CaesarCipher => Core.CaesarCipher.Decoder(encoded_text, CodecViewModel.CurrentCaesarShift),
+
                 _ => encoded_text,
             };
         }
+
     }
 }

@@ -36,5 +36,8 @@ public enum CodecMode : byte
     InternationalMorseCode,
     [Description("转换为中文电码")]
     ChineseTelegraphCode,
+
+    [Description("凯撒密码加密解密")]
+    CaesarCipher,
 }
 
