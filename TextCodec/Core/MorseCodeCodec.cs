@@ -95,9 +95,12 @@ class MorseCodeCodec
         }
         try
         {
-            char? tmp_ch = morse_dict[tmp_text_buff.ToString()];
-            Utilities.SwitchToValid(ref is_valid, decoded_text_buff);
-            decoded_text_buff.Append(tmp_ch);
+            if (tmp_text_buff.Length > 0)
+            {
+                char? tmp_ch = morse_dict[tmp_text_buff.ToString()];
+                Utilities.SwitchToValid(ref is_valid, decoded_text_buff);
+                decoded_text_buff.Append(tmp_ch);
+            }
         }
         catch (KeyNotFoundException)
         {
