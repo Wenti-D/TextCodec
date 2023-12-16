@@ -1,31 +1,41 @@
-﻿using System.Collections.Generic;
+﻿using CommunityToolkit.Mvvm.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 using TextCodec.Helpers;
 
 namespace TextCodec.Core;
 
-class UtfCodec
+public class UtfCodec
 {
-    private static AppSettings AppSettings = MainWindow.AppSettings;
+    private readonly AppSettings appSettings;
+    private IServiceProvider serviceProvider;
 
-    public static string Utf8Encoder(string raw_text) => Encoder(raw_text, new UTF8Encoding());
-    public static string Utf8Decoder(string text) => Decoder(text, new UTF8Encoding());
-    public static string Utf16LeEncoder(string raw_text) => Encoder(raw_text, new UnicodeEncoding());
-    public static string Utf16LeDecoder(string text) => Decoder(text, new UnicodeEncoding());
-    public static string Utf16BeEncoder(string raw_text) => Encoder(raw_text, new UnicodeEncoding(true, false));
-    public static string Utf16BeDecoder(string text) => Decoder(text, new UnicodeEncoding(true, false));
+    public UtfCodec()
+    {
+        serviceProvider = Ioc.Default;
+        appSettings = serviceProvider.GetRequiredService<AppSettings>();
+    }
 
-    private static string Encoder(string raw_text, Encoding encoding)
+    public string Utf8Encoder(string raw_text) => Encoder(raw_text, new UTF8Encoding());
+    public string Utf8Decoder(string text) => Decoder(text, new UTF8Encoding());
+    public string Utf16LeEncoder(string raw_text) => Encoder(raw_text, new UnicodeEncoding());
+    public string Utf16LeDecoder(string text) => Decoder(text, new UnicodeEncoding());
+    public string Utf16BeEncoder(string raw_text) => Encoder(raw_text, new UnicodeEncoding(true, false));
+    public string Utf16BeDecoder(string text) => Decoder(text, new UnicodeEncoding(true, false));
+
+    private string Encoder(string raw_text, Encoding encoding)
     {
         StringBuilder result_buff = new();
         foreach (byte b in encoding.GetBytes(raw_text))
         {
             result_buff.Append(b.ToString("X2"));
-            if (AppSettings.IsUtfEncodeWithSpace)
+            if (appSettings.IsUtfEncodeWithSpace)
                 result_buff.Append(' ');
         }
-        if (result_buff.Length > 0 && AppSettings.IsUtfEncodeWithSpace)
+        if (result_buff.Length > 0 && appSettings.IsUtfEncodeWithSpace)
             result_buff.Length--;
         return result_buff.ToString();
     }

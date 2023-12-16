@@ -5,9 +5,9 @@ using Windows.ApplicationModel.Resources;
 
 namespace TextCodec.ViewModels
 {
-    internal sealed class CodecViewModel : ObservableObject
+    public sealed class CodecViewModel : ObservableObject
     {
-        private static AppSettings AppSettings = MainWindow.AppSettings;
+        private AppSettings _appSettings;
         private static ResourceLoader resource_loader = ResourceLoader.GetForViewIndependentUse();
 
         private bool isEncodeWithSpaceChecked;
@@ -17,12 +17,13 @@ namespace TextCodec.ViewModels
         private int currentCaesarShift;
         private string currentCaesarShiftText;
 
-        public CodecViewModel()
+        public CodecViewModel(AppSettings appSettings)
         {
-            isEncodeWithSpaceChecked = AppSettings.IsUtfEncodeWithSpace;
-            selectedBaseSeriesTextPreprocessMode = AppSettings.BaseSeriesTextPreprocessMode;
-            selectedBase58Style = AppSettings.Base58Style;
-            selectedChineseTelegraphCodeStyle = AppSettings.ChineseTelegraphCodeStyle;
+            _appSettings = appSettings;
+            isEncodeWithSpaceChecked = _appSettings.IsUtfEncodeWithSpace;
+            selectedBaseSeriesTextPreprocessMode = _appSettings.BaseSeriesTextPreprocessMode;
+            selectedBase58Style = _appSettings.Base58Style;
+            selectedChineseTelegraphCodeStyle = _appSettings.ChineseTelegraphCodeStyle;
             currentCaesarShift = 0;
             currentCaesarShiftText = string.Empty;
         }
@@ -41,7 +42,7 @@ namespace TextCodec.ViewModels
             set
             {
                 SetProperty(ref isEncodeWithSpaceChecked, value);
-                AppSettings.IsUtfEncodeWithSpace = value;
+                _appSettings.IsUtfEncodeWithSpace = value;
             }
         }
 
@@ -54,7 +55,7 @@ namespace TextCodec.ViewModels
             set
             {
                 SetProperty(ref selectedBaseSeriesTextPreprocessMode, value);
-                AppSettings.BaseSeriesTextPreprocessMode = value;
+                _appSettings.BaseSeriesTextPreprocessMode = value;
             }
         }
 
@@ -67,7 +68,7 @@ namespace TextCodec.ViewModels
             set
             {
                 SetProperty(ref selectedBase58Style, value);
-                AppSettings.Base58Style = value;
+                _appSettings.Base58Style = value;
             }
         }
 
@@ -80,7 +81,7 @@ namespace TextCodec.ViewModels
             set
             {
                 SetProperty(ref selectedChineseTelegraphCodeStyle, value);
-                AppSettings.ChineseTelegraphCodeStyle = value;
+                _appSettings.ChineseTelegraphCodeStyle = value;
             }
         }
 

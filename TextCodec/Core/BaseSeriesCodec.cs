@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -7,21 +9,28 @@ using TextCodec.Helpers;
 
 namespace TextCodec.Core;
 
-class BaseSeriesCodec
+public class BaseSeriesCodec
 {
-    private static AppSettings AppSettings = MainWindow.AppSettings;
+    private readonly AppSettings appSettings;
+    private IServiceProvider serviceProvider;
 
-    public static string Base64Encoder(string raw_text)
+    public BaseSeriesCodec()
     {
-        var preprocessor = new BaseSeriesHelper().GetPreprocessMode(AppSettings.BaseSeriesTextPreprocessMode);
+        serviceProvider = Ioc.Default;
+        appSettings = serviceProvider.GetRequiredService<AppSettings>();
+    }
+
+    public string Base64Encoder(string raw_text)
+    {
+        var preprocessor = new BaseSeriesHelper().GetPreprocessMode(appSettings.BaseSeriesTextPreprocessMode);
         return Convert.ToBase64String(preprocessor.GetBytes(raw_text));
     }
 
-    public static string Base64Decoder(string code_text)
+    public string Base64Decoder(string code_text)
     {
         string[] encoded_texts = code_text.Split(new char[] { ' ', '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
         const string code_str = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-        var preprocessor = new BaseSeriesHelper().GetPreprocessMode(AppSettings.BaseSeriesTextPreprocessMode);
+        var preprocessor = new BaseSeriesHelper().GetPreprocessMode(appSettings.BaseSeriesTextPreprocessMode);
 
         List<StringBuilder> result_buffs = new();
         StringBuilder tmp_string_buff = new();
@@ -123,11 +132,11 @@ class BaseSeriesCodec
         return string.Join('\n', result_buffs);
     }
 
-    public static string Base58Encoder(string raw_text)
+    public string Base58Encoder(string raw_text)
     {
         BaseSeriesHelper BaseSeriesHelper = new();
-        var preprocessor = BaseSeriesHelper.GetPreprocessMode(AppSettings.BaseSeriesTextPreprocessMode);
-        string code_str = BaseSeriesHelper.GetBase58Style(AppSettings.Base58Style);
+        var preprocessor = BaseSeriesHelper.GetPreprocessMode(appSettings.BaseSeriesTextPreprocessMode);
+        string code_str = BaseSeriesHelper.GetBase58Style(appSettings.Base58Style);
 
         List<byte> bytes = preprocessor.GetBytes(raw_text).Reverse().ToList();
         bytes.Add(0);
@@ -143,11 +152,11 @@ class BaseSeriesCodec
         return result_buff.ToString();
     }
 
-    public static string Base58Decoder(string text)
+    public string Base58Decoder(string text)
     {
         BaseSeriesHelper BaseSeriesHelper = new();
         string[] encoded_texts = text.Split(new char[] { ' ', '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-        string code_str = BaseSeriesHelper.GetBase58Style(AppSettings.Base58Style);
+        string code_str = BaseSeriesHelper.GetBase58Style(appSettings.Base58Style);
 
         List<StringBuilder> result_buffs = new();
         StringBuilder tmp_buff = new();
@@ -177,12 +186,12 @@ class BaseSeriesCodec
         return string.Join("\n", result_buffs);
     }
 
-    public static string Base32Encoder(string raw_text)
+    public string Base32Encoder(string raw_text)
     {
         string code_str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
 
         byte[] bytes = new BaseSeriesHelper()
-            .GetPreprocessMode(AppSettings.BaseSeriesTextPreprocessMode)
+            .GetPreprocessMode(appSettings.BaseSeriesTextPreprocessMode)
             .GetBytes(raw_text);
         int group_num = bytes.Length / 5,
             tail_num = bytes.Length % 5;
@@ -216,7 +225,7 @@ class BaseSeriesCodec
                 result_buff.Append("====");
                 break;
             case 3:
-                result_buff.Append(code_str[bytes[tail_begin] >> 3].ToString());
+                result_buff.Append(code_str[bytes[tail_begin] >> 3]);
                 result_buff.Append(code_str[((bytes[tail_begin] & 0b111) << 2) + (bytes[tail_begin + 1] >> 6)]);
                 result_buff.Append(code_str[(bytes[tail_begin + 1] & 0b111110) >> 1]);
                 result_buff.Append(code_str[((bytes[tail_begin + 1] & 0b1) << 4) + (bytes[tail_begin + 2] >> 4)]);
@@ -239,11 +248,11 @@ class BaseSeriesCodec
         return result_buff.ToString();
     }
 
-    public static string Base32Decoder(string encoded_text)
+    public string Base32Decoder(string encoded_text)
     {
         string[] encoded_texts = encoded_text.Split(new char[] { ' ', '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
         string code_str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
-        var preprocessor = new BaseSeriesHelper().GetPreprocessMode(AppSettings.BaseSeriesTextPreprocessMode);
+        var preprocessor = new BaseSeriesHelper().GetPreprocessMode(appSettings.BaseSeriesTextPreprocessMode);
 
         List<StringBuilder> result_buffs = new();
         StringBuilder tmp_string_buff = new();

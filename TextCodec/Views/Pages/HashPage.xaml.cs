@@ -1,3 +1,5 @@
+using CommunityToolkit.Mvvm.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using System;
@@ -5,6 +7,7 @@ using System.Security.Cryptography;
 using System.Text;
 using TextCodec.Core;
 using TextCodec.Helpers;
+using TextCodec.ViewModels;
 using Vanara.Extensions.Reflection;
 using Windows.ApplicationModel.DataTransfer;
 
@@ -20,13 +23,17 @@ namespace TextCodec.Views.Pages
     {
         private HashMode hash_mode;
         private static DispatcherTimer timer;
-        private static AppSettings AppSettings = MainWindow.AppSettings;
+        private IServiceProvider serviceProvider;
+        public HashViewModel ViewModel { get; }
 
         public HashPage()
         {
+            serviceProvider = Ioc.Default;
             InitializeComponent();
 
             hash_mode = (HashMode)Enum.Parse(typeof(HashMode), "MD5");
+            ViewModel = serviceProvider.GetRequiredService<HashViewModel>();
+            DataContext = ViewModel;
 
             timer = new DispatcherTimer();
             timer.Tick += Timer_Tick;

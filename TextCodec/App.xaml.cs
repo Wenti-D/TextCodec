@@ -1,62 +1,90 @@
-﻿using Microsoft.UI;
+﻿using CommunityToolkit.Mvvm.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.UI;
 using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using System;
+using TextCodec.Core;
+using TextCodec.Services.Navigation;
+using TextCodec.ViewModels;
+using TextCodec.Views.Pages;
 using Windows.Graphics;
 using WinRT.Interop;
 
-namespace TextCodec
+namespace TextCodec;
+
+/// <summary>
+/// Provides application-specific behavior to supplement the default Application class.
+/// </summary>
+public partial class App : Application
 {
+    private AppWindow appWindow;
+    private IServiceProvider serviceProvider;
+
     /// <summary>
-    /// Provides application-specific behavior to supplement the default Application class.
+    /// 初始化程序对象单例，这里是程序入口。
     /// </summary>
-    public partial class App : Application
+    public App()
     {
-        private AppWindow appWindow;
+        InitializeComponent();
+    }
 
-        /// <summary>
-        /// 初始化单例程序对象。
-        /// 这里是程序入口。
-        /// </summary>
-        public App()
+    /// <summary>
+    /// 程序启动时唤起。
+    /// </summary>
+    /// <param name="args">Details about the launch request and process.</param>
+    protected override void OnLaunched(LaunchActivatedEventArgs args)
+    {
+        serviceProvider = ConfigureService();
+        Window mainWindow = serviceProvider.GetRequiredService<MainWindow>();
+
+        if (AppWindowTitleBar.IsCustomizationSupported())
         {
-            InitializeComponent();
+            mainWindow.SizeChanged += SizeChanged;
+
+            appWindow = GetAppWindow(mainWindow);
+            appWindow.TitleBar.ExtendsContentIntoTitleBar = true;
+            appWindow.TitleBar.ButtonBackgroundColor = Colors.Transparent;
+            appWindow.TitleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
         }
+        mainWindow.Activate();
+    }
 
-        /// <summary>
-        /// 程序启动时唤起。
-        /// </summary>
-        /// <param name="args">Details about the launch request and process.</param>
-        protected override void OnLaunched(LaunchActivatedEventArgs args)
-        {
-            m_window = new MainWindow();
+    /// <summary>
+    /// 配置依赖注入服务，可通过 IoC 获取服务提供器。
+    /// </summary>
+    /// <returns>配置好的服务提供器</returns>
+    private static ServiceProvider ConfigureService()
+    {
+        ServiceProvider serviceProvider = new ServiceCollection()
+            .AddSingleton<INavigationService, NavigationService>()
 
-            if (AppWindowTitleBar.IsCustomizationSupported())
-            {
-                m_window.SizeChanged += SizeChanged;
+            .AddSingleton<AppSettings>()
 
-                appWindow = GetAppWindow(m_window);
-                appWindow.TitleBar.ExtendsContentIntoTitleBar = true;
-                appWindow.TitleBar.ButtonBackgroundColor = Colors.Transparent;
-                appWindow.TitleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
-            }
-            m_window.Activate();
-        }
+            .AddSingleton<MainWindow>()
+            .AddSingleton<CodecPage>()
+            .AddSingleton<CodecViewModel>()
+            .AddSingleton<HashPage>()
+            .AddSingleton<HashViewModel>()
+            .AddSingleton<SettingsPage>()
+            .AddSingleton<SettingsViewModel>()
+            .BuildServiceProvider(true);
 
-        private void SizeChanged(object sender, WindowSizeChangedEventArgs args)
-        {
-            RectInt32[] rects = new RectInt32[]
-                {new RectInt32(48, 0, (int)args.Size.Width - 48, 48)};
-            appWindow.TitleBar.SetDragRectangles(rects);
-        }
+        Ioc.Default.ConfigureServices(serviceProvider);
 
-        private AppWindow GetAppWindow(Window window)
-        {
-            IntPtr hwnd = WindowNative.GetWindowHandle(window);
-            WindowId windowId = Win32Interop.GetWindowIdFromWindow(hwnd);
-            return AppWindow.GetFromWindowId(windowId);
-        }
+        return serviceProvider;
+    }
 
-        private Window m_window;
+    private void SizeChanged(object sender, WindowSizeChangedEventArgs args)
+    {
+        RectInt32[] rects = new RectInt32[] { new(48, 0, (int)args.Size.Width - 48, 48) };
+        appWindow.TitleBar.SetDragRectangles(rects);
+    }
+
+    private static AppWindow GetAppWindow(Window window)
+    {
+        IntPtr hwnd = WindowNative.GetWindowHandle(window);
+        WindowId windowId = Win32Interop.GetWindowIdFromWindow(hwnd);
+        return AppWindow.GetFromWindowId(windowId);
     }
 }

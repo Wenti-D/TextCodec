@@ -3,7 +3,7 @@ using TextCodec.Helpers;
 
 namespace TextCodec.Core;
 
-class UnicodeCodec
+public class UnicodeCodec
 {
     public static string BinEncoder(string raw_text) => Encoder(raw_text, 2);
     public static string BinDecoder(string encoded_text) => Decoder(encoded_text, 2);

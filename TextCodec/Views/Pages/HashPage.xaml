@@ -15,10 +15,6 @@
         <local_cvt:ResourceTranslationConverter x:Name="ResourceTranslationConverter"/>
     </Page.Resources>
 
-    <Page.DataContext>
-        <local_vm:HashViewModel/>
-    </Page.DataContext>
-    
 
     <Grid Width="Auto" Height="Auto">
         <Grid.RowDefinitions>

@@ -1,14 +1,24 @@
-﻿using System.Collections.Generic;
+﻿using CommunityToolkit.Mvvm.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Collections.Generic;
 using System.Text;
 using TextCodec.Helpers;
 
 namespace TextCodec.Core;
 
-class ChineseTelegraphCodec
+public class ChineseTelegraphCodec
 {
-    private static AppSettings AppSettings = MainWindow.AppSettings;
+    private readonly AppSettings appSettings;
+    private IServiceProvider serviceProvider;
 
-    public static string Encoder(string raw_text)
+    public ChineseTelegraphCodec()
+    {
+        serviceProvider = Ioc.Default;
+        appSettings = serviceProvider.GetRequiredService<AppSettings>();
+    }
+
+    public string Encoder(string raw_text)
     {
         StringBuilder result_buff = new();
         bool is_valid = true;
@@ -18,7 +28,7 @@ class ChineseTelegraphCodec
             {
                 string code = Dicts.ChineseTelegraphDict.CharCodenumPairs[ch];
                 Utilities.SwitchToValid(ref is_valid, result_buff);
-                switch (AppSettings.ChineseTelegraphCodeStyle)
+                switch (appSettings.ChineseTelegraphCodeStyle)
                 {
                     case "ChineseTeleCodeNumber":
                         result_buff.Append(code);
@@ -53,9 +63,9 @@ class ChineseTelegraphCodec
         return result_buff.ToString();
     }
 
-    public static string Decoder(string encoded_text)
+    public string Decoder(string encoded_text)
     {
-        return AppSettings.ChineseTelegraphCodeStyle switch
+        return appSettings.ChineseTelegraphCodeStyle switch
         {
             "ChineseTeleCodeNumber" => NumDecoder(encoded_text),
             "ChineseTeleCodeNumberSimp" => NumMorseDecoder(encoded_text, Dicts.ChineseTelegraphDict.CodeSimpNumPairs),

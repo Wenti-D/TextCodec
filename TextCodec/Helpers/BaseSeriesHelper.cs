@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -9,7 +11,8 @@ namespace TextCodec.Helpers
 {
     class BaseSeriesHelper
     {
-        private static AppSettings AppSettings = MainWindow.AppSettings;
+        private readonly AppSettings appSettings;
+        private IServiceProvider serviceProvider;
         private Dictionary<string, Encoding> PreprocessMode = new();
         private Dictionary<string, string> Base58Style = new();
 
@@ -25,8 +28,8 @@ namespace TextCodec.Helpers
 
         public string Base58DecodeHelper(string encoded_text)
         {
-            var preprocessor = GetPreprocessMode(AppSettings.BaseSeriesTextPreprocessMode);
-            string code_str = GetBase58Style(AppSettings.Base58Style);
+            var preprocessor = GetPreprocessMode(appSettings.BaseSeriesTextPreprocessMode);
+            string code_str = GetBase58Style(appSettings.Base58Style);
             BigInteger big_int = 0;
             foreach (char ch in encoded_text)
             {
@@ -85,6 +88,9 @@ namespace TextCodec.Helpers
 
         public BaseSeriesHelper()
         {
+            serviceProvider = Ioc.Default;
+            appSettings = serviceProvider.GetRequiredService<AppSettings>();
+
             PreprocessMode.Add("CodecPageModeUtf8", new UTF8Encoding());
             PreprocessMode.Add("CodecPageModeUtf16Le/Text", new UnicodeEncoding());
             PreprocessMode.Add("CodecPageModeUtf16Be/Text", new UnicodeEncoding(true, false));

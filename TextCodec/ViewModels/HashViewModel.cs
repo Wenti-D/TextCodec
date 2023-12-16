@@ -4,9 +4,9 @@ using Windows.ApplicationModel.Resources;
 
 namespace TextCodec.ViewModels
 {
-    internal sealed class HashViewModel : ObservableObject
+    public sealed class HashViewModel : ObservableObject
     {
-        private static AppSettings AppSettings = MainWindow.AppSettings;
+        private readonly AppSettings _appSettings;
         private static ResourceLoader resource_loader = ResourceLoader.GetForViewIndependentUse();
 
         private string selectedHashTextPreprocessMode;
@@ -19,22 +19,27 @@ namespace TextCodec.ViewModels
 
         public string SelectedHashTextPreprocessMode
         {
-            get { return selectedHashTextPreprocessMode ??= AppSettings.HashTextPreprocessMode; }
+            get { return selectedHashTextPreprocessMode ??= _appSettings.HashTextPreprocessMode; }
             set
             {
                 SetProperty(ref selectedHashTextPreprocessMode, value);
-                AppSettings.HashTextPreprocessMode = value;
+                _appSettings.HashTextPreprocessMode = value;
             }
         }
 
         public string SelectedHashMode
         {
-            get { return selectedHashMode ??= AppSettings.HashMode; }
+            get { return selectedHashMode ??= _appSettings.HashMode; }
             set
             {
                 SetProperty(ref selectedHashMode, value);
-                AppSettings.HashMode = value;
+                _appSettings.HashMode = value;
             }
+        }
+
+        public HashViewModel(AppSettings appSettings)
+        {
+            _appSettings = appSettings;
         }
     }
 }

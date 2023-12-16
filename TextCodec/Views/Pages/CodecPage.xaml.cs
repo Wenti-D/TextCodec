@@ -1,3 +1,5 @@
+using CommunityToolkit.Mvvm.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
@@ -18,21 +20,23 @@ namespace TextCodec.Views.Pages
     /// <summary>
     /// 编解码页面
     /// </summary>
-    public sealed partial class CodecPage : Page
+    public partial class CodecPage : Page
     {
         // 最后交互的文本框：T-原文；F-编码文本
         private bool last_focused_is_raw_text;
         private CodecMode converter_mode;
         private static DispatcherTimer timer;
-        private CodecViewModel CodecViewModel;
+        private IServiceProvider serviceProvider;
+        public CodecViewModel ViewModel { get; }
         TaskCompletionSource<bool> tcs = null;
 
         public CodecPage()
         {
+            serviceProvider = Ioc.Default;
             InitializeComponent();
-            CodecViewModel = new CodecViewModel();
-            DataContext = CodecViewModel;
-            CodecViewModel.PropertyChanged += CodecViewModel_PropertyChanged;
+            ViewModel = serviceProvider.GetRequiredService<CodecViewModel>();
+            DataContext = ViewModel;
+            ViewModel.PropertyChanged += CodecViewModel_PropertyChanged;
 
             last_focused_is_raw_text = true;
             converter_mode = (CodecMode)Enum.Parse(typeof(CodecMode), "None");
@@ -221,19 +225,19 @@ namespace TextCodec.Views.Pages
                 CodecMode.UnicodeDec => UnicodeCodec.DecEncoder(raw_text),
                 CodecMode.UnicodeHex => UnicodeCodec.HexEncoder(raw_text),
 
-                CodecMode.UTF8 => UtfCodec.Utf8Encoder(raw_text),
-                CodecMode.UTF16LE => UtfCodec.Utf16LeEncoder(raw_text),
-                CodecMode.UTF16BE => UtfCodec.Utf16BeEncoder(raw_text),
+                //CodecMode.UTF8 => UtfCodec.Utf8Encoder(raw_text),
+                //CodecMode.UTF16LE => UtfCodec.Utf16LeEncoder(raw_text),
+                //CodecMode.UTF16BE => UtfCodec.Utf16BeEncoder(raw_text),
 
-                CodecMode.Base64 => BaseSeriesCodec.Base64Encoder(raw_text),
-                CodecMode.Base58 => BaseSeriesCodec.Base58Encoder(raw_text),
-                CodecMode.Base32 => BaseSeriesCodec.Base32Encoder(raw_text),
+                //CodecMode.Base64 => BaseSeriesCodec.Base64Encoder(raw_text),
+                //CodecMode.Base58 => BaseSeriesCodec.Base58Encoder(raw_text),
+                //CodecMode.Base32 => BaseSeriesCodec.Base32Encoder(raw_text),
 
-                CodecMode.JsonString => JsonStringCodec.Encoder(raw_text),
-                CodecMode.InternationalMorseCode => MorseCodeCodec.Encoder(raw_text),
-                CodecMode.ChineseTelegraphCode => ChineseTelegraphCodec.Encoder(raw_text),
+                //CodecMode.JsonString => JsonStringCodec.Encoder(raw_text),
+                //CodecMode.InternationalMorseCode => MorseCodeCodec.Encoder(raw_text),
+                //CodecMode.ChineseTelegraphCode => ChineseTelegraphCodec.Encoder(raw_text),
 
-                CodecMode.CaesarCipher => Core.CaesarCipher.Encoder(raw_text, CodecViewModel.CurrentCaesarShift),
+                CodecMode.CaesarCipher => Core.CaesarCipher.Encoder(raw_text, ViewModel.CurrentCaesarShift),
 
                 _ => raw_text,
             };
@@ -248,19 +252,19 @@ namespace TextCodec.Views.Pages
                 CodecMode.UnicodeDec => UnicodeCodec.DecDecoder(encoded_text),
                 CodecMode.UnicodeHex => UnicodeCodec.HexDecoder(encoded_text),
 
-                CodecMode.UTF8 => UtfCodec.Utf8Decoder(encoded_text),
-                CodecMode.UTF16LE => UtfCodec.Utf16LeDecoder(encoded_text),
-                CodecMode.UTF16BE => UtfCodec.Utf16BeDecoder(encoded_text),
+                //CodecMode.UTF8 => UtfCodec.Utf8Decoder(encoded_text),
+                //CodecMode.UTF16LE => UtfCodec.Utf16LeDecoder(encoded_text),
+                //CodecMode.UTF16BE => UtfCodec.Utf16BeDecoder(encoded_text),
 
-                CodecMode.Base64 => BaseSeriesCodec.Base64Decoder(encoded_text),
-                CodecMode.Base58 => BaseSeriesCodec.Base58Decoder(encoded_text),
-                CodecMode.Base32 => BaseSeriesCodec.Base32Decoder(encoded_text),
+                //CodecMode.Base64 => BaseSeriesCodec.Base64Decoder(encoded_text),
+                //CodecMode.Base58 => BaseSeriesCodec.Base58Decoder(encoded_text),
+                //CodecMode.Base32 => BaseSeriesCodec.Base32Decoder(encoded_text),
 
-                CodecMode.JsonString => JsonStringCodec.Decoder(encoded_text),
-                CodecMode.InternationalMorseCode => MorseCodeCodec.Decoder(encoded_text),
-                CodecMode.ChineseTelegraphCode => ChineseTelegraphCodec.Decoder(encoded_text),
+                //CodecMode.JsonString => JsonStringCodec.Decoder(encoded_text),
+                //CodecMode.InternationalMorseCode => MorseCodeCodec.Decoder(encoded_text),
+                //CodecMode.ChineseTelegraphCode => ChineseTelegraphCodec.Decoder(encoded_text),
 
-                CodecMode.CaesarCipher => Core.CaesarCipher.Decoder(encoded_text, CodecViewModel.CurrentCaesarShift),
+                CodecMode.CaesarCipher => Core.CaesarCipher.Decoder(encoded_text, ViewModel.CurrentCaesarShift),
 
                 _ => encoded_text,
             };

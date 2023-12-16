@@ -28,9 +28,6 @@
         </Style>
     </Page.Resources>
 
-    <Page.DataContext>
-        <local_vm:SettingsViewModel/>
-    </Page.DataContext>
 
     <Grid>
         <Grid.RowDefinitions>

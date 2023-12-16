@@ -37,9 +37,8 @@
                         IsTitleBarAutoPaddingEnabled="False"
                         IsTabStop="False"
                         IsPaneOpen="True"
-                        OpenPaneLength="188"
-                        BackRequested="NavigationViewController_BackRequested" 
-                        ItemInvoked="NavigationViewController_ItemInvoked">
+                        IsBackEnabled="{x:Bind ContentFrame.CanGoBack, Mode=OneWay}"
+                        OpenPaneLength="188">
             <NavigationView.MenuItems>
                 <NavigationViewItem Icon="Rename"
                                     x:Uid="NaviViewItemCodecPage"
@@ -51,7 +50,9 @@
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
             </NavigationView.MenuItems>
-            <Frame x:Name="ContentFrame" Navigated="ContentFrame_Navigated" Padding="20"/>
+
+            <Frame x:Name="ContentFrame"
+                   Padding="20"/>
         </NavigationView>
     </Grid>
 
