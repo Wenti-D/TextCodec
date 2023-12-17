@@ -11,7 +11,7 @@ namespace TextCodec.Core;
 public class UtfCodec
 {
     private readonly AppSettings appSettings;
-    private IServiceProvider serviceProvider;
+    private readonly IServiceProvider serviceProvider;
 
     public UtfCodec()
     {

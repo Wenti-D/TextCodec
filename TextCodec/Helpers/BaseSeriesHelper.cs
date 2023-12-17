@@ -12,9 +12,9 @@ namespace TextCodec.Helpers
     class BaseSeriesHelper
     {
         private readonly AppSettings appSettings;
-        private IServiceProvider serviceProvider;
-        private Dictionary<string, Encoding> PreprocessMode = new();
-        private Dictionary<string, string> Base58Style = new();
+        private readonly IServiceProvider serviceProvider;
+        private readonly Dictionary<string, Encoding> PreprocessMode = new();
+        private readonly Dictionary<string, string> Base58Style = new();
 
         public Encoding GetPreprocessMode(string selected_mode)
         {

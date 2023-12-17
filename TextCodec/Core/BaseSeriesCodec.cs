@@ -12,17 +12,19 @@ namespace TextCodec.Core;
 public class BaseSeriesCodec
 {
     private readonly AppSettings appSettings;
-    private IServiceProvider serviceProvider;
+    private readonly IServiceProvider serviceProvider;
+    private readonly BaseSeriesHelper helper;
 
     public BaseSeriesCodec()
     {
         serviceProvider = Ioc.Default;
         appSettings = serviceProvider.GetRequiredService<AppSettings>();
+        helper = serviceProvider.GetRequiredService<BaseSeriesHelper>();
     }
 
     public string Base64Encoder(string raw_text)
     {
-        var preprocessor = new BaseSeriesHelper().GetPreprocessMode(appSettings.BaseSeriesTextPreprocessMode);
+        var preprocessor = helper.GetPreprocessMode(appSettings.BaseSeriesTextPreprocessMode);
         return Convert.ToBase64String(preprocessor.GetBytes(raw_text));
     }
 
@@ -30,7 +32,7 @@ public class BaseSeriesCodec
     {
         string[] encoded_texts = code_text.Split(new char[] { ' ', '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
         const string code_str = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-        var preprocessor = new BaseSeriesHelper().GetPreprocessMode(appSettings.BaseSeriesTextPreprocessMode);
+        var preprocessor = helper.GetPreprocessMode(appSettings.BaseSeriesTextPreprocessMode);
 
         List<StringBuilder> result_buffs = new();
         StringBuilder tmp_string_buff = new();
@@ -134,9 +136,8 @@ public class BaseSeriesCodec
 
     public string Base58Encoder(string raw_text)
     {
-        BaseSeriesHelper BaseSeriesHelper = new();
-        var preprocessor = BaseSeriesHelper.GetPreprocessMode(appSettings.BaseSeriesTextPreprocessMode);
-        string code_str = BaseSeriesHelper.GetBase58Style(appSettings.Base58Style);
+        var preprocessor = helper.GetPreprocessMode(appSettings.BaseSeriesTextPreprocessMode);
+        string code_str = helper.GetBase58Style(appSettings.Base58Style);
 
         List<byte> bytes = preprocessor.GetBytes(raw_text).Reverse().ToList();
         bytes.Add(0);
@@ -154,9 +155,8 @@ public class BaseSeriesCodec
 
     public string Base58Decoder(string text)
     {
-        BaseSeriesHelper BaseSeriesHelper = new();
         string[] encoded_texts = text.Split(new char[] { ' ', '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-        string code_str = BaseSeriesHelper.GetBase58Style(appSettings.Base58Style);
+        string code_str = helper.GetBase58Style(appSettings.Base58Style);
 
         List<StringBuilder> result_buffs = new();
         StringBuilder tmp_buff = new();
@@ -174,13 +174,13 @@ public class BaseSeriesCodec
                 }
                 else
                 {
-                    result_buffs[i].Append(BaseSeriesHelper.Base58DecodeHelper(tmp_buff.ToString()));
+                    result_buffs[i].Append(helper.Base58DecodeHelper(tmp_buff.ToString()));
                     tmp_buff.Clear();
                     Utilities.SwitchToInvalid(ref is_valid, result_buffs[i]);
                     result_buffs[i].Append(ch);
                 }
             }
-            result_buffs[i].Append(BaseSeriesHelper.Base58DecodeHelper(tmp_buff.ToString()));
+            result_buffs[i].Append(helper.Base58DecodeHelper(tmp_buff.ToString()));
             if (!is_valid) { result_buffs[i].Append('⁆'); }
         }
         return string.Join("\n", result_buffs);
@@ -190,7 +190,7 @@ public class BaseSeriesCodec
     {
         string code_str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
 
-        byte[] bytes = new BaseSeriesHelper()
+        byte[] bytes = helper
             .GetPreprocessMode(appSettings.BaseSeriesTextPreprocessMode)
             .GetBytes(raw_text);
         int group_num = bytes.Length / 5,
@@ -252,7 +252,7 @@ public class BaseSeriesCodec
     {
         string[] encoded_texts = encoded_text.Split(new char[] { ' ', '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
         string code_str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
-        var preprocessor = new BaseSeriesHelper().GetPreprocessMode(appSettings.BaseSeriesTextPreprocessMode);
+        var preprocessor = helper.GetPreprocessMode(appSettings.BaseSeriesTextPreprocessMode);
 
         List<StringBuilder> result_buffs = new();
         StringBuilder tmp_string_buff = new();

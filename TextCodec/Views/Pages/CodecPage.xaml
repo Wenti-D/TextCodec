@@ -4,8 +4,8 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:TextCodec.Views.Pages"
-    xmlns:local_vm="using:TextCodec.ViewModels"
     xmlns:local_cvt="using:TextCodec.Core.Converters"
+    xmlns:ct_cvt="using:CommunityToolkit.WinUI.UI.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
@@ -13,6 +13,7 @@
 
     <Page.Resources>
         <local_cvt:ResourceTranslationConverter x:Name="ResourceTranslationConverter"/>
+        <ct_cvt:BoolToVisibilityConverter x:Name="BoolToVisibilityConverter"/>
     </Page.Resources>
 
     
@@ -28,7 +29,7 @@
         </Grid.ColumnDefinitions>
         <StackPanel Orientation="Vertical">
             <Button x:Name="ClearRawText"
-                    Click="ClearText_Click">
+                    Command="{x:Bind ViewModel.ClearTextCommand}">
                 <ToolTipService.ToolTip>
                     <ToolTip x:Uid="CodecPageClearTextButtonInfo"/>
                 </ToolTipService.ToolTip>
@@ -36,7 +37,7 @@
             </Button>
 
             <Button x:Name="CopyRawText"
-                    Click="CopyRawText_Click">
+                    Command="{x:Bind ViewModel.CopyRawTextCommand}">
                 <ToolTipService.ToolTip>
                     <ToolTip x:Uid="CodecPageCopyTextButtonInfo"/>
                 </ToolTipService.ToolTip>
@@ -45,11 +46,12 @@
             <TeachingTip x:Name="RawTextCopiedTip"
                          x:Uid="CodecPageTextCopiedInfo"
                          IsLightDismissEnabled="True"
+                         IsOpen="{x:Bind ViewModel.IsRawTextCopiedTipOpen, Mode=OneWay}"
                          Target="{x:Bind CopyRawText}"
                          FontFamily="{StaticResource SarasaUI}"/>
 
             <Button x:Name="PasteRawText"
-                    Click="PasteRawText_Click">
+                    Command="{x:Bind ViewModel.PasteRawTextCommand}">
                 <ToolTipService.ToolTip>
                     <ToolTip x:Uid="CodecPagePasteTextButtonInfo"/>
                 </ToolTipService.ToolTip>
@@ -58,6 +60,7 @@
             <TeachingTip x:Name="RawTextPastedTip"
                          x:Uid="CodecPageTextPastedInfo"
                          IsLightDismissEnabled="True"
+                         IsOpen="{x:Bind ViewModel.IsRawTextPastedTipOpen, Mode=OneWay}"
                          Target="{x:Bind PasteRawText}"
                          FontFamily="{StaticResource SarasaUI}"/>
         </StackPanel>
@@ -68,7 +71,10 @@
                  IsSpellCheckEnabled="False"
                  Grid.Row="0"
                  Grid.Column="1"
-                 TextChanged="TextBox_TextChanged"/>
+                 GettingFocus="{x:Bind ViewModel.SwitchToEncodeMode}"
+                 Text="{x:Bind ViewModel.RawText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                 TextChanged="{x:Bind ViewModel.StartEncodeAsync}">
+        </TextBox>
 
         <Grid Grid.Row="1" 
               Grid.Column="1"
@@ -79,57 +85,72 @@
             </Grid.ColumnDefinitions>
             <DropDownButton x:Name="EncodeMode"
                             x:Uid="CodecPageModeSelectButton"
+                            Content="{x:Bind ViewModel.CurrentCodecModeText, Mode=OneWay}"
                             Margin="40,0,5,5">
                 <DropDownButton.Flyout>
                     <MenuFlyout>
                         <MenuFlyoutSubItem Text="Unicode">
                             <MenuFlyoutItem x:Name="UnicodeBin"
                                             Text="Bin"
-                                            Click="SelectMode_Click"/>
+                                            Command="{x:Bind ViewModel.SelectCodecModeCommand}"
+                                            CommandParameter="{Binding ElementName=UnicodeBin}"/>
                             <MenuFlyoutItem x:Name="UnicodeOct"
                                             Text="Oct"
-                                            Click="SelectMode_Click"/>
+                                            Command="{x:Bind ViewModel.SelectCodecModeCommand}"
+                                            CommandParameter="{Binding ElementName=UnicodeOct}"/>
                             <MenuFlyoutItem x:Name="UnicodeDec"
                                             Text="Dec"
-                                            Click="SelectMode_Click"/>
+                                            Command="{x:Bind ViewModel.SelectCodecModeCommand}"
+                                            CommandParameter="{Binding ElementName=UnicodeDec}"/>
                             <MenuFlyoutItem x:Name="UnicodeHex"
                                             Text="Hex"
-                                            Click="SelectMode_Click"/>
+                                            Command="{x:Bind ViewModel.SelectCodecModeCommand}"
+                                            CommandParameter="{Binding ElementName=UnicodeHex}"/>
                         </MenuFlyoutSubItem>
                         <MenuFlyoutSubItem Text="UTF">
                             <MenuFlyoutItem x:Name="UTF8"
                                             Text="UTF-8"
-                                            Click="SelectMode_Click"/>
+                                            Command="{x:Bind ViewModel.SelectCodecModeCommand}"
+                                            CommandParameter="{Binding ElementName=UTF8}"/>
                             <MenuFlyoutItem x:Name="UTF16LE"
                                             x:Uid="CodecPageModeUtf16Le"
-                                            Click="SelectMode_Click"/>
+                                            Command="{x:Bind ViewModel.SelectCodecModeCommand}"
+                                            CommandParameter="{Binding ElementName=UTF16LE}"/>
                             <MenuFlyoutItem x:Name="UTF16BE"
                                             x:Uid="CodecPageModeUtf16Be"
-                                            Click="SelectMode_Click"/>
+                                            Command="{x:Bind ViewModel.SelectCodecModeCommand}"
+                                            CommandParameter="{Binding ElementName=UTF16BE}"/>
                         </MenuFlyoutSubItem>
                         <MenuFlyoutSubItem x:Uid="CodecPageModeBaseSeries">
                             <MenuFlyoutItem x:Name="Base64"
                                             Text="Base64"
-                                            Click="SelectMode_Click"/>
+                                            Command="{x:Bind ViewModel.SelectCodecModeCommand}"
+                                            CommandParameter="{Binding ElementName=Base64}"/>
                             <MenuFlyoutItem x:Name="Base58"
                                             Text="Base58"
-                                            Click="SelectMode_Click"/>
+                                            Command="{x:Bind ViewModel.SelectCodecModeCommand}"
+                                            CommandParameter="{Binding ElementName=Base58}"/>
                             <MenuFlyoutItem x:Name="Base32"
                                             Text="Base32"
-                                            Click="SelectMode_Click"/>
+                                            Command="{x:Bind ViewModel.SelectCodecModeCommand}"
+                                            CommandParameter="{Binding ElementName=Base32}"/>
                         </MenuFlyoutSubItem>
                         <MenuFlyoutItem x:Name="JsonString"
                                         x:Uid="CodecPageModeJsonString"
-                                        Click="SelectMode_Click"/>
+                                        Command="{x:Bind ViewModel.SelectCodecModeCommand}"
+                                        CommandParameter="{Binding ElementName=JsonString}"/>
                         <MenuFlyoutItem x:Name="InternationalMorseCode"
                                         x:Uid="CodecPageModeIntMorseCode"
-                                        Click="SelectMode_Click"/>
+                                        Command="{x:Bind ViewModel.SelectCodecModeCommand}"
+                                        CommandParameter="{Binding ElementName=InternationalMorseCode}"/>
                         <MenuFlyoutItem x:Name="ChineseTelegraphCode"
                                         x:Uid="CodecPageChnTeleCode"
-                                        Click="SelectMode_Click"/>
+                                        Command="{x:Bind ViewModel.SelectCodecModeCommand}"
+                                        CommandParameter="{Binding ElementName=ChineseTelegraphCode}"/>
                         <MenuFlyoutItem x:Name="CaesarCipher"
                                         x:Uid="CodecPageCaesarCipher"
-                                        Click="SelectMode_Click"/>
+                                        Command="{x:Bind ViewModel.SelectCodecModeCommand}"
+                                        CommandParameter="{Binding ElementName=CaesarCipher}"/>
                     </MenuFlyout>
                 </DropDownButton.Flyout>
             </DropDownButton>
@@ -138,19 +159,18 @@
             <CheckBox x:Name="EncodeWithSpace"
                       x:Uid="CodecPageEncodeWithSpaceCheckBox"
                       Grid.Column="1"
-                      IsChecked="{Binding IsEncodeWithSpaceChecked, Mode=TwoWay}"
-                      Visibility="Collapsed"
-                      Checked="EncodeWithSpace_Changed"
-                      Unchecked="EncodeWithSpace_Changed"/>
+                      IsChecked="{x:Bind ViewModel.IsEncodeWithSpaceChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                      Visibility="{x:Bind ViewModel.IsEncodeWithSpaceVisible, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
+                      Command="{x:Bind ViewModel.StartCodecAsyncCommand}"/>
 
             <!--Base系列编码时出现的编码方式与序列选项-->
             <StackPanel Orientation="Horizontal"
                         Grid.Column="1">
                 <ComboBox x:Name="TextPreprocessMode"
                           Width="150"
-                          SelectedValue="{Binding SelectedBaseSeriesTextPreprocessMode, Mode=TwoWay}"
-                          Visibility="Collapsed"
-                          SelectionChanged="BaseSeries_SelectionChanged">
+                          SelectedValue="{x:Bind ViewModel.SelectedBaseSeriesTextPreprocessMode, Mode=TwoWay}"
+                          Visibility="{x:Bind ViewModel.IsTextPreprocessModeVisible, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
+                          SelectionChanged="{x:Bind ViewModel.StartCodecAsync}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Converter={StaticResource ResourceTranslationConverter}}"/>
@@ -162,9 +182,9 @@
                 </ComboBox>
                 <ComboBox x:Name="Base58Style"
                           Width="120"
-                          SelectedValue="{Binding SelectedBase58Style, Mode=TwoWay}"
-                          Visibility="Collapsed"
-                          SelectionChanged="BaseSeries_SelectionChanged">
+                          SelectedValue="{x:Bind ViewModel.SelectedBase58Style, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                          Visibility="{x:Bind ViewModel.IsBase58StyleVisible, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
+                          SelectionChanged="{x:Bind ViewModel.StartCodecAsync}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Converter={StaticResource ResourceTranslationConverter}}"/>
@@ -179,9 +199,9 @@
             <ComboBox x:Name="ChineseTeleCodeStyle"
                       Width="150"
                       Grid.Column="1"
-                      SelectedValue="{Binding SelectedChineseTelegraphCodeStyle, Mode=TwoWay}"
-                      Visibility="Collapsed"
-                      SelectionChanged="ChineseTeleCodeStyle_SelectionChanged">
+                      SelectedValue="{x:Bind ViewModel.SelectedChineseTelegraphCodeStyle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                      Visibility="{x:Bind ViewModel.IsChineseTeleCodeStyleVisible, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
+                      SelectionChanged="{x:Bind ViewModel.StartCodecAsync}">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding Converter={StaticResource ResourceTranslationConverter}}"/>
@@ -198,11 +218,12 @@
                 <NumberBox x:Name="CaesarCipherShift"
                            x:Uid="CodecPageCaesarCipherShift"
                            Grid.Column="1"
-                           Text="{Binding CurrentCaesarShiftText, Mode=TwoWay}"
-                           Visibility="Collapsed"
+                           Text="{x:Bind ViewModel.CurrentCaesarShiftText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                           Visibility="{x:Bind ViewModel.IsCaesarCipherShiftVisible, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
                            MinWidth="150"
                            MaxWidth="300"
-                           ValueChanged="CaesarCipherShift_ValueChanged"
+                           ValueChanged="{x:Bind ViewModel.CaeserShiftValueChanged}"
+                           NumberFormatter="{x:Bind ViewModel.CaesarCipherNumberFormatter}"
                            Minimum="-32768"
                            Maximum="32767"
                            SpinButtonPlacementMode="Compact"
@@ -214,7 +235,7 @@
 
         <StackPanel Orientation="Vertical" Grid.Row="2">
             <Button x:Name="ClearEncodedText"
-                    Click="ClearText_Click">
+                    Command="{x:Bind ViewModel.ClearTextCommand}">
                 <ToolTipService.ToolTip>
                     <ToolTip x:Uid="CodecPageClearTextButtonInfo"/>
                 </ToolTipService.ToolTip>
@@ -222,7 +243,7 @@
             </Button>
 
             <Button x:Name="CopyEncodedText"
-                    Click="CopyEncodedText_Click">
+                    Command="{x:Bind ViewModel.CopyEncodedTextCommand}">
                 <ToolTipService.ToolTip>
                     <ToolTip x:Uid="CodecPageCopyTextButtonInfo"/>
                 </ToolTipService.ToolTip>
@@ -231,11 +252,12 @@
             <TeachingTip x:Name="EncodedTextCopiedTip"
                          x:Uid="CodecPageTextCopiedInfo"
                          IsLightDismissEnabled="True"
+                         IsOpen="{x:Bind ViewModel.IsEncodedTextCopiedTipOpen, Mode=OneWay}"
                          Target="{x:Bind CopyEncodedText}"
                          FontFamily="{StaticResource SarasaUI}"/>
 
             <Button x:Name="PasteEncodedText"
-                    Click="PasteEncodedText_Click">
+                    Command="{x:Bind ViewModel.PasteEncodedTextCommand}">
                 <ToolTipService.ToolTip>
                     <ToolTip x:Uid="CodecPagePasteTextButtonInfo"/>
                 </ToolTipService.ToolTip>
@@ -244,6 +266,7 @@
             <TeachingTip x:Name="EncodedTextPastedTip"
                          x:Uid="CodecPageTextPastedInfo"
                          IsLightDismissEnabled="True"
+                         IsOpen="{x:Bind ViewModel.IsEncodedTextPastedTipOpen, Mode=OneWay}"
                          Target="{x:Bind PasteEncodedText}"
                          FontFamily="{StaticResource SarasaUI}"/>
         </StackPanel>
@@ -255,6 +278,8 @@
                  IsSpellCheckEnabled="False"
                  Grid.Row="2"
                  Grid.Column="1"
-                 TextChanged="TextBox_TextChanged"/>
+                 GettingFocus="{x:Bind ViewModel.SwitchToDecodeMode}"
+                 Text="{x:Bind ViewModel.EncodedText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                 TextChanged="{x:Bind ViewModel.StartDecodeAsync}"/>
     </Grid>
 </Page>

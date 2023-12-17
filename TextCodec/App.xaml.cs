@@ -5,9 +5,11 @@ using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using System;
 using TextCodec.Core;
+using TextCodec.Helpers;
 using TextCodec.Services.Navigation;
 using TextCodec.ViewModels;
 using TextCodec.Views.Pages;
+using Windows.ApplicationModel.Resources;
 using Windows.Graphics;
 using WinRT.Interop;
 
@@ -56,10 +58,12 @@ public partial class App : Application
     /// <returns>配置好的服务提供器</returns>
     private static ServiceProvider ConfigureService()
     {
+        ResourceLoader resourceLoader = ResourceLoader.GetForViewIndependentUse();
         ServiceProvider serviceProvider = new ServiceCollection()
             .AddSingleton<INavigationService, NavigationService>()
 
             .AddSingleton<AppSettings>()
+            .AddSingleton(resourceLoader)
 
             .AddSingleton<MainWindow>()
             .AddSingleton<CodecPage>()
@@ -68,6 +72,12 @@ public partial class App : Application
             .AddSingleton<HashViewModel>()
             .AddSingleton<SettingsPage>()
             .AddSingleton<SettingsViewModel>()
+
+            .AddSingleton<UtfCodec>()
+            .AddSingleton<BaseSeriesCodec>()
+            .AddSingleton<BaseSeriesHelper>()
+            .AddSingleton<ChineseTelegraphCodec>()
+
             .BuildServiceProvider(true);
 
         Ioc.Default.ConfigureServices(serviceProvider);

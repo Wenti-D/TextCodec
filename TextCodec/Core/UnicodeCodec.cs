@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using CommunityToolkit.Mvvm.DependencyInjection;
+using System;
+using System.Text;
 using TextCodec.Helpers;
 
 namespace TextCodec.Core;
