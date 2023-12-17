@@ -27,48 +27,51 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <StackPanel Orientation="Vertical">
-            <Button x:Name="clearRawText"
-                    Click="ClearText_Click">
+            <Button x:Name="ClearRawText"
+                    Command="{x:Bind ViewModel.ClearTextCommand}">
                 <ToolTipService.ToolTip>
                     <ToolTip x:Uid="CodecPageClearTextButtonInfo"/>
                 </ToolTipService.ToolTip>
                 <FontIcon Glyph="&#xE711;" />
             </Button>
 
-            <Button x:Name="copyRawText"
-                    Click="copyRawText_Click">
+            <Button x:Name="CopyRawText"
+                    Command="{x:Bind ViewModel.CopyRawTextCommand}">
                 <ToolTipService.ToolTip>
                     <ToolTip x:Uid="CodecPageCopyTextButtonInfo"/>
                 </ToolTipService.ToolTip>
                 <FontIcon Glyph="&#xE8C8;" />
             </Button>
-            <TeachingTip x:Name="rawTextCopiedTip"
+            <TeachingTip x:Name="RawTextCopiedTip"
                          x:Uid="CodecPageTextCopiedInfo"
                          IsLightDismissEnabled="True"
-                         Target="{x:Bind copyRawText}"
+                         IsOpen="{x:Bind ViewModel.IsRawTextCopiedTipOpen, Mode=OneWay}"
+                         Target="{x:Bind CopyRawText}"
                          FontFamily="{StaticResource SarasaUI}"/>
 
-            <Button x:Name="pasteRawText"
-                    Click="pasteRawText_Click">
+            <Button x:Name="PasteRawText"
+                    Command="{x:Bind ViewModel.PasteRawTextCommand}">
                 <ToolTipService.ToolTip>
                     <ToolTip x:Uid="CodecPagePasteTextButtonInfo"/>
                 </ToolTipService.ToolTip>
                 <FontIcon Glyph="&#xE77F;" />
             </Button>
-            <TeachingTip x:Name="rawTextPastedTip"
+            <TeachingTip x:Name="RawTextPastedTip"
                          x:Uid="CodecPageTextPastedInfo"
                          IsLightDismissEnabled="True"
-                         Target="{x:Bind pasteRawText}"
+                         IsOpen="{x:Bind ViewModel.IsRawTextPastedTipOpen, Mode=OneWay}"
+                         Target="{x:Bind PasteRawText}"
                          FontFamily="{StaticResource SarasaUI}"/>
         </StackPanel>
-        <TextBox x:Name="rawTextBox"
+        <TextBox x:Name="RawTextBox"
                  AcceptsReturn="True"
                  Margin="20,0,0,0"
                  TextWrapping="Wrap"
+                 Text="{x:Bind ViewModel.RawText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                  IsSpellCheckEnabled="False"
                  Grid.Row="0"
                  Grid.Column="1"
-                 TextChanged="TextBox_TextChanged"/>
+                 TextChanged="{x:Bind ViewModel.StartHashAsync}"/>
 
         <Grid Grid.Row="1" 
               Grid.Column="1"
@@ -76,19 +79,19 @@
 
             <StackPanel Orientation="Horizontal"
                         Margin="40,0,0,0">
-                <ComboBox x:Name="hashMode"
+                <ComboBox x:Name="HashMode"
                           Width="120"
-                          SelectedValue="{Binding SelectedHashMode, Mode=TwoWay}"
-                          SelectionChanged="hashMode_SelectionChanged">
+                          SelectedValue="{x:Bind ViewModel.CurrentHashModeText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                          SelectionChanged="{x:Bind ViewModel.SelectHashMode}">
                     <x:String>MD5</x:String>
                     <x:String>SHA1</x:String>
                     <x:String>SHA256</x:String>
                     <x:String>SHA512</x:String>
                 </ComboBox>
-                <ComboBox x:Name="textPreprocessMode"
+                <ComboBox x:Name="TextPreprocessMode"
                           Width="150"
-                          SelectedValue="{Binding SelectedHashTextPreprocessMode, Mode=TwoWay}"
-                          SelectionChanged="textPreprocessMode_SelectionChanged">
+                          SelectedValue="{x:Bind ViewModel.SelectedHashTextPreprocessMode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                          SelectionChanged="{x:Bind ViewModel.StartHashAsync}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Converter={StaticResource ResourceTranslationConverter}}"/>
@@ -103,23 +106,25 @@
 
 
         <StackPanel Orientation="Vertical" Grid.Row="2">
-            <Button x:Name="copyEncodedText"
-                    Click="copyEncodedText_Click">
+            <Button x:Name="CopyEncodedText"
+                    Command="{x:Bind ViewModel.CopyEncodedTextCommand}">
                 <ToolTipService.ToolTip>
                     <ToolTip x:Uid="CodecPageCopyTextButtonInfo"/>
                 </ToolTipService.ToolTip>
                 <FontIcon Glyph="&#xE8C8;" />
             </Button>
-            <TeachingTip x:Name="encodedTextCopiedTip"
+            <TeachingTip x:Name="EncodedTextCopiedTip"
                          x:Uid="CodecPageTextCopiedInfo"
                          IsLightDismissEnabled="True"
-                         Target="{x:Bind copyEncodedText}"
+                         IsOpen="{x:Bind ViewModel.IsEncodedTextCopiedTipOpen}"
+                         Target="{x:Bind CopyEncodedText}"
                          FontFamily="{StaticResource SarasaUI}"/>
         </StackPanel>
-        <TextBox x:Name="encodedTextBox"
+        <TextBox x:Name="EncodedTextBox"
                  IsReadOnly="True"
                  Margin="20,0,0,0"
                  Style="{ThemeResource MonoTextBoxStyle}"
+                 Text="{x:Bind ViewModel.EncodedText, Mode=OneWay}"
                  TextWrapping="Wrap"
                  IsSpellCheckEnabled="False"
                  Grid.Row="2"

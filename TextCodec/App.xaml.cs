@@ -78,6 +78,8 @@ public partial class App : Application
             .AddSingleton<BaseSeriesHelper>()
             .AddSingleton<ChineseTelegraphCodec>()
 
+            .AddSingleton<HashHelper>()
+
             .BuildServiceProvider(true);
 
         Ioc.Default.ConfigureServices(serviceProvider);

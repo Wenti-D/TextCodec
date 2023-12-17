@@ -10,7 +10,7 @@ namespace TextCodec.Helpers;
 public class HashHelper
 {
     private readonly AppSettings appSettings;
-    private IServiceProvider serviceProvider;
+    private readonly IServiceProvider serviceProvider;
     private readonly Dictionary<string, Encoding> PreprocessMode = new();
 
     public byte[] TextToBytes(string text)
