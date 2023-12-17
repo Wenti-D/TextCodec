@@ -1,9 +1,5 @@
 ﻿using Microsoft.UI.Xaml.Controls;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TextCodec.Views.Pages;
 using Windows.Foundation;
 
@@ -109,6 +105,7 @@ public class NavigationService : INavigationService
         {
             _frame.GoBack();
             SyncSelectedItem(_frame.Content.GetType());
+            GC.Collect();
         }
     }
 
@@ -120,6 +117,7 @@ public class NavigationService : INavigationService
         if (target is not null)
         {
             Navigate(target);
+            GC.Collect();
         }
     }
 
