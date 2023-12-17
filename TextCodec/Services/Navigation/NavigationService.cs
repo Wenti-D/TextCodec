@@ -4,6 +4,7 @@ using TextCodec.Views.Pages;
 using Windows.Foundation;
 
 namespace TextCodec.Services.Navigation;
+#nullable enable
 
 public class NavigationService : INavigationService
 {

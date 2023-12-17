@@ -6,6 +6,7 @@ using TextCodec.Extensions;
 using Windows.ApplicationModel;
 
 namespace TextCodec.ViewModels;
+#nullable enable
 
 public sealed class SettingsViewModel : ObservableObject
 {
