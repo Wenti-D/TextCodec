@@ -71,6 +71,7 @@ public partial class HashViewModel : ObservableObject
         resourceLoader = serviceProvider.GetRequiredService<ResourceLoader>();
         hashHelper = serviceProvider.GetRequiredService<HashHelper>();
 
+        selectedHashTextPreprocessMode = appSettings.HashTextPreprocessMode;
         CurrentHashModeText = "MD5";
         CurrentHashMode = (HashMode)Enum.Parse(typeof(HashMode), CurrentHashModeText);
         RawText = "";
