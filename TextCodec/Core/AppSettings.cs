@@ -5,8 +5,14 @@ using Windows.Storage;
 namespace TextCodec.Core;
 #nullable enable
 
-public sealed class AppSettings : ObservableObject
+public partial class AppSettings : ObservableObject
 {
+    #region fields
+    private readonly ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
+    #endregion
+
+    #region properties
+
     private BackdropTypes? backdropTypes;
     private bool? isMainWindowMaximum;
     private ulong? mainWindowRect;
@@ -20,7 +26,6 @@ public sealed class AppSettings : ObservableObject
     private string? hashMode;
 
     private bool? onReset;
-    private ApplicationDataContainer local_settings = ApplicationData.Current.LocalSettings;
 
     /// <summary>
     /// 选中的背景材质
@@ -31,7 +36,7 @@ public sealed class AppSettings : ObservableObject
         set
         {
             SetProperty(ref backdropTypes, value);
-            local_settings.Values["BackdropType"] = value.ToString();
+            localSettings.Values["BackdropType"] = value.ToString();
         }
     }
 
@@ -44,7 +49,7 @@ public sealed class AppSettings : ObservableObject
         set
         {
             SetProperty(ref isMainWindowMaximum, value);
-            local_settings.Values["IsMainWindowMaximum"] = value;
+            localSettings.Values["IsMainWindowMaximum"] = value;
         }
     }
 
@@ -57,7 +62,7 @@ public sealed class AppSettings : ObservableObject
         set
         {
             SetProperty(ref mainWindowRect, value);
-            local_settings.Values["MainWindowRect"] = value;
+            localSettings.Values["MainWindowRect"] = value;
         }
     }
 
@@ -70,7 +75,7 @@ public sealed class AppSettings : ObservableObject
         set
         {
             SetProperty(ref isUtfEncodeWithSpace, value);
-            local_settings.Values["IsUtfEncodeWithSpace"] = value;
+            localSettings.Values["IsUtfEncodeWithSpace"] = value;
         }
     }
 
@@ -83,7 +88,7 @@ public sealed class AppSettings : ObservableObject
         set
         {
             SetProperty(ref baseSeriesTextPreprocessMode, value);
-            local_settings.Values["BaseSeriesTextPreprocessMode"] = value;
+            localSettings.Values["BaseSeriesTextPreprocessMode"] = value;
         }
     }
 
@@ -96,7 +101,7 @@ public sealed class AppSettings : ObservableObject
         set
         {
             SetProperty(ref base58Style, value);
-            local_settings.Values["Base58Style"] = value;
+            localSettings.Values["Base58Style"] = value;
         }
     }
 
@@ -109,7 +114,7 @@ public sealed class AppSettings : ObservableObject
         set
         {
             SetProperty(ref chineseTelegraphCodeStyle, value);
-            local_settings.Values["ChineseTelegraphCodeStyle"] = value;
+            localSettings.Values["ChineseTelegraphCodeStyle"] = value;
         }
     }
 
@@ -122,7 +127,7 @@ public sealed class AppSettings : ObservableObject
         set
         {
             SetProperty(ref hashTextPreprocessMode, value);
-            local_settings.Values["HashTextPreprocessMode"] = value;
+            localSettings.Values["HashTextPreprocessMode"] = value;
         }
     }
 
@@ -135,7 +140,7 @@ public sealed class AppSettings : ObservableObject
         set
         {
             SetProperty(ref hashMode, value);
-            local_settings.Values["HashMode"] = value;
+            localSettings.Values["HashMode"] = value;
         }
     }
 
@@ -148,9 +153,13 @@ public sealed class AppSettings : ObservableObject
         set
         {
             SetProperty(ref onReset, value);
-            local_settings.Values["OnReset"] = value;
+            localSettings.Values["OnReset"] = value;
         }
     }
+
+    #endregion
+
+    #region methods
 
     public AppSettings()
     {
@@ -160,37 +169,39 @@ public sealed class AppSettings : ObservableObject
 
     private void Init()
     {
-        if (local_settings.Values["IsInitialized"] is null)
+        if (localSettings.Values["IsInitialized"] is null or false)
         {
-            local_settings.Values["IsInitialized"] = true;
+            localSettings.Values["IsInitialized"] = true;
 
-            local_settings.Values["BackdropType"] = "Mica";
-            local_settings.Values["IsMainWindowMaximum"] = false;
+            localSettings.Values["BackdropType"] = "Mica";
+            localSettings.Values["IsMainWindowMaximum"] = false;
 
-            local_settings.Values["IsUtfEncodeWithSpace"] = true;
-            local_settings.Values["BaseSeriesTextPreprocessMode"] = "CodecPageModeUtf8";
-            local_settings.Values["Base58Style"] = "CodecPageBase58StdCharList";
+            localSettings.Values["IsUtfEncodeWithSpace"] = true;
+            localSettings.Values["BaseSeriesTextPreprocessMode"] = "CodecPageModeUtf8";
+            localSettings.Values["Base58Style"] = "CodecPageBase58StdCharList";
 
-            local_settings.Values["HashTextPreprocessMode"] = "HashPreprocessModeUtf8";
-            local_settings.Values["HashMode"] = "MD5";
+            localSettings.Values["HashTextPreprocessMode"] = "HashPreprocessModeUtf8";
+            localSettings.Values["HashMode"] = "MD5";
 
-            local_settings.Values["OnReset"] = false;
+            localSettings.Values["OnReset"] = false;
         }
     }
 
     private void GetSettings()
     {
-        backdropTypes = Enum.Parse<BackdropTypes>(local_settings.Values["BackdropType"] as string);
-        isMainWindowMaximum = (bool?)local_settings.Values["IsMainWindowMaximum"];
-        mainWindowRect = (ulong?)local_settings.Values["MainWindowRect"];
+        backdropTypes = Enum.Parse<BackdropTypes>((string)localSettings.Values["BackdropType"]);
+        isMainWindowMaximum = (bool)localSettings.Values["IsMainWindowMaximum"];
+        mainWindowRect = (ulong?)localSettings.Values["MainWindowRect"];
 
-        isUtfEncodeWithSpace = (bool?)local_settings.Values["IsUtfEncodeWithSpace"];
-        baseSeriesTextPreprocessMode = local_settings.Values["BaseSeriesTextPreprocessMode"] as string;
-        base58Style = local_settings.Values["Base58Style"] as string;
+        isUtfEncodeWithSpace = (bool)localSettings.Values["IsUtfEncodeWithSpace"];
+        baseSeriesTextPreprocessMode = localSettings.Values["BaseSeriesTextPreprocessMode"] as string;
+        base58Style = localSettings.Values["Base58Style"] as string;
 
-        hashTextPreprocessMode = local_settings.Values["HashTextPreprocessMode"] as string;
-        hashMode = local_settings.Values["HashMode"] as string;
+        hashTextPreprocessMode = localSettings.Values["HashTextPreprocessMode"] as string;
+        hashMode = localSettings.Values["HashMode"] as string;
 
-        onReset = (bool?)local_settings.Values["OnReset"];
+        onReset = (bool)localSettings.Values["OnReset"];
     }
+
+    #endregion
 }
