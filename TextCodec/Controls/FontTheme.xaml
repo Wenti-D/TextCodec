@@ -27,6 +27,9 @@
            BasedOn="{StaticResource DefaultMenuFlyoutItemStyle}">
         <Setter Property="FontFamily" Value="{StaticResource SarasaUI}"/>
     </Style>
+    <Style TargetType="InfoBar">
+        <Setter Property="FontFamily" Value="{StaticResource SarasaUI}"/>
+    </Style>
     
     <!--带标签的字体样式-->
     <Style x:Name="BaseTextBlockStyle" 

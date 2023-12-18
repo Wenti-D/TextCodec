@@ -62,12 +62,26 @@ public partial class CodecViewModel : ObservableObject
     [ObservableProperty] // 「凯撒密码偏移量」内容格式化器
     private DecimalFormatter caesarCipherNumberFormatter;
 
+    private string currentCodecModeName;
     private bool isEncodeWithSpaceChecked;
     private string selectedBaseSeriesTextPreprocessMode;
     private string selectedBase58Style;
     private string selectedChineseTelegraphCodeStyle;
     private int currentCaesarShift;
     private string currentCaesarShiftText;
+
+    /// <summary>
+    /// 当前编解码模式名称文本
+    /// </summary>
+    public string CurrentCodecModeName
+    {
+        get => currentCodecModeName;
+        set
+        {
+            SetProperty(ref currentCodecModeName, value);
+            appSettings.LastCodecMode = value;
+        }
+    }
 
     /// <summary>
     /// UTF 系列「编码时带空格」是否勾选
@@ -182,7 +196,31 @@ public partial class CodecViewModel : ObservableObject
         selectedChineseTelegraphCodeStyle = appSettings.ChineseTelegraphCodeStyle;
 
         // 初始化部分属性
-        CurrentCodecModeText = GetTranslation("CodecPageModeSelectButton/Content");
+        if (appSettings.IsKeepLastModeEnabled)
+        {
+            if (appSettings.LastCodecMode == "None")
+            {
+                currentCodecModeName = appSettings.LastCodecMode;
+                currentCodecModeText = GetTranslation("CodecPageModeSelectButton/Content");
+            }
+            else
+            {
+                currentCodecModeName = appSettings.LastCodecMode;
+                currentCodecModeText = GetTranslation(CurrentCodecModeName);
+                CurrentCodecMode = (CodecMode)Enum.Parse(typeof(CodecMode), CurrentCodecModeName);
+            }
+        }
+        else if (appSettings.DefaultCodecMode == "None")
+        {
+            currentCodecModeName = appSettings.DefaultCodecMode;
+            currentCodecModeText = GetTranslation("CodecPageModeSelectButton/Content");
+        }
+        else
+        {
+            currentCodecModeName = appSettings.DefaultCodecMode;
+            currentCodecModeText = GetTranslation(CurrentCodecModeName);
+            CurrentCodecMode = (CodecMode)Enum.Parse(typeof(CodecMode), CurrentCodecModeName);
+        }
         CurrentCaesarShift = 0;
         currentCaesarShiftText = string.Empty;
         CaesarCipherNumberFormatter = new()
@@ -198,7 +236,12 @@ public partial class CodecViewModel : ObservableObject
 
     public string GetTranslation(string resource)
     {
-        return resourceLoader.GetString(resource);
+        string translation = resourceLoader.GetString(resource);
+        if (translation == string.Empty)
+        {
+            return resource;
+        }
+        return translation;
     }
 
     private string GetEncodedText(string? rawText)
@@ -325,7 +368,8 @@ public partial class CodecViewModel : ObservableObject
         if (sender is null) return;
 
         CurrentCodecModeText = sender.GetPropertyValue<string>("Text");
-        CurrentCodecMode = (CodecMode)Enum.Parse(typeof(CodecMode), sender.GetPropertyValue<string>("Name"));
+        CurrentCodecModeName = sender.GetPropertyValue<string>("Name");
+        CurrentCodecMode = (CodecMode)Enum.Parse(typeof(CodecMode), CurrentCodecModeName);
 
         if (CurrentCodecMode is >= CodecMode.UTF8 and <= CodecMode.UTF16BE)
             IsEncodeWithSpaceVisible = true;

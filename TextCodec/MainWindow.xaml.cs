@@ -119,7 +119,7 @@ namespace TextCodec
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="args"></param>
-        private async void MainWindow_Closed(object sender, WindowEventArgs args)
+        private void MainWindow_Closed(object sender, WindowEventArgs args)
         {
             var window_placement = new User32.WINDOWPLACEMENT();
             if (User32.GetWindowPlacement(hwnd, ref window_placement))
@@ -129,10 +129,6 @@ namespace TextCodec
                 var size = appWindow.Size;
                 var rect = new WindowRect(pos.X, pos.Y, size.Width, size.Height);
                 appSettings.MainWindowRect = rect.val;
-            }
-            if (appSettings.OnReset)
-            {
-                await ApplicationData.Current.ClearAsync(ApplicationDataLocality.Local);
             }
         }
     }

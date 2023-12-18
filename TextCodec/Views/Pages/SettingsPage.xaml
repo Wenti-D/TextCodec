@@ -4,6 +4,8 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:TextCodec.Views.Pages"
+    xmlns:local_cvt="using:TextCodec.Core.Converters"
+    xmlns:ct_cvt="using:CommunityToolkit.WinUI.UI.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:labs="using:CommunityToolkit.Labs.WinUI"
@@ -11,6 +13,8 @@
     <!--Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"-->
 
     <Page.Resources>
+        <local_cvt:ResourceTranslationConverter x:Name="ResourceTranslationConverter"/>
+        <ct_cvt:BoolNegationConverter x:Name="BoolNegationConverter"/>
         <!--  These styles can be referenced to create a consistent SettingsPage layout  -->
 
         <!--  Spacing between cards  -->
@@ -51,11 +55,122 @@
                               ItemsSource="{x:Bind ViewModel.SysBackdrops}"
                               SelectedItem="{x:Bind ViewModel.SelectedBackdrop, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 </labs:SettingsCard>
+                
+                <labs:SettingsCard x:Uid="SettingsPageKeepLastModeSet">
+                    <labs:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xE723;" />
+                    </labs:SettingsCard.HeaderIcon>
+                    <ToggleSwitch x:Name="IsKeepLastModeSwitch"
+                                  IsOn="{x:Bind ViewModel.IsKeepLastModeEnabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                </labs:SettingsCard>
+                
+                <labs:SettingsCard x:Uid="SettingsPageDefaultCodecModeSet"
+                                   IsEnabled="{x:Bind IsKeepLastModeSwitch.IsOn, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}">
+                    <labs:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xE8AC;" />
+                    </labs:SettingsCard.HeaderIcon>
+                    <DropDownButton x:Name="DefaultCodecMode"
+                                    x:Uid="CodecPageModeSelectButton"
+                                    Content="{x:Bind ViewModel.SelectedDefaultCodecModeText, Mode=OneWay}"
+                                    Margin="40,0,5,5">
+                        <DropDownButton.Flyout>
+                            <MenuFlyout>
+                                <MenuFlyoutItem x:Name="None"
+                                                x:Uid="CodecPageModeNone"
+                                                Command="{x:Bind ViewModel.SelectDefaultCodecModeCommand}"
+                                                CommandParameter="{Binding ElementName=None}"/>
+                                <MenuFlyoutSubItem Text="Unicode">
+                                    <MenuFlyoutItem x:Name="UnicodeBin"
+                                                    x:Uid="CodecPageModeUnicodeBin"
+                                                    Command="{x:Bind ViewModel.SelectDefaultCodecModeCommand}"
+                                                    CommandParameter="{Binding ElementName=UnicodeBin}"/>
+                                    <MenuFlyoutItem x:Name="UnicodeOct"
+                                                    x:Uid="CodecPageModeUnicodeOct"
+                                                    Command="{x:Bind ViewModel.SelectDefaultCodecModeCommand}"
+                                                    CommandParameter="{Binding ElementName=UnicodeOct}"/>
+                                    <MenuFlyoutItem x:Name="UnicodeDec"
+                                                    x:Uid="CodecPageModeUnicodeDec"
+                                                    Command="{x:Bind ViewModel.SelectDefaultCodecModeCommand}"
+                                                    CommandParameter="{Binding ElementName=UnicodeDec}"/>
+                                    <MenuFlyoutItem x:Name="UnicodeHex"
+                                                    x:Uid="CodecPageModeUnicodeHex"
+                                                    Command="{x:Bind ViewModel.SelectDefaultCodecModeCommand}"
+                                                    CommandParameter="{Binding ElementName=UnicodeHex}"/>
+                                </MenuFlyoutSubItem>
+                                <MenuFlyoutSubItem Text="UTF">
+                                    <MenuFlyoutItem x:Name="UTF8"
+                                                    Text="UTF-8"
+                                                    Command="{x:Bind ViewModel.SelectDefaultCodecModeCommand}"
+                                                    CommandParameter="{Binding ElementName=UTF8}"/>
+                                    <MenuFlyoutItem x:Name="UTF16LE"
+                                                    x:Uid="CodecPageModeUtf16Le"
+                                                    Command="{x:Bind ViewModel.SelectDefaultCodecModeCommand}"
+                                                    CommandParameter="{Binding ElementName=UTF16LE}"/>
+                                    <MenuFlyoutItem x:Name="UTF16BE"
+                                                    x:Uid="CodecPageModeUtf16Be"
+                                                    Command="{x:Bind ViewModel.SelectDefaultCodecModeCommand}"
+                                                    CommandParameter="{Binding ElementName=UTF16BE}"/>
+                                </MenuFlyoutSubItem>
+                                <MenuFlyoutSubItem x:Uid="CodecPageModeBaseSeries">
+                                    <MenuFlyoutItem x:Name="Base64"
+                                                    Text="Base64"
+                                                    Command="{x:Bind ViewModel.SelectDefaultCodecModeCommand}"
+                                                    CommandParameter="{Binding ElementName=Base64}"/>
+                                    <MenuFlyoutItem x:Name="Base58"
+                                                    Text="Base58"
+                                                    Command="{x:Bind ViewModel.SelectDefaultCodecModeCommand}"
+                                                    CommandParameter="{Binding ElementName=Base58}"/>
+                                    <MenuFlyoutItem x:Name="Base32"
+                                                    Text="Base32"
+                                                    Command="{x:Bind ViewModel.SelectDefaultCodecModeCommand}"
+                                                    CommandParameter="{Binding ElementName=Base32}"/>
+                                </MenuFlyoutSubItem>
+                                <MenuFlyoutItem x:Name="JsonString"
+                                                x:Uid="CodecPageModeJsonString"
+                                                Command="{x:Bind ViewModel.SelectDefaultCodecModeCommand}"
+                                                CommandParameter="{Binding ElementName=JsonString}"/>
+                                <MenuFlyoutItem x:Name="InternationalMorseCode"
+                                                x:Uid="CodecPageModeIntMorseCode"
+                                                Command="{x:Bind ViewModel.SelectDefaultCodecModeCommand}"
+                                                CommandParameter="{Binding ElementName=InternationalMorseCode}"/>
+                                <MenuFlyoutItem x:Name="ChineseTelegraphCode"
+                                                x:Uid="CodecPageChnTeleCode"
+                                                Command="{x:Bind ViewModel.SelectDefaultCodecModeCommand}"
+                                                CommandParameter="{Binding ElementName=ChineseTelegraphCode}"/>
+                                <MenuFlyoutItem x:Name="CaesarCipher"
+                                                x:Uid="CodecPageCaesarCipher"
+                                                Command="{x:Bind ViewModel.SelectDefaultCodecModeCommand}"
+                                                CommandParameter="{Binding ElementName=CaesarCipher}"/>
+                            </MenuFlyout>
+                        </DropDownButton.Flyout>
+                    </DropDownButton>
+                </labs:SettingsCard>
 
-                <!--开发人员测试-->
+                <labs:SettingsCard x:Uid="SettingsPageDefaultHashModeSet"
+                                   IsEnabled="{x:Bind IsKeepLastModeSwitch.IsOn, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}">
+                    <labs:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xE943;" />
+                    </labs:SettingsCard.HeaderIcon>
+                    <ComboBox x:Name="DefaultHashMode"
+                              Width="120"
+                              SelectedValue="{x:Bind ViewModel.SelectedDefaultHashModeText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                              SelectionChanged="{x:Bind ViewModel.SelectDefaultHashMode}">
+                        <x:String>MD5</x:String>
+                        <x:String>SHA1</x:String>
+                        <x:String>SHA256</x:String>
+                        <x:String>SHA512</x:String>
+                    </ComboBox>
+                </labs:SettingsCard>
+
+                <!--高级选项-->
                 <TextBlock Style="{StaticResource SettingsSectionHeaderTextBlockStyle}"
-                           x:Uid="SettingsPageDevSet"/>
+                           x:Uid="SettingsPageAdvancedSet"/>
+                <InfoBar x:Uid="SettingsPageResetAppInfoBar"
+                         Severity="Success"
+                         IsClosable="False"
+                         IsOpen="{x:Bind ViewModel.IsInitialized, Mode=TwoWay, Converter={StaticResource BoolNegationConverter}, UpdateSourceTrigger=PropertyChanged}"/>
                 <labs:SettingsCard x:Uid="SettingsPageResetAppSet"
+                                   IsEnabled="{x:Bind ViewModel.IsInitialized, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                    IsClickEnabled="True"
                                    Command="{x:Bind ViewModel.ResetSettingsCommand}">
                     <labs:SettingsCard.HeaderIcon>

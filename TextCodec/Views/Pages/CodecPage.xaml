@@ -91,19 +91,19 @@
                     <MenuFlyout>
                         <MenuFlyoutSubItem Text="Unicode">
                             <MenuFlyoutItem x:Name="UnicodeBin"
-                                            Text="Bin"
+                                            x:Uid="CodecPageModeUnicodeBin"
                                             Command="{x:Bind ViewModel.SelectCodecModeCommand}"
                                             CommandParameter="{Binding ElementName=UnicodeBin}"/>
                             <MenuFlyoutItem x:Name="UnicodeOct"
-                                            Text="Oct"
+                                            x:Uid="CodecPageModeUnicodeOct"
                                             Command="{x:Bind ViewModel.SelectCodecModeCommand}"
                                             CommandParameter="{Binding ElementName=UnicodeOct}"/>
                             <MenuFlyoutItem x:Name="UnicodeDec"
-                                            Text="Dec"
+                                            x:Uid="CodecPageModeUnicodeDec"
                                             Command="{x:Bind ViewModel.SelectCodecModeCommand}"
                                             CommandParameter="{Binding ElementName=UnicodeDec}"/>
                             <MenuFlyoutItem x:Name="UnicodeHex"
-                                            Text="Hex"
+                                            x:Uid="CodecPageModeUnicodeHex"
                                             Command="{x:Bind ViewModel.SelectCodecModeCommand}"
                                             CommandParameter="{Binding ElementName=UnicodeHex}"/>
                         </MenuFlyoutSubItem>

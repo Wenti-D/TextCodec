@@ -23,9 +23,13 @@ public partial class AppSettings : ObservableObject
     private string? chineseTelegraphCodeStyle;
 
     private string? hashTextPreprocessMode;
-    private string? hashMode;
 
-    private bool? onReset;
+    private bool? isKeepLastModeEnabled;
+    private string? lastCodecMode;
+    private string? lastHashMode;
+    private string? defaultCodecMode;
+    private string? defaultHashMode;
+    private bool? isInitialized;
 
     /// <summary>
     /// 选中的背景材质
@@ -132,28 +136,80 @@ public partial class AppSettings : ObservableObject
     }
 
     /// <summary>
-    /// 散列算法
+    /// 「记住最后的模式」是否启用
     /// </summary>
-    public string HashMode
+    public bool IsKeepLastModeEnabled
     {
-        get => hashMode ?? "MD5";
+        get => isKeepLastModeEnabled ??= false;
         set
         {
-            SetProperty(ref hashMode, value);
-            localSettings.Values["HashMode"] = value;
+            SetProperty(ref isKeepLastModeEnabled, value);
+            localSettings.Values["IsKeepLastModeEnabled"] = value;
         }
     }
 
     /// <summary>
-    /// 是否处于重置状态
+    /// 最后使用的文本编解码模式
     /// </summary>
-    public bool OnReset
+    public string LastCodecMode
     {
-        get => onReset ?? false;
+        get => lastCodecMode ??= "None";
         set
         {
-            SetProperty(ref onReset, value);
-            localSettings.Values["OnReset"] = value;
+            SetProperty(ref lastCodecMode, value);
+            localSettings.Values["LastCodecMode"] = value;
+        }
+    }
+
+    /// <summary>
+    /// 最后使用的散列算法
+    /// </summary>
+    public string LastHashMode
+    {
+        get => lastHashMode ??= "MD5";
+        set
+        {
+            SetProperty(ref lastHashMode, value);
+            localSettings.Values["LastHashMode"] = value;
+        }
+    }
+
+    /// <summary>
+    /// 默认文本编解码模式
+    /// </summary>
+    public string DefaultCodecMode
+    {
+        get => defaultCodecMode ??= "UnicodeHex";
+        set
+        {
+            SetProperty(ref defaultCodecMode, value);
+            localSettings.Values["DefaultCodecMode"] = value;
+        }
+    }
+
+    /// <summary>
+    /// 默认散列算法
+    /// </summary>
+    public string DefaultHashMode
+    {
+        get => defaultHashMode ??= "MD5";
+        set
+        {
+            SetProperty(ref defaultHashMode, value);
+            localSettings.Values["DefaultHashMode"] = value;
+        }
+    }
+
+    /// <summary>
+    /// 是否完成初始化
+    /// </summary>
+    public bool IsInitialized
+    {
+        get => isInitialized ??= true;
+        set
+        {
+            SetProperty(ref isInitialized, value);
+            localSettings.Values["IsInitialized"] = value;
         }
     }
 
@@ -163,8 +219,22 @@ public partial class AppSettings : ObservableObject
 
     public AppSettings()
     {
-        Init();
-        GetSettings();
+        try
+        {
+            // 紧急情况取消注释下一句
+            //localSettings.Values["IsInitialized"] = false;
+            Init();
+            GetSettings();
+        }
+        catch (Exception)
+        {
+            localSettings.Values["IsInitialized"] = false;
+            Init();
+        }
+        finally
+        {
+            GetSettings();
+        }
     }
 
     private void Init()
@@ -181,9 +251,12 @@ public partial class AppSettings : ObservableObject
             localSettings.Values["Base58Style"] = "CodecPageBase58StdCharList";
 
             localSettings.Values["HashTextPreprocessMode"] = "HashPreprocessModeUtf8";
-            localSettings.Values["HashMode"] = "MD5";
 
-            localSettings.Values["OnReset"] = false;
+            localSettings.Values["IsKeepLastModeEnabled"] = false;
+            localSettings.Values["LastCodecMode"] = "None";
+            localSettings.Values["LastHashMode"] = "MD5";
+            localSettings.Values["DefaultCodecMode"] = "None";
+            localSettings.Values["DefaultHashMode"] = "MD5";
         }
     }
 
@@ -198,9 +271,13 @@ public partial class AppSettings : ObservableObject
         base58Style = localSettings.Values["Base58Style"] as string;
 
         hashTextPreprocessMode = localSettings.Values["HashTextPreprocessMode"] as string;
-        hashMode = localSettings.Values["HashMode"] as string;
 
-        onReset = (bool)localSettings.Values["OnReset"];
+        isKeepLastModeEnabled = (bool)localSettings.Values["IsKeepLastModeEnabled"];
+        lastCodecMode = localSettings.Values["LastCodecMode"] as string;
+        lastHashMode = localSettings.Values["LastHashMode"] as string;
+        defaultCodecMode = localSettings.Values["DefaultCodecMode"] as string;
+        defaultHashMode = localSettings.Values["DefaultHashMode"] as string;
+        isInitialized = (bool)localSettings.Values["IsInitialized"];
     }
 
     #endregion

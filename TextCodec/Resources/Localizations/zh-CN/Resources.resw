@@ -120,6 +120,9 @@
   <data name="AppTitle.Text" xml:space="preserve">
     <value>Text Codec</value>
   </data>
+  <data name="CaesarCipher" xml:space="preserve">
+    <value>凯撒密码</value>
+  </data>
   <data name="ChineseTeleCodeNumber" xml:space="preserve">
     <value>数字序号</value>
   </data>
@@ -129,6 +132,9 @@
   <data name="ChineseTeleCodeNumberSimp" xml:space="preserve">
     <value>数字简码</value>
   </data>
+  <data name="ChineseTelegraphCode" xml:space="preserve">
+    <value>中文电码</value>
+  </data>
   <data name="CodecPageBase58BtcCharList" xml:space="preserve">
     <value>比特币序列</value>
   </data>
@@ -137,12 +143,14 @@
   </data>
   <data name="CodecPageCaesarCipher.Text" xml:space="preserve">
     <value>凯撒密码</value>
+    <comment>Same as "CaesarCipher".</comment>
   </data>
   <data name="CodecPageCaesarCipherShift.PlaceholderText" xml:space="preserve">
     <value>偏移量</value>
   </data>
   <data name="CodecPageChnTeleCode.Text" xml:space="preserve">
     <value>中文电码</value>
+    <comment>Same as "ChineseTelegraphCode".</comment>
   </data>
   <data name="CodecPageClearTextButtonInfo.Content" xml:space="preserve">
     <value>清除</value>
@@ -158,21 +166,46 @@
   </data>
   <data name="CodecPageModeIntMorseCode.Text" xml:space="preserve">
     <value>国际摩尔斯电码</value>
+    <comment>Same as "InternationalMorseCode".</comment>
   </data>
   <data name="CodecPageModeJsonString.Text" xml:space="preserve">
     <value>Json 字符串</value>
+    <comment>Same as "JsonString".</comment>
+  </data>
+  <data name="CodecPageModeNone.Text" xml:space="preserve">
+    <value>无</value>
+    <comment>Same as "None".</comment>
   </data>
   <data name="CodecPageModeSelectButton.Content" xml:space="preserve">
     <value>选择模式</value>
   </data>
+  <data name="CodecPageModeUnicodeBin.Text" xml:space="preserve">
+    <value>二进制（Bin）</value>
+    <comment>Same as "UnicodeBin".</comment>
+  </data>
+  <data name="CodecPageModeUnicodeDec.Text" xml:space="preserve">
+    <value>十进制（Dec）</value>
+    <comment>Same as "UnicodeDec".</comment>
+  </data>
+  <data name="CodecPageModeUnicodeHex.Text" xml:space="preserve">
+    <value>十六进制（Hex）</value>
+    <comment>Same as "UnicodeHex".</comment>
+  </data>
+  <data name="CodecPageModeUnicodeOct.Text" xml:space="preserve">
+    <value>八进制（Oct）</value>
+    <comment>Same as "UnicodeOct".</comment>
+  </data>
   <data name="CodecPageModeUtf16Be.Text" xml:space="preserve">
     <value>UTF-16 大端序</value>
+    <comment>Same as "UTF16BE".</comment>
   </data>
   <data name="CodecPageModeUtf16Le.Text" xml:space="preserve">
     <value>UTF-16 小端序</value>
+    <comment>Same as "UTF16LE".</comment>
   </data>
   <data name="CodecPageModeUtf8" xml:space="preserve">
     <value>UTF-8</value>
+    <comment>Same as "UTF8".</comment>
   </data>
   <data name="CodecPagePasteTextButtonInfo.Content" xml:space="preserve">
     <value>粘贴</value>
@@ -185,12 +218,21 @@
   </data>
   <data name="HashPreprocessModeUtf16Be" xml:space="preserve">
     <value>UTF-16 大端序</value>
+    <comment>Same as "UTF16BE".</comment>
   </data>
   <data name="HashPreprocessModeUtf16Le" xml:space="preserve">
     <value>UTF-16 小端序</value>
+    <comment>Same as "UTF16LE".</comment>
   </data>
   <data name="HashPreprocessModeUtf8" xml:space="preserve">
     <value>UTF-8</value>
+    <comment>Same as "UTF8".</comment>
+  </data>
+  <data name="InternationalMorseCode" xml:space="preserve">
+    <value>国际摩尔斯电码</value>
+  </data>
+  <data name="JsonString" xml:space="preserve">
+    <value>Json 字符串</value>
   </data>
   <data name="MorseCodeAsciiStyle" xml:space="preserve">
     <value>ASCII 风格</value>
@@ -203,6 +245,9 @@
   </data>
   <data name="NaviViewItemHashPage.Content" xml:space="preserve">
     <value>散列计算</value>
+  </data>
+  <data name="None" xml:space="preserve">
+    <value>无</value>
   </data>
   <data name="SettingsPageAbout.Text" xml:space="preserve">
     <value>关于</value>
@@ -225,6 +270,9 @@
   <data name="SettingsPageAboutDependencyWinUiLib.Content" xml:space="preserve">
     <value>WinUI 库</value>
   </data>
+  <data name="SettingsPageAdvancedSet.Text" xml:space="preserve">
+    <value>高级选项</value>
+  </data>
   <data name="SettingsPageAppSet.Text" xml:space="preserve">
     <value>应用程序设置</value>
   </data>
@@ -234,8 +282,29 @@
   <data name="SettingsPageBackdropSet.Header" xml:space="preserve">
     <value>背景材质</value>
   </data>
+  <data name="SettingsPageDefaultCodecModeSet.Description" xml:space="preserve">
+    <value>打开应用时默认启用的文本编解码模式（仅关闭「模式记忆」有效）</value>
+  </data>
+  <data name="SettingsPageDefaultCodecModeSet.Header" xml:space="preserve">
+    <value>默认文本编解码模式</value>
+  </data>
+  <data name="SettingsPageDefaultHashModeSet.Description" xml:space="preserve">
+    <value>打开应用时默认启用的散列计算模式（仅关闭「模式记忆」有效）</value>
+  </data>
+  <data name="SettingsPageDefaultHashModeSet.Header" xml:space="preserve">
+    <value>默认散列计算模式</value>
+  </data>
   <data name="SettingsPageDevSet.Text" xml:space="preserve">
     <value>开发</value>
+  </data>
+  <data name="SettingsPageKeepLastModeSet.Description" xml:space="preserve">
+    <value>下次打开应用的默认模式就是上次最后使用的模式</value>
+  </data>
+  <data name="SettingsPageKeepLastModeSet.Header" xml:space="preserve">
+    <value>记住最后使用的模式</value>
+  </data>
+  <data name="SettingsPageResetAppInfoBar.Message" xml:space="preserve">
+    <value>初始化成功，请重启应用。</value>
   </data>
   <data name="SettingsPageResetAppSet.Description" xml:space="preserve">
     <value>需要重启应用</value>
@@ -254,5 +323,26 @@
   </data>
   <data name="SHA512" xml:space="preserve">
     <value>SHA-512</value>
+  </data>
+  <data name="UnicodeBin" xml:space="preserve">
+    <value>二进制（Bin）</value>
+  </data>
+  <data name="UnicodeDec" xml:space="preserve">
+    <value>十进制（Dec）</value>
+  </data>
+  <data name="UnicodeHex" xml:space="preserve">
+    <value>十六进制（Hex）</value>
+  </data>
+  <data name="UnicodeOct" xml:space="preserve">
+    <value>八进制（Oct）</value>
+  </data>
+  <data name="UTF16BE" xml:space="preserve">
+    <value>UTF-16 大端序</value>
+  </data>
+  <data name="UTF16LE" xml:space="preserve">
+    <value>UTF-16 小端序</value>
+  </data>
+  <data name="UTF8" xml:space="preserve">
+    <value>UTF-8</value>
   </data>
 </root>

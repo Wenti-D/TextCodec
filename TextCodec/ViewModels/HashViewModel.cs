@@ -42,10 +42,19 @@ public partial class HashViewModel : ObservableObject
     private bool isEncodedTextCopiedTipOpen;
     [ObservableProperty]
     private HashMode currentHashMode;
-    [ObservableProperty]
-    private string currentHashModeText;
 
+    private string currentHashModeText;
     private string selectedHashTextPreprocessMode;
+
+    public string CurrentHashModeText
+    {
+        get => currentHashModeText;
+        set
+        {
+            SetProperty(ref currentHashModeText, value);
+            appSettings.LastHashMode = value;
+        }
+    }
 
     /// <summary>
     /// 当前文本预处理模式
@@ -72,7 +81,7 @@ public partial class HashViewModel : ObservableObject
         hashHelper = serviceProvider.GetRequiredService<HashHelper>();
 
         selectedHashTextPreprocessMode = appSettings.HashTextPreprocessMode;
-        CurrentHashModeText = "MD5";
+        currentHashModeText = appSettings.IsKeepLastModeEnabled ? appSettings.LastHashMode : appSettings.DefaultHashMode;
         CurrentHashMode = (HashMode)Enum.Parse(typeof(HashMode), CurrentHashModeText);
         RawText = "";
 
