@@ -199,15 +199,15 @@ public class BaseSeriesCodec
 
         for (int i = 0; i < group_num; i++)
         {
-            result_buff.Append(code_str[bytes[i] >> 3]);
-            result_buff.Append(code_str[((bytes[i] & 0b111) << 2) + (bytes[i + 1] >> 6)]);
-            result_buff.Append(code_str[(bytes[i + 1] & 0b111110) >> 1]);
-            result_buff.Append(code_str[((bytes[i + 1] & 0b1) << 4) + (bytes[i + 2] >> 4)]);
+            result_buff.Append(code_str[bytes[5 * i] >> 3]);
+            result_buff.Append(code_str[((bytes[5 * i] & 0b111) << 2) + (bytes[5 * i + 1] >> 6)]);
+            result_buff.Append(code_str[(bytes[5 * i + 1] & 0b111110) >> 1]);
+            result_buff.Append(code_str[((bytes[5 * i + 1] & 0b1) << 4) + (bytes[5 * i + 2] >> 4)]);
 
-            result_buff.Append(code_str[((bytes[i + 2] & 0b1111) << 1) + (bytes[i + 3] >> 7)]);
-            result_buff.Append(code_str[(bytes[i + 3] & 0b1111100) >> 2]);
-            result_buff.Append(code_str[((bytes[i + 3] & 0b11) << 3) + (bytes[i + 4] >> 5)]);
-            result_buff.Append(code_str[bytes[i + 4] & 0b11111]);
+            result_buff.Append(code_str[((bytes[5 * i + 2] & 0b1111) << 1) + (bytes[5 * i + 3] >> 7)]);
+            result_buff.Append(code_str[(bytes[5 * i + 3] & 0b1111100) >> 2]);
+            result_buff.Append(code_str[((bytes[5 * i + 3] & 0b11) << 3) + (bytes[5 * i + 4] >> 5)]);
+            result_buff.Append(code_str[bytes[5 * i + 4] & 0b11111]);
         }
         int tail_begin = 5 * group_num;
         switch (tail_num)
