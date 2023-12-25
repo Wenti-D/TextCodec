@@ -3,7 +3,7 @@ using System.Text;
 using TextCodec.Core.Dicts;
 using TextCodec.Helpers;
 
-namespace TextCodec.Core;
+namespace TextCodec.Core.Codecs;
 
 class MorseCodeCodec
 {

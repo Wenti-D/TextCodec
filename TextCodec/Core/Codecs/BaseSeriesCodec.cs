@@ -7,7 +7,7 @@ using System.Numerics;
 using System.Text;
 using TextCodec.Helpers;
 
-namespace TextCodec.Core;
+namespace TextCodec.Core.Codecs;
 
 public class BaseSeriesCodec
 {

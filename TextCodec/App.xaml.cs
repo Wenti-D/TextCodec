@@ -5,6 +5,7 @@ using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using System;
 using TextCodec.Core;
+using TextCodec.Core.Codecs;
 using TextCodec.Helpers;
 using TextCodec.Services.Navigation;
 using TextCodec.ViewModels;

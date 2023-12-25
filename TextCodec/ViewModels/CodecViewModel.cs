@@ -6,6 +6,7 @@ using Microsoft.UI.Xaml;
 using System;
 using System.Threading.Tasks;
 using TextCodec.Core;
+using TextCodec.Core.Codecs;
 using Vanara.Extensions.Reflection;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.ApplicationModel.Resources;

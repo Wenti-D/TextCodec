@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TextCodec.Core;
+namespace TextCodec.Core.Codecs;
 
 class CaesarCipher
 {

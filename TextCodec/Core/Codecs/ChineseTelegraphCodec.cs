@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using TextCodec.Helpers;
 
-namespace TextCodec.Core;
+namespace TextCodec.Core.Codecs;
 
 public class ChineseTelegraphCodec
 {
