@@ -39,5 +39,7 @@ public enum CodecMode : byte
 
     [Description("凯撒密码加密解密")]
     CaesarCipher,
+    [Description("字母顺序号加密解密")]
+    AlphabetOrdinary,
 }
 

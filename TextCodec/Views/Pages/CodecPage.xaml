@@ -151,6 +151,10 @@
                                         x:Uid="CodecPageCaesarCipher"
                                         Command="{x:Bind ViewModel.SelectCodecModeCommand}"
                                         CommandParameter="{Binding ElementName=CaesarCipher}"/>
+                        <MenuFlyoutItem x:Name="AlphabetOrdinary"
+                                        x:Uid="CodecPageAlphabetOrdinary"
+                                        Command="{x:Bind ViewModel.SelectCodecModeCommand}"
+                                        CommandParameter="{Binding ElementName=AlphabetOrdinary}"/>
                     </MenuFlyout>
                 </DropDownButton.Flyout>
             </DropDownButton>

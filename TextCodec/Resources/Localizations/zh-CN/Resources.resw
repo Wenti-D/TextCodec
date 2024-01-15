@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AlphabetOrdinary" xml:space="preserve">
+    <value>字母顺序号</value>
+  </data>
   <data name="AppTitle.Text" xml:space="preserve">
     <value>Text Codec</value>
   </data>
@@ -134,6 +137,10 @@
   </data>
   <data name="ChineseTelegraphCode" xml:space="preserve">
     <value>中文电码</value>
+  </data>
+  <data name="CodecPageAlphabetOrdinary.Text" xml:space="preserve">
+    <value>字母顺序号</value>
+    <comment>Same as "AlphabetOrdinary".</comment>
   </data>
   <data name="CodecPageBase58BtcCharList" xml:space="preserve">
     <value>比特币序列</value>

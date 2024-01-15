@@ -269,6 +269,7 @@ public partial class CodecViewModel : ObservableObject
             CodecMode.ChineseTelegraphCode => chineseTelegraphCodec.Encoder(rawText),
 
             CodecMode.CaesarCipher => CaesarCipher.Encoder(rawText, CurrentCaesarShift),
+            CodecMode.AlphabetOrdinary => AlphabetOrdinary.Encoder(rawText),
 
             _ => rawText
         };
@@ -298,6 +299,7 @@ public partial class CodecViewModel : ObservableObject
             CodecMode.ChineseTelegraphCode => chineseTelegraphCodec.Decoder(encodedText),
 
             CodecMode.CaesarCipher => CaesarCipher.Decoder(encodedText, CurrentCaesarShift),
+            CodecMode.AlphabetOrdinary => AlphabetOrdinary.Decoder(encodedText),
 
             _ => encodedText
         };
