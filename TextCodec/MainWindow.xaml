@@ -49,6 +49,9 @@
                         <FontIcon Glyph="&#xE943;"/>
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
+                <NavigationViewItem Icon="Character"
+                                    x:Uid="NaviViewItemMojibakeRecoverPage"
+                                    Tag="TextCodec.Views.Pages.MojibakeRecoverPage"/>
             </NavigationView.MenuItems>
 
             <Frame x:Name="ContentFrame"

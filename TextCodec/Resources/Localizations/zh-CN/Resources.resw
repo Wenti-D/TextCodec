@@ -253,6 +253,9 @@
   <data name="NaviViewItemHashPage.Content" xml:space="preserve">
     <value>散列计算</value>
   </data>
+  <data name="NaviViewItemMojibakeRecoverPage.Content" xml:space="preserve">
+    <value>乱码恢复</value>
+  </data>
   <data name="None" xml:space="preserve">
     <value>无</value>
   </data>

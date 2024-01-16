@@ -29,6 +29,7 @@
     <None Remove="Controls\FontTheme.xaml" />
     <None Remove="Views\Pages\CodecPage.xaml" />
     <None Remove="Views\Pages\HashPage.xaml" />
+    <None Remove="Views\Pages\MojibakeRecoverPage.xaml" />
     <None Remove="Views\Pages\SettingsPage.xaml" />
   </ItemGroup>
 
@@ -60,6 +61,11 @@
   -->
   <ItemGroup Condition="'$(DisableMsixProjectCapabilityAddedByProject)'!='true' and '$(EnableMsixTooling)'=='true'">
     <ProjectCapability Include="Msix" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\Pages\MojibakeRecoverPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Views\Pages\HashPage.xaml">

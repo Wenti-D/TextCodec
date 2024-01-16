@@ -71,6 +71,8 @@ public partial class App : Application
             .AddSingleton<CodecViewModel>()
             .AddSingleton<HashPage>()
             .AddSingleton<HashViewModel>()
+            .AddSingleton<MojibakeRecoverPage>()
+            .AddSingleton<MojibakeRecoverViewModel>()
             .AddSingleton<SettingsPage>()
             .AddSingleton<SettingsViewModel>()
 
