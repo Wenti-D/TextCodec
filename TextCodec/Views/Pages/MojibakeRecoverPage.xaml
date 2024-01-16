@@ -57,27 +57,6 @@
                 <ColumnDefinition MinWidth="140"/>
             </Grid.ColumnDefinitions>
 
-            <!--<Grid>
-                <Line X1="0" Y1="0"
-                      X2="110" Y2="39"
-                      Stroke="DimGray"
-                      StrokeThickness="2"
-                      Margin="4,4,-4,-4"/>
-            </Grid>
-            
-            <Grid x:Name="TextBoxGrid"
-                  Grid.Row="1"
-                  Grid.Column="1"
-                  Grid.RowSpan="5"
-                  Grid.ColumnSpan="5">
-                <Line X1="0" Y1="0"
-                      X2="{Binding Path=ActualWidth, Mode=OneWay, ElementName=TextBoxGrid}"
-                      Y2="{Binding Path=ActualHeight, Mode=OneWay, ElementName=TextBoxGrid}"
-                      Stroke="DimGray"
-                      StrokeThickness="2"
-                      Margin="0,0,0,0"/>
-            </Grid>-->
-
             <TextBlock Text="原编码"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"
