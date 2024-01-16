@@ -22,13 +22,16 @@
             </Grid.ColumnDefinitions>
 
             <TextBox Margin="10,0"
+                     x:Uid="MojibakeRecoverPageMojibakeTextBox"
+                     Text="{x:Bind ViewModel.MojibakeText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                      AcceptsReturn="True"
                      TextWrapping="Wrap"
                      IsSpellCheckEnabled="False"/>
             <Button Content="尝试恢复"
                     Margin="4"
                     Style="{StaticResource AccentButtonStyle}"
-                    Grid.Column="1"/>
+                    Grid.Column="1"
+                    Command="{x:Bind ViewModel.MojibakaRecoverCommand}"/>
         </Grid>
 
         <Grid x:Name="ResultGrid"
@@ -141,28 +144,28 @@
                        Grid.Row="5"/>
 
             <TextBox Margin="2"
-                     Text=""
+                     Text="{x:Bind ViewModel.RecoverTextList[1], Mode=OneWay}"
                      IsReadOnly="True"
                      TextWrapping="Wrap"
                      IsSpellCheckEnabled="False"
                      Grid.Row="1"
                      Grid.Column="2"/>
             <TextBox Margin="2"
-                     Text=""
+                     Text="{x:Bind ViewModel.RecoverTextList[2], Mode=OneWay}"
                      IsReadOnly="True"
                      TextWrapping="Wrap"
                      IsSpellCheckEnabled="False"
                      Grid.Row="1"
                      Grid.Column="3"/>
             <TextBox Margin="2"
-                     Text=""
+                     Text="{x:Bind ViewModel.RecoverTextList[3], Mode=OneWay}"
                      IsReadOnly="True"
                      TextWrapping="Wrap"
                      IsSpellCheckEnabled="False"
                      Grid.Row="1"
                      Grid.Column="4"/>
             <TextBox Margin="2"
-                     Text=""
+                     Text="{x:Bind ViewModel.RecoverTextList[4], Mode=OneWay}"
                      IsReadOnly="True"
                      TextWrapping="Wrap"
                      IsSpellCheckEnabled="False"
@@ -170,28 +173,28 @@
                      Grid.Column="5"/>
 
             <TextBox Margin="2"
-                     Text=""
+                     Text="{x:Bind ViewModel.RecoverTextList[5], Mode=OneWay}"
                      IsReadOnly="True"
                      TextWrapping="Wrap"
                      IsSpellCheckEnabled="False"
                      Grid.Row="2"
                      Grid.Column="1"/>
             <TextBox Margin="2"
-                     Text=""
+                     Text="{x:Bind ViewModel.RecoverTextList[7], Mode=OneWay}"
                      IsReadOnly="True"
                      TextWrapping="Wrap"
                      IsSpellCheckEnabled="False"
                      Grid.Row="2"
                      Grid.Column="3"/>
             <TextBox Margin="2"
-                     Text=""
+                     Text="{x:Bind ViewModel.RecoverTextList[8], Mode=OneWay}"
                      IsReadOnly="True"
                      TextWrapping="Wrap"
                      IsSpellCheckEnabled="False"
                      Grid.Row="2"
                      Grid.Column="4"/>
             <TextBox Margin="2"
-                     Text=""
+                     Text="{x:Bind ViewModel.RecoverTextList[9], Mode=OneWay}"
                      IsReadOnly="True"
                      TextWrapping="Wrap"
                      IsSpellCheckEnabled="False"
@@ -199,28 +202,28 @@
                      Grid.Column="5"/>
 
             <TextBox Margin="2"
-                     Text=""
+                     Text="{x:Bind ViewModel.RecoverTextList[10], Mode=OneWay}"
                      IsReadOnly="True"
                      TextWrapping="Wrap"
                      IsSpellCheckEnabled="False"
                      Grid.Row="3"
                      Grid.Column="1"/>
             <TextBox Margin="2"
-                     Text=""
+                     Text="{x:Bind ViewModel.RecoverTextList[11], Mode=OneWay}"
                      IsReadOnly="True"
                      TextWrapping="Wrap"
                      IsSpellCheckEnabled="False"
                      Grid.Row="3"
                      Grid.Column="2"/>
             <TextBox Margin="2"
-                     Text=""
+                     Text="{x:Bind ViewModel.RecoverTextList[13], Mode=OneWay}"
                      IsReadOnly="True"
                      TextWrapping="Wrap"
                      IsSpellCheckEnabled="False"
                      Grid.Row="3"
                      Grid.Column="4"/>
             <TextBox Margin="2"
-                     Text=""
+                     Text="{x:Bind ViewModel.RecoverTextList[14], Mode=OneWay}"
                      IsReadOnly="True"
                      TextWrapping="Wrap"
                      IsSpellCheckEnabled="False"
@@ -228,28 +231,28 @@
                      Grid.Column="5"/>
 
             <TextBox Margin="2"
-                     Text=""
+                     Text="{x:Bind ViewModel.RecoverTextList[15], Mode=OneWay}"
                      IsReadOnly="True"
                      TextWrapping="Wrap"
                      IsSpellCheckEnabled="False"
                      Grid.Row="4"
                      Grid.Column="1"/>
             <TextBox Margin="2"
-                     Text=""
+                     Text="{x:Bind ViewModel.RecoverTextList[16], Mode=OneWay}"
                      IsReadOnly="True"
                      TextWrapping="Wrap"
                      IsSpellCheckEnabled="False"
                      Grid.Row="4"
                      Grid.Column="2"/>
             <TextBox Margin="2"
-                     Text=""
+                     Text="{x:Bind ViewModel.RecoverTextList[17], Mode=OneWay}"
                      IsReadOnly="True"
                      TextWrapping="Wrap"
                      IsSpellCheckEnabled="False"
                      Grid.Row="4"
                      Grid.Column="3"/>
             <TextBox Margin="2"
-                     Text=""
+                     Text="{x:Bind ViewModel.RecoverTextList[19], Mode=OneWay}"
                      IsReadOnly="True"
                      TextWrapping="Wrap"
                      IsSpellCheckEnabled="False"
@@ -257,28 +260,28 @@
                      Grid.Column="5"/>
 
             <TextBox Margin="2"
-                     Text=""
+                     Text="{x:Bind ViewModel.RecoverTextList[20], Mode=OneWay}"
                      IsReadOnly="True"
                      TextWrapping="Wrap"
                      IsSpellCheckEnabled="False"
                      Grid.Row="5"
                      Grid.Column="1"/>
             <TextBox Margin="2"
-                     Text=""
+                     Text="{x:Bind ViewModel.RecoverTextList[21], Mode=OneWay}"
                      IsReadOnly="True"
                      TextWrapping="Wrap"
                      IsSpellCheckEnabled="False"
                      Grid.Row="5"
                      Grid.Column="2"/>
             <TextBox Margin="2"
-                     Text=""
+                     Text="{x:Bind ViewModel.RecoverTextList[22], Mode=OneWay}"
                      IsReadOnly="True"
                      TextWrapping="Wrap"
                      IsSpellCheckEnabled="False"
                      Grid.Row="5"
                      Grid.Column="3"/>
             <TextBox Margin="2"
-                     Text=""
+                     Text="{x:Bind ViewModel.RecoverTextList[23], Mode=OneWay}"
                      IsReadOnly="True"
                      TextWrapping="Wrap"
                      IsSpellCheckEnabled="False"

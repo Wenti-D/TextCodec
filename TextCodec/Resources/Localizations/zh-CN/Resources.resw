@@ -241,6 +241,9 @@
   <data name="JsonString" xml:space="preserve">
     <value>Json 字符串</value>
   </data>
+  <data name="MojibakeRecoverPageMojibakeTextBox.PlaceholderText" xml:space="preserve">
+    <value>输入待恢复文字</value>
+  </data>
   <data name="MorseCodeAsciiStyle" xml:space="preserve">
     <value>ASCII 风格</value>
   </data>
