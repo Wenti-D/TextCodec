@@ -27,7 +27,7 @@
                      AcceptsReturn="True"
                      TextWrapping="Wrap"
                      IsSpellCheckEnabled="False"/>
-            <Button Content="尝试恢复"
+            <Button x:Uid="MojibakeRecoverPageRecoverButton"
                     Margin="4"
                     Style="{StaticResource AccentButtonStyle}"
                     Grid.Column="1"
@@ -57,13 +57,13 @@
                 <ColumnDefinition MinWidth="140"/>
             </Grid.ColumnDefinitions>
 
-            <TextBlock Text="原编码"
+            <TextBlock x:Uid="MojibakeRecoverPageOriginalEncoding"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"
                        MaxWidth="100"
                        Grid.ColumnSpan="2"
                        Margin="0,0,80,0"/>
-            <TextBlock Text="现编码"
+            <TextBlock x:Uid="MojibakeRecoverPageCurrentEncoding"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"
                        Grid.RowSpan="2"
