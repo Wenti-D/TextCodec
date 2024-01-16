@@ -241,6 +241,18 @@
   <data name="JsonString" xml:space="preserve">
     <value>Json 字符串</value>
   </data>
+  <data name="MojibakeRecoverPageCurrentEncoding.Text" xml:space="preserve">
+    <value>现编码</value>
+  </data>
+  <data name="MojibakeRecoverPageMojibakeTextBox.PlaceholderText" xml:space="preserve">
+    <value>输入待恢复文字</value>
+  </data>
+  <data name="MojibakeRecoverPageOriginalEncoding.Text" xml:space="preserve">
+    <value>原编码</value>
+  </data>
+  <data name="MojibakeRecoverPageRecoverButton.Content" xml:space="preserve">
+    <value>尝试恢复</value>
+  </data>
   <data name="MorseCodeAsciiStyle" xml:space="preserve">
     <value>ASCII 风格</value>
   </data>
@@ -252,6 +264,9 @@
   </data>
   <data name="NaviViewItemHashPage.Content" xml:space="preserve">
     <value>散列计算</value>
+  </data>
+  <data name="NaviViewItemMojibakeRecoverPage.Content" xml:space="preserve">
+    <value>乱码恢复</value>
   </data>
   <data name="None" xml:space="preserve">
     <value>无</value>
