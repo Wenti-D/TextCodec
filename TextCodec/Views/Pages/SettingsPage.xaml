@@ -72,7 +72,9 @@
                     <DropDownButton x:Name="DefaultCodecMode"
                                     x:Uid="CodecPageModeSelectButton"
                                     Content="{x:Bind ViewModel.SelectedDefaultCodecModeText, Mode=OneWay}"
-                                    Margin="40,0,5,5">
+                                    Margin="40,0,5,5"
+                                    MinWidth="110"
+                                    HorizontalContentAlignment="Left">
                         <DropDownButton.Flyout>
                             <MenuFlyout>
                                 <MenuFlyoutItem x:Name="None"
