@@ -278,7 +278,7 @@
     <value>Text Codec</value>
   </data>
   <data name="SettingsPageAboutCopyright.Header" xml:space="preserve">
-    <value>Copyright © 2023 Windy Deng.</value>
+    <value>著作权所有 © 2023-2024 Windy Deng。</value>
   </data>
   <data name="SettingsPageAboutDependency.Header" xml:space="preserve">
     <value>依赖项</value>

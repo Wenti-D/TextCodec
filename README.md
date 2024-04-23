@@ -46,7 +46,7 @@ Text Codec 的主界面大致如下图所示，上方是原始文本，下方是
 
 ## 开发
 
-本项目使用 WinUI 3（Windows App SDK 1.4）与 .NET Core 7 平台，可以下载 [Visual Studio 2022](https://visualstudio.microsoft.com/) 来构建应用。
+本项目使用 WinUI 3（Windows App SDK 1.4）与 .NET 8 平台，可以下载 [Visual Studio 2022](https://visualstudio.microsoft.com/) 来构建应用。
 
 ## 已知问题
 
