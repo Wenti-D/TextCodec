@@ -1,7 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,42 +13,54 @@ public partial class MojibakeRecoverViewModel : ObservableObject
     [ObservableProperty]
     private string mojibakeText;
     [ObservableProperty]
-    private ObservableCollection<string> recoverTextList = new();
+    private List<string> recoveredTextList;
+    
 
-    private readonly List<Encoding> encodings = new();
+    private readonly Encoding[] encodings;
 
     public MojibakeRecoverViewModel()
     {
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-        encodings.Add(Encoding.UTF8);
-        encodings.Add(Encoding.GetEncoding("gbk"));
-        encodings.Add(Encoding.GetEncoding("shift_jis"));
-        encodings.Add(Encoding.GetEncoding("big5"));
-        encodings.Add(Encoding.GetEncoding("windows-1252"));
+        encodings = [
+            Encoding.UTF8,
+            Encoding.GetEncoding("gbk"),
+            Encoding.GetEncoding("shift_jis"),
+            Encoding.GetEncoding("big5"),
+            Encoding.GetEncoding("windows-1252"),
+        ];
 
+        RecoveredTextList = [];
         for (int i = 0; i < 25; i++)
         {
-            RecoverTextList.Add(string.Empty);
+            RecoveredTextList.Add(string.Empty);
         }
     }
 
     [RelayCommand]
     private async Task MojibakaRecoverAsync()
     {
-        for (int i = 0; i < 5; i++)
+        string[] recoverTextList = new string[25];
+        await Task.Run(() =>
         {
-            byte[] bytes = await Task.Run(() =>
+            try
             {
-                return encodings[i].GetBytes(MojibakeText);
-            });
-            for (int j = 0; j < 5; j++)
-            {
-                if (i == j) { continue; }
-                RecoverTextList[5 * i + j] = await Task.Run(() =>
+                Parallel.For(0, 5, (i) =>
                 {
-                    return encodings[j].GetString(bytes);
+                    byte[] bytes = encodings[i].GetBytes(MojibakeText);
+                    Parallel.For(0, 5, (j) =>
+                    {
+                        if (i != j)
+                        {
+                            recoverTextList[5 * i + j] = encodings[j].GetString(bytes);
+                        }
+                    });
                 });
             }
-        }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.ToString() + ex.Message);
+            }
+        });
+        RecoveredTextList = [.. recoverTextList];
     }
 }
