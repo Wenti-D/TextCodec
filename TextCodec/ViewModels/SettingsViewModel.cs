@@ -147,8 +147,8 @@ public partial class SettingsViewModel : ObservableObject
     [RelayCommand]
     private void SelectDefaultCodecMode(object? sender)
     {
-        SelectedDefaultCodecModeText = sender.GetPropertyValue<string>("Text");
-        SelectedDefaultCodecModeName = sender.GetPropertyValue<string>("Name");
+        SelectedDefaultCodecModeText = sender?.GetPropertyValue<string>("Text");
+        SelectedDefaultCodecModeName = sender?.GetPropertyValue<string>("Name") ?? "None";
         SelectedDefaultCodecMode = (CodecMode)Enum.Parse(typeof(CodecMode), SelectedDefaultCodecModeName);
     }
 

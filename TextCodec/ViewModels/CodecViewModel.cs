@@ -370,8 +370,8 @@ public partial class CodecViewModel : ObservableObject
     {
         if (sender is null) return;
 
-        CurrentCodecModeText = sender.GetPropertyValue<string>("Text");
-        CurrentCodecModeName = sender.GetPropertyValue<string>("Name");
+        CurrentCodecModeText = sender?.GetPropertyValue<string>("Text") ?? "None";
+        CurrentCodecModeName = sender?.GetPropertyValue<string>("Name") ?? "None";
         CurrentCodecMode = (CodecMode)Enum.Parse(typeof(CodecMode), CurrentCodecModeName);
 
         if (CurrentCodecMode is >= CodecMode.UTF8 and <= CodecMode.UTF16BE)
@@ -469,7 +469,7 @@ public partial class CodecViewModel : ObservableObject
     private void Timer_Tick(object? sender, object e)
     {
         if (sender is null) return;
-        (sender as DispatcherTimer).Stop();
+        (sender as DispatcherTimer)?.Stop();
         IsRawTextCopiedTipOpen = false;
         IsRawTextPastedTipOpen = false;
         IsEncodedTextCopiedTipOpen = false;
